@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-
+import Redis from 'ioredis'
+const redis = new Redis
 class IndexController {
 
   public index = (req: Request, res: Response, next: NextFunction) => {

@@ -18,4 +18,5 @@ export class CreateUserDto {
   @IsString()
   public username: string;
 
+  public userId: number
 }

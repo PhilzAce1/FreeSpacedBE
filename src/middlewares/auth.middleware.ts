@@ -5,10 +5,10 @@ import {
   DataStoredInToken,
   RequestWithUser,
 } from '../interfaces/auth.interface';
-import userModel from '../models/users.model';
+import { UserModel } from '../models/users.model';
 import { JWT_SECRET } from '../config';
 
-function authMiddleware(
+async function authMiddleware(
   req: RequestWithUser,
   res: Response,
   next: NextFunction
@@ -22,8 +22,8 @@ function authMiddleware(
         secret
       ) as DataStoredInToken;
       const userId = verificationResponse.id;
-      const findUser = userModel.find((user) => user.id === userId);
-
+      // const findUser = UserModel.find((user) => user.id === userId);
+      const findUser = await UserModel.findOne({ where: { id: userId } })
       if (findUser) {
         req.user = findUser;
         next();

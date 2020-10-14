@@ -3,26 +3,34 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../interfaces/users.interface';
+import { Story } from './story.model'
 @Entity()
-export class userReModel extends BaseEntity implements User {
+export class UserModel extends BaseEntity implements User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   password: string;
 
-  @Column()
+  @Column({ nullable: true })
   username: string;
 
+  @Column('bool', { default: false })
+  verified: boolean
   @Column('numeric', { default: 0 })
   role: number;
+
+
+  @OneToMany(() => Story, (story) => story.creator)
+  stories: Story[]
 
   @CreateDateColumn()
   createdAt: Date;
@@ -30,29 +38,3 @@ export class userReModel extends BaseEntity implements User {
   @UpdateDateColumn()
   updatedAt: Date;
 }
-
-// // password: q1w2e3r4
-const userModel: User[] = [
-  {
-    id: 1,
-    email: 'lim@gmail.com',
-    password: '$2b$10$hmrwtGwC.QlfWt6YWaT3S.FP9CarS3.V9n3Qr.d9y2ovcan0oxs56',
-  },
-  {
-    id: 2,
-    email: 'kim@gmail.com',
-    password: '$2b$10$hmrwtGwC.QlfWt6YWaT3S.FP9CarS3.V9n3Qr.d9y2ovcan0oxs56',
-  },
-  {
-    id: 3,
-    email: 'park@gmail.com',
-    password: '$2b$10$hmrwtGwC.QlfWt6YWaT3S.FP9CarS3.V9n3Qr.d9y2ovcan0oxs56',
-  },
-  {
-    id: 4,
-    email: 'choi@gmail.com',
-    password: '$2b$10$hmrwtGwC.QlfWt6YWaT3S.FP9CarS3.V9n3Qr.d9y2ovcan0oxs56',
-  },
-];
-
-export default userModel;

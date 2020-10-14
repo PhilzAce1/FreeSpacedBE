@@ -4,18 +4,24 @@ import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import logger from 'morgan';
+import Redis from 'ioredis'
+import connectRedis from 'connect-redis'
+import session from 'express-session'
 import Routes from './interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
-import {PORT } from './config'
+import { PORT } from './config'
+import { __prod__, COOKIE_NAME } from './config'
+const RedisStore = connectRedis(session);
+const redis = new Redis();
 
-class App { 
+class App {
   public app: express.Application;
   public port: string | number;
   public env: boolean;
 
   constructor(routes: Routes[]) {
     this.app = express();
-    this.port =  PORT || 3000;
+    this.port = PORT || 3000;
     this.env = process.env.NODE_ENV === 'production' ? true : false;
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
@@ -34,14 +40,32 @@ class App {
   }
 
   private initializeMiddlewares() {
+    this.app.use(
+      session({
+        name: COOKIE_NAME,
+        store: new RedisStore({
+          client: redis,
+          disableTouch: true,
+        }),
+        cookie: {
+          maxAge: 1000 * 60 * 60 * 24 * 365 * 1, // 1 years
+          httpOnly: true,
+          sameSite: "lax", // csrf
+          secure: __prod__, // cookie only works in https
+        },
+        saveUninitialized: false,
+        secret: "qowiueojwojfalksdjoqiwueo",
+        resave: false,
+      })
+    );
     if (this.env) {
+
       this.app.use(hpp());
       this.app.use(helmet());
       this.app.use(logger('combined'));
       this.app.use(cors({ origin: 'your.domain.com', credentials: true }));
     } else {
       this.app.use(helmet());
-
       this.app.use(logger('dev'));
       this.app.use(cors({ origin: true, credentials: true }));
     }

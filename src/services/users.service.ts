@@ -2,12 +2,15 @@ import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '../dtos/users.dto';
 import HttpException from '../exceptions/HttpException';
 import { User } from '../interfaces/users.interface';
-import { userReModel as userModel } from '../models/users.model';
+import { UserModel as userModel } from '../models/users.model';
 import { isEmptyObject } from '../utils/util';
-
+import { __prod__ } from '../config'
+import Redis from 'ioredis'
+import { v4 } from 'uuid'
+import { sendMessage } from '../utils/sendMail';
 class UserService {
   public users = userModel;
-
+  public redis = new Redis()
   public async findAllUser(): Promise<User[]> {
     const users: userModel[] = await this.users.find();
     return users;
@@ -23,7 +26,7 @@ class UserService {
     if (isEmptyObject(userData))
       throw new HttpException(400, "You're not userData");
 
-    const findUser = this.users.find({ where: { email: userData.email } });
+    const findUser = await this.users.findOne({ where: { email: userData.email } });
     if (findUser)
       throw new HttpException(
         409,
@@ -39,6 +42,11 @@ class UserService {
 
     return createUserData;
   }
+  public async createAnonUser() {
+    const newUser = await this.users.create()
+    return newUser.id
+  };
+
 
   public async updateUser(userId: number, userData: User): Promise<any> {
     if (isEmptyObject(userData))
@@ -47,14 +55,6 @@ class UserService {
     const findUser = this.users.findOne({ where: { email: userData.email } });
     if (!findUser) throw new HttpException(409, "You're not user");
 
-    // const hashedPassword = await bcrypt.hash(userData.password, 10);
-    // const updateUserData = this.users.map((user) => {
-    //   if (user.id === findUser.id) {
-    //     return user;
-    //   }
-    //   // user = { id, ...userData, password: hashedPassword };
-    //   return user;
-    // });
 
     return findUser;
   }
@@ -77,6 +77,50 @@ class UserService {
 
     const deleteUserData = await this.users.delete(userId);
     return findUser;
+  }
+  public async sendVerifyUserEmail(email) {
+    const findUser = await this.users.findOne({ where: { email } })
+    if (!findUser) throw new HttpException(404, 'user not found')
+    const token = await this.cacheVerifiedPwd(findUser.id)
+
+    await sendMessage(findUser.email, token)
+    return true
+  }
+  public async verifyUser(token) {
+    const userId = await this.redis.get(token);
+    if (!userId)
+      throw new HttpException(404, "user no longer exist or token expired")
+    const userIdNum = parseInt(userId);
+    const user = await this.users.findOne(userIdNum)
+    if (!user)
+      throw new HttpException(404, "user no longer exist or token expired")
+    await this.users.update({
+      id: userIdNum
+    },
+      {
+        verified: true
+      })
+
+    return true
+  }
+  public async cacheVerifiedPwd(id) {
+    const token = v4()
+    const key = token
+    const time = 1000 * 60 * 60 * 24 * 1
+    if (__prod__) {
+      await this.redis.set(
+        key,
+        id,
+        "ex",
+        time
+      )
+    }
+    else {
+      await this.redis.set(
+        key,
+        id)
+    }
+    return token
   }
 }
 

@@ -4,7 +4,8 @@
   "port": 5432,
   "username": "postgres",
   "password": "admin",
-  "database": "ogaticket",
+  "database": "freespaced",
   "synchronize": true,
-  "logging": false
+  "logging": false,
+  "schema":"public"
 }

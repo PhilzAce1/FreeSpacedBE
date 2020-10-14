@@ -4,12 +4,15 @@ import { CreateUserDto } from '../dtos/users.dto';
 import HttpException from '../exceptions/HttpException';
 import { DataStoredInToken, TokenData } from '../interfaces/auth.interface';
 import { User } from '../interfaces/users.interface';
-import { userReModel as userModel } from '../models/users.model';
+import { UserModel as userModel } from '../models/users.model';
 import { isEmptyObject } from '../utils/util';
-import { JWT_SECRET } from '../config';
+import { JWT_SECRET, FORGET_PASSWORD_PREFIX, __prod__ } from '../config';
 import { sendMessage } from '../utils/sendMail';
+import { v4 } from 'uuid'
+import Redis from 'ioredis'
 class AuthService {
   public users = userModel;
+  public redis = new Redis()
 
   public async signup(userData: CreateUserDto): Promise<User> {
     if (isEmptyObject(userData))
@@ -33,6 +36,26 @@ class AuthService {
     await this.users.create(createUserData).save();
     delete createUserData.password;
     return createUserData;
+  }
+  public async updateAnonUser(userData): Promise<User> {
+    if (isEmptyObject(userData))
+      throw new HttpException(400, "You're not userData");
+
+    const userExist = await this.users.findOne({ where: { id: userData.userId } })
+    if ((userExist && userExist.username !== null) || !userExist) {
+      return this.signup(userData)
+    }
+    const hashedPassword = await bcrypt.hash(userData.password, 10);
+    const updateUser = {
+      username: userData.username,
+      email: userData.email,
+      password: hashedPassword
+    }
+    await this.users.update({
+      id: userData.id,
+    }, updateUser
+    )
+    return updateUser
   }
 
   public async login(
@@ -61,18 +84,17 @@ class AuthService {
 
     return { cookie, findUser };
   }
+
   public async forgotPassword(email: string): Promise<boolean> {
     const findUser = await this.users.findOne({ where: { email } });
     if (!findUser) {
       throw new HttpException(404, 'email not found please check again');
     }
-    const newPassword: string = Math.random().toString(36).slice(5);
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const token = await this.cacheForgotPassword(findUser.id)
 
-    await this.users.update({ id: findUser.id }, { password: hashedPassword });
-    await sendMessage(findUser.email, newPassword);
-
-    return true;
+    // send Email
+    await sendMessage(findUser.email, token)
+    return true
   }
   public async logout(userData: User): Promise<User> {
     if (isEmptyObject(userData))
@@ -85,11 +107,54 @@ class AuthService {
 
     return findUser;
   }
+  public async changePassword(token, newPassword) {
+    const key = FORGET_PASSWORD_PREFIX + token;
+    const userId = await this.redis.get(key);
+    if (!userId)
+      throw new HttpException(404, "Token expired or invalid")
 
+    const userIdNum = parseInt(userId);
+    const user = await this.users.findOne(userIdNum)
+
+    if (!user)
+      throw new HttpException(404, "User no longer exist")
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await this.users.update({
+      id: userIdNum
+    },
+      {
+        password: hashedPassword
+      })
+    await this.redis.del(key)
+    const tokenData = this.createToken(user);
+    const cookie = this.createCookie(tokenData);
+
+    return { user, cookie }
+  }
+  public async cacheForgotPassword(id) {
+    const token = v4()
+    const key = FORGET_PASSWORD_PREFIX + token
+    const time = 1000 * 60 * 60 * 24 * 1
+    if (__prod__) {
+      await this.redis.set(
+        key,
+        id,
+        "ex",
+        time
+      )
+    }
+    else {
+      await this.redis.set(
+        key,
+        id)
+    }
+    return token
+  }
   public createToken(user: User): TokenData {
     const dataStoredInToken: DataStoredInToken = { id: user.id };
     const secret: string = JWT_SECRET;
-    const expiresIn: number = 60 * 60;
+    const expiresIn: number = 60 * 60 * 24 * 3 // 3 days;
 
     return {
       expiresIn,

@@ -96,6 +96,29 @@ class UsersController {
       next(error);
     }
   };
+  public sendVerifyEmail = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email } = req.body
+      await this.userService.sendVerifyUserEmail(email)
+
+      res.status(200).json({ message: 'email sent' })
+
+    } catch (error) {
+      next(error)
+
+    }
+  }
+  public verifyUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { token } = req.body
+      await this.userService.verifyUser(token)
+      res.status(200).json({ message: 'email sent' })
+
+    } catch (error) {
+      next(error)
+
+    }
+  }
 }
 
 export default UsersController;
