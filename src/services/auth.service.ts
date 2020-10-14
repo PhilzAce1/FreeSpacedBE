@@ -42,7 +42,7 @@ class AuthService {
       throw new HttpException(400, "You're not userData");
 
     const userExist = await this.users.findOne({ where: { id: userData.userId } })
-    if ((userExist && userExist.username !== null) || !userExist) {
+    if ((userExist && userExist.email !== null) || !userExist) {
       return this.signup(userData)
     }
     const hashedPassword = await bcrypt.hash(userData.password, 10);

@@ -20,14 +20,11 @@ export class UserModel extends BaseEntity implements User {
   @Column({ nullable: true })
   password: string;
 
-  @Column({ nullable: true })
-  username: string;
-
   @Column('bool', { default: false })
   verified: boolean
+
   @Column('numeric', { default: 0 })
   role: number;
-
 
   @OneToMany(() => Story, (story) => story.creator)
   stories: Story[]

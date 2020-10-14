@@ -69,7 +69,7 @@ class AuthController {
     }
   }
   public logOut = async (
-    req: RequestWithUser,
+    req,
     res: Response,
     next: NextFunction
   ) => {

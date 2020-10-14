@@ -1,25 +1,24 @@
+swagger: '2.0'
+info:
+  version: 0.0.0
+  title: Free spaced api
+  description: The Api for the free spaced application
+host: 'localhost'
+basePath: '/'
+
 tags:
-- name: users
-  description: users API
+- name: Auth
+  description: Auth API
 
-paths:
-# [GET] users
-  /users:
-    get:
-      tags: 
-      - users
-      summary: Find All Users
-      responses:
-        200:
-          description: 'OK'
-        500:
-          description: 'Server Error'
 
-# [POST] users
-    post:
+
+paths: 
+  #[POST] auth
+  /signup:
+   post:
       tags:
-      - users
-      summary: Add User
+      - Auth
+      summary: Register New User
       parameters:
       - name: body
         in: body
@@ -36,38 +35,13 @@ paths:
           description: 'Conflict'
         500:
           description: 'Server Error'
-
-# [GET] users/id
-  /users/{id}:
-    get:
+  #[POST] auth
+  /login:
+   post:
       tags:
-      - users
-      summary: Find User By Id
+      - Auth
+      summary: Login user 
       parameters:
-      - name: id
-        in: path
-        description: User Id
-        required: true
-        type: integer
-      responses:
-        200:
-          description: 'OK'
-        409:
-          description: 'Conflict'
-        500:
-          description: 'Server Error'
-
-# [PUT] users/id
-    put:
-      tags:
-      - users
-      summary: Update User By Id
-      parameters:
-      - name: id
-        in: path
-        description: user Id
-        required: true
-        type: integer
       - name: body
         in: body
         description: user Data
@@ -76,44 +50,246 @@ paths:
           $ref: '#/definitions/users'
       responses:
         200:
-          description: 'OK'
+          description: 'Ok'
+        404:
+          description: 'Not Found'
         400:
           description: 'Bad Request'
         409:
           description: 'Conflict'
         500:
-          description: 'Server Error'
-
-# [DELETE] users/id
-    delete:
+          description: 'Server Error'        
+  #[POST] auth
+  /forgotpassword:
+   post:
       tags:
-      - users
-      summary: Delete User By Id
+      - Auth
+      summary: Forgot password 
       parameters:
-      - name: id
-        in: path
-        description: user Id
+      - name: body
+        in: body
+        description: user email
         required: true
-        type: integer
+        schema:
+          $ref: '#/definitions/forgot'
       responses:
         200:
-          description: 'OK'
+          description: 'Ok'
+        404:
+          description: 'Not Found'
+        400:
+          description: 'Bad Request'
         409:
           description: 'Conflict'
         500:
-          description: 'Server Error'
+          description: 'Server Error'        
+
+
+ #[POST] auth
+  /changepassword:
+   post:
+      tags:
+      - Auth
+      summary: Change password
+      parameters:
+      - name: body
+        in: body
+        description: token , newPassword
+        required: true
+        schema:
+          $ref: '#/definitions/changepassword'
+      responses:
+        200:
+          description: 'Ok'
+        404:
+          description: 'Not Found'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'        
+
+ #[POST] auth
+  /sendverifyemail:
+   post:
+      tags:
+      - User
+      summary: Send Email verification link
+      parameters:
+      - name: body
+        in: body
+        description: user email
+        required: true
+        schema:
+          $ref: '#/definitions/forgot'
+      responses:
+        200:
+          description: 'Ok'
+        404:
+          description: 'Not Found'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'        
+
+
+ #[POST] auth
+  /verifyuser:
+   post:
+      tags:
+      - User
+      summary: Verify User
+      parameters:
+      - name: body
+        in: body
+        description: user email
+        required: true
+        schema:
+          $ref: '#/definitions/forgot'
+      responses:
+        200:
+          description: 'Ok'
+        404:
+          description: 'Not Found'
+        400:
+          description: 'Bad Request'
+        409:
+          description: 'Conflict'
+        500:
+          description: 'Server Error'        
+
+
+# # [GET] users
+#   /users:
+#     get:
+#       tags: 
+#       - users
+#       summary: Find All Users
+#       responses:
+#         200:
+#           description: 'OK'
+#         500:
+#           description: 'Server Error'
+
+# # [POST] users
+    # post:
+    #   tags:
+    #   - users
+    #   summary: Add User
+    #   parameters:
+    #   - name: body
+    #     in: body
+    #     description: user Data
+    #     required: true
+    #     schema:
+    #       $ref: '#/definitions/users'
+    #   responses:
+    #     201:
+    #       description: 'Created'
+    #     400:
+    #       description: 'Bad Request'
+    #     409:
+    #       description: 'Conflict'
+    #     500:
+    #       description: 'Server Error'
+
+# # [GET] users/id
+#   /users/{id}:
+#     get:
+#       tags:
+#       - users
+#       summary: Find User By Id
+#       parameters:
+#       - name: id
+#         in: path
+#         description: User Id
+#         required: true
+#         type: integer
+#       responses:
+#         200:
+#           description: 'OK'
+#         409:
+#           description: 'Conflict'
+#         500:
+#           description: 'Server Error'
+
+# # [PUT] users/id
+#     put:
+#       tags:
+#       - users
+#       summary: Update User By Id
+#       parameters:
+#       - name: id
+#         in: path
+#         description: user Id
+#         required: true
+#         type: integer
+#       - name: body
+#         in: body
+#         description: user Data
+#         required: true
+#         schema:
+#           $ref: '#/definitions/users'
+#       responses:
+#         200:
+#           description: 'OK'
+#         400:
+#           description: 'Bad Request'
+#         409:
+#           description: 'Conflict'
+#         500:
+#           description: 'Server Error'
+
+# # [DELETE] users/id
+#     delete:
+#       tags:
+#       - users
+#       summary: Delete User By Id
+#       parameters:
+#       - name: id
+#         in: path
+#         description: user Id
+#         required: true
+#         type: integer
+#       responses:
+#         200:
+#           description: 'OK'
+#         409:
+#           description: 'Conflict'
+#         500:
+#           description: 'Server Error'
 
 # definitions
 definitions:
+  changepassword: 
+    type: object
+    required: 
+      - token
+      - newPassword
+    properties:
+      token: 
+        type: string
+        description: token created and sent to user's email
+      newPassword:
+        type: string
+        description: user's new Password 
+  forgot:
+    type: string
+    required: 
+      - email 
+    properties:
+      email:
+        type: string
+        description: user email
   users:
     type: object
     required:
         - email
         - password
     properties:
-      id:
-        type: integer
-        description: user Id
       email:
         type: string
         description: user Email

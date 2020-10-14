@@ -23,6 +23,7 @@ class UsersRoute implements Route {
       this.usersController.createUser
     );
     this.router.post(`${this.path}/sendverifyemail`, this.usersController.sendVerifyEmail)
+    this.router.post(`${this.path}/verifyuser`, this.usersController.verifyUser)
     this.router.put(
       `${this.path}/:id(\\d+)`,
       validationMiddleware(CreateUserDto, true),

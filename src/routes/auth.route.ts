@@ -26,7 +26,7 @@ class AuthRoute implements Route {
     );
     this.router.post('/forgotpassword', this.authController.forgotPassword);
     this.router.post('/changepassword', this.authController.changePassword)
-    // this.router.post(`/logout`, authMiddleware as RequestHandler,  this.authController.logOut);
+    this.router.post(`/logout`, authMiddleware, this.authController.logOut);
   }
 }
 

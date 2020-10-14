@@ -9,9 +9,9 @@ import { UserModel } from '../models/users.model';
 import { JWT_SECRET } from '../config';
 
 async function authMiddleware(
-  req: RequestWithUser,
-  res: Response,
-  next: NextFunction
+  req,
+  res,
+  next
 ) {
   const cookies = req.cookies;
   if (cookies && cookies.Authorization) {
@@ -22,7 +22,6 @@ async function authMiddleware(
         secret
       ) as DataStoredInToken;
       const userId = verificationResponse.id;
-      // const findUser = UserModel.find((user) => user.id === userId);
       const findUser = await UserModel.findOne({ where: { id: userId } })
       if (findUser) {
         req.user = findUser;
