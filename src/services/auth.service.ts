@@ -9,10 +9,10 @@ import { isEmptyObject } from '../utils/util';
 import { JWT_SECRET, FORGET_PASSWORD_PREFIX, __prod__ } from '../config';
 import { sendMessage } from '../utils/sendMail';
 import { v4 } from 'uuid'
-import Redis from 'ioredis'
+import { redisDb } from '../utils/connectDB'
 class AuthService {
   public users = userModel;
-  public redis = new Redis()
+  public redis = redisDb
 
   public async signup(userData: CreateUserDto): Promise<User> {
     if (isEmptyObject(userData))

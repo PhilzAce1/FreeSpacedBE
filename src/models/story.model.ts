@@ -1,5 +1,5 @@
-import {UserModel as User} from './users.model'
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
+import { UserModel as User } from './users.model'
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Story extends BaseEntity {
@@ -16,11 +16,11 @@ export class Story extends BaseEntity {
     creatorId: number;
 
     @ManyToOne(() => User, (user) => user.stories)
-    creator:User
+    creator: User
 
     @CreateDateColumn()
     createdAt: Date;
-  
+
     @UpdateDateColumn()
     updatedAt: Date;
 }

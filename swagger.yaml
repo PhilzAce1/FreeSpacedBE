@@ -111,7 +111,7 @@ paths:
           description: 'Server Error'        
 
  #[POST] auth
-  /sendverifyemail:
+  /users/sendverifyemail:
    post:
       tags:
       - User
@@ -137,7 +137,7 @@ paths:
 
 
  #[POST] auth
-  /verifyuser:
+  /users/verifyuser:
    post:
       tags:
       - User

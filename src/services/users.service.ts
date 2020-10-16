@@ -5,12 +5,13 @@ import { User } from '../interfaces/users.interface';
 import { UserModel as userModel } from '../models/users.model';
 import { isEmptyObject } from '../utils/util';
 import { __prod__ } from '../config'
-import Redis from 'ioredis'
+import { redisDb } from '../utils/connectDB'
 import { v4 } from 'uuid'
 import { sendMessage } from '../utils/sendMail';
 class UserService {
   public users = userModel;
-  public redis = new Redis()
+  public redis = redisDb;
+
   public async findAllUser(): Promise<User[]> {
     const users: userModel[] = await this.users.find();
     return users;

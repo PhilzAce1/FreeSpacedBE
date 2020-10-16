@@ -4,15 +4,15 @@ import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import logger from 'morgan';
-import Redis from 'ioredis'
 import connectRedis from 'connect-redis'
 import session from 'express-session'
 import Routes from './interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
 import { PORT } from './config'
 import { __prod__, COOKIE_NAME } from './config'
+import { redisDb as redis } from './utils/connectDB'
 const RedisStore = connectRedis(session);
-const redis = new Redis();
+
 
 class App {
   public app: express.Application;
