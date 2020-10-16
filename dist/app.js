@@ -35,6 +35,18 @@ class App {
         return this.app;
     }
     initializeMiddlewares() {
+        const whitelist = ["http://localhost:3000", "freespaced.co"];
+        var corsOptions = {
+            origin: function (origin, callback) {
+                if (whitelist.indexOf(origin) !== -1) {
+                    callback(null, true);
+                }
+                else {
+                    callback(new Error('Not allowed by CORS'));
+                }
+            },
+            credentials: true
+        };
         this.app.use(express_session_1.default({
             name: config_2.COOKIE_NAME,
             store: new RedisStore({
@@ -55,7 +67,7 @@ class App {
             this.app.use(hpp_1.default());
             this.app.use(helmet_1.default());
             this.app.use(morgan_1.default('combined'));
-            this.app.use(cors_1.default({ origin: 'your.domain.com', credentials: true }));
+            this.app.use(cors_1.default(corsOptions));
         }
         else {
             this.app.use(helmet_1.default());

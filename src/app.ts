@@ -40,6 +40,17 @@ class App {
   }
 
   private initializeMiddlewares() {
+    const whitelist = ["http://localhost:3000", "freespaced.co"]
+    var corsOptions = {
+      origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+          callback(null, true)
+        } else {
+          callback(new Error('Not allowed by CORS'))
+        }
+      },
+      credentials: true
+    }
     this.app.use(
       session({
         name: COOKIE_NAME,
@@ -63,7 +74,7 @@ class App {
       this.app.use(hpp());
       this.app.use(helmet());
       this.app.use(logger('combined'));
-      this.app.use(cors({ origin: 'your.domain.com', credentials: true }));
+      this.app.use(cors(corsOptions));
     } else {
       this.app.use(helmet());
       this.app.use(logger('dev'));
