@@ -2,7 +2,6 @@
   "name": "freespaced",
   "version": "0.0.0",
   "scripts": {
-
     "start": "node dist/server",
     "start:dev": "cross-env NODE_ENV=development node dist/server",
     "watch": "tsc -w",
