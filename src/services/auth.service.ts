@@ -6,165 +6,178 @@ import { DataStoredInToken, TokenData } from '../interfaces/auth.interface';
 import { User } from '../interfaces/users.interface';
 import { UserModel as userModel } from '../models/users.model';
 import { isEmptyObject } from '../utils/util';
-import { JWT_SECRET, FORGET_PASSWORD_PREFIX, __prod__ } from '../config';
+import {
+	JWT_SECRET,
+	FORGET_PASSWORD_PREFIX,
+	__prod__,
+	FRONTEND_DOMAIN,
+} from '../config';
 import { sendMessage } from '../utils/sendMail';
-import { v4 } from 'uuid'
-import { redisDb } from '../utils/connectDB'
+import { v4 } from 'uuid';
+import { redisDb } from '../utils/connectDB';
 class AuthService {
-  public users = userModel;
-  public redis = redisDb
+	public users = userModel;
+	public redis = redisDb;
 
-  public async signup(userData: CreateUserDto): Promise<User> {
-    if (isEmptyObject(userData))
-      throw new HttpException(400, "You're not userData");
+	public async signup(
+		userData: CreateUserDto
+	): Promise<{ cookie: string; findUser: User; token: string }> {
+		if (isEmptyObject(userData))
+			throw new HttpException(400, "You're not userData");
 
-    const findUser = await this.users.findOne({
-      where: { email: userData.email },
-    });
-    if (findUser)
-      throw new HttpException(
-        409,
-        `You're email ${userData.email} already exists`
-      );
+		const findUser = await this.users.findOne({
+			where: { email: userData.email },
+		});
+		if (findUser)
+			throw new HttpException(
+				400,
+				`You're email ${userData.email} already exists`
+			);
 
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
+		const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-    const createUserData: User = {
-      ...userData,
-      password: hashedPassword,
-    };
-    await this.users.create(createUserData).save();
-    delete createUserData.password;
-    return createUserData;
-  }
-  public async updateAnonUser(userData): Promise<User> {
-    if (isEmptyObject(userData))
-      throw new HttpException(400, "You're not userData");
+		const createUserData: User = {
+			email: userData.email,
+			username: 'Anon',
+			password: hashedPassword,
+		};
+		const res = await this.users.create(createUserData).save();
+		const tokenData = this.createToken(res);
+		const cookie = this.createCookie(tokenData);
+		console.log(res.username);
+		return { cookie, findUser: res, token: tokenData.token };
+	}
+	public async updateAnonUser(
+		userData
+	): Promise<{ cookie: string; findUser: User; token: string }> {
+		if (isEmptyObject(userData))
+			throw new HttpException(400, "You're not userData");
 
-    const userExist = await this.users.findOne({ where: { id: userData.userId } })
-    if ((userExist && userExist.email !== null) || !userExist) {
-      return this.signup(userData)
-    }
-    const hashedPassword = await bcrypt.hash(userData.password, 10);
-    const updateUser = {
-      username: userData.username,
-      email: userData.email,
-      password: hashedPassword
-    }
-    await this.users.update({
-      id: userData.id,
-    }, updateUser
-    )
-    return updateUser
-  }
+		const userExist = await this.users.findOne({
+			where: { id: userData.userId },
+		});
+		if ((userExist && userExist.email !== null) || !userExist) {
+			return this.signup(userData);
+		}
+		const hashedPassword = await bcrypt.hash(userData.password, 10);
+		const updateUser = {
+			username: userData.username,
+			email: userData.email,
+			password: hashedPassword,
+		};
+		await this.users.update(
+			{
+				id: userData.id,
+			},
+			updateUser
+		);
+		const tokenData = this.createToken(updateUser);
+		const cookie = this.createCookie(tokenData);
 
-  public async login(
-    userData: CreateUserDto
-  ): Promise<{ cookie: string; findUser: User }> {
-    if (isEmptyObject(userData))
-      throw new HttpException(400, "You're not userData");
+		return { cookie, findUser: updateUser, token: tokenData.token };
+	}
 
-    const findUser = await this.users.findOne({
-      where: { email: userData.email },
-    });
-    if (!findUser)
-      throw new HttpException(409, `You're email ${userData.email} not found`);
+	public async login(
+		userData: CreateUserDto
+	): Promise<{ cookie: string; findUser: User; token: string }> {
+		if (isEmptyObject(userData))
+			throw new HttpException(400, "You're not userData");
 
-    const isPasswordMatching: boolean = await bcrypt.compare(
-      userData.password,
-      findUser.password
-    );
-    if (!isPasswordMatching)
-      throw new HttpException(409, "You're password not matching");
+		const findUser = await this.users.findOne({
+			where: { email: userData.email },
+		});
+		if (!findUser)
+			throw new HttpException(409, `You're email ${userData.email} not found`);
 
-    const tokenData = this.createToken(findUser);
-    const cookie = this.createCookie(tokenData);
+		const isPasswordMatching: boolean = await bcrypt.compare(
+			userData.password,
+			findUser.password
+		);
+		if (!isPasswordMatching)
+			throw new HttpException(409, "You're password not matching");
 
-    findUser.password = '';
+		const tokenData = this.createToken(findUser);
+		const cookie = this.createCookie(tokenData);
 
-    return { cookie, findUser };
-  }
+		findUser.password = '';
 
-  public async forgotPassword(email: string): Promise<boolean> {
-    const findUser = await this.users.findOne({ where: { email } });
-    if (!findUser) {
-      throw new HttpException(404, 'email not found please check again');
-    }
-    const token = await this.cacheForgotPassword(findUser.id)
+		return { cookie, findUser, token: tokenData.token };
+	}
 
-    // send Email
-    await sendMessage(findUser.email, token)
-    return true
-  }
-  public async logout(userData: User): Promise<User> {
-    if (isEmptyObject(userData))
-      throw new HttpException(400, "You're not userData");
+	public async forgotPassword(email: string): Promise<boolean> {
+		const findUser = await this.users.findOne({ where: { email } });
+		if (!findUser) {
+			throw new HttpException(404, 'email not found please check again');
+		}
+		const token = await this.cacheForgotPassword(findUser.id);
+		const link = FRONTEND_DOMAIN + '/' + token;
+		// send Email
+		await sendMessage(findUser.email, link);
+		return true;
+	}
+	public async logout(userData: User): Promise<User> {
+		if (isEmptyObject(userData))
+			throw new HttpException(400, "You're not userData");
 
-    const findUser = await this.users.findOne({
-      where: { email: userData.email },
-    });
-    if (!findUser) throw new HttpException(409, "You're not user");
+		const findUser = await this.users.findOne({
+			where: { email: userData.email },
+		});
+		if (!findUser) throw new HttpException(409, "You're not user");
 
-    return findUser;
-  }
-  public async changePassword(token, newPassword) {
-    const key = FORGET_PASSWORD_PREFIX + token;
-    const userId = await this.redis.get(key);
-    if (!userId)
-      throw new HttpException(404, "Token expired or invalid")
+		return findUser;
+	}
+	public async changePassword(token, newPassword) {
+		const key = FORGET_PASSWORD_PREFIX + token;
+		const userId = await this.redis.get(key);
+		if (!userId) throw new HttpException(404, 'Token expired or invalid');
 
-    const userIdNum = parseInt(userId);
-    const user = await this.users.findOne(userIdNum)
+		const userIdNum = parseInt(userId);
+		const user = await this.users.findOne(userIdNum);
 
-    if (!user)
-      throw new HttpException(404, "User no longer exist")
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+		if (!user) throw new HttpException(404, 'User no longer exist');
+		const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-    await this.users.update({
-      id: userIdNum
-    },
-      {
-        password: hashedPassword
-      })
-    await this.redis.del(key)
-    const tokenData = this.createToken(user);
-    const cookie = this.createCookie(tokenData);
+		await this.users.update(
+			{
+				id: userIdNum,
+			},
+			{
+				password: hashedPassword,
+			}
+		);
+		await this.redis.del(key);
+		const tokenData = this.createToken(user);
+		const cookie = this.createCookie(tokenData);
 
-    return { user, cookie }
-  }
-  public async cacheForgotPassword(id) {
-    const token = v4()
-    const key = FORGET_PASSWORD_PREFIX + token
-    const time = 1000 * 60 * 60 * 24 * 1
-    if (__prod__) {
-      await this.redis.set(
-        key,
-        id,
-        "ex",
-        time
-      )
-    }
-    else {
-      await this.redis.set(
-        key,
-        id)
-    }
-    return token
-  }
-  public createToken(user: User): TokenData {
-    const dataStoredInToken: DataStoredInToken = { id: user.id };
-    const secret: string = JWT_SECRET;
-    const expiresIn: number = 60 * 60 * 24 * 3 // 3 days;
+		return { user, cookie };
+	}
+	public async cacheForgotPassword(id) {
+		const token = v4();
+		const key = FORGET_PASSWORD_PREFIX + token;
+		const time = 1000 * 60 * 60 * 24 * 1;
+		if (__prod__) {
+			await this.redis.set(key, id, 'ex', time);
+		} else {
+			await this.redis.set(key, id);
+		}
+		return token;
+	}
+	public createToken(user: User): TokenData {
+		const dataStoredInToken: DataStoredInToken = { id: user.id };
+		const secret: string = JWT_SECRET;
+		const expiresIn: number = 60 * 60 * 24 * 3; // 3 days;
+		console.log('Secret is ', JWT_SECRET);
+		console.log('Secret something is  is ', dataStoredInToken);
 
-    return {
-      expiresIn,
-      token: jwt.sign(dataStoredInToken, secret, { expiresIn }),
-    };
-  }
+		return {
+			expiresIn,
+			token: jwt.sign(dataStoredInToken, secret, { expiresIn }),
+		};
+	}
 
-  public createCookie(tokenData: TokenData): string {
-    return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
-  }
+	public createCookie(tokenData: TokenData): string {
+		return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
+	}
 }
 
 export default AuthService;
