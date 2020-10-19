@@ -24,6 +24,7 @@ class AuthController {
 					email: createdUser.email,
 					token,
 					role: createdUser.role,
+					username: createdUser.username,
 					id: createdUser.id,
 				};
 				res.status(201).json({ payload: resData, success: true });
@@ -35,6 +36,7 @@ class AuthController {
 				const resData = {
 					email: createdUser.email,
 					token,
+					username: createdUser.username,
 					role: createdUser.role,
 					id: createdUser.id,
 				};
@@ -58,6 +60,7 @@ class AuthController {
 				email: loggedInUser.email,
 				token,
 				role: loggedInUser.role,
+				username: loggedInUser.username,
 				id: loggedInUser.id,
 			};
 			res.setHeader('Set-Cookie', [cookie]);
