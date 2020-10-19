@@ -35,17 +35,28 @@ class AuthService {
 			);
 
 		const hashedPassword = await bcrypt.hash(userData.password, 10);
-
+		const generatedUsername = await this.genUsername();
 		const createUserData: User = {
 			email: userData.email,
-			username: 'Anon',
+			username: generatedUsername,
 			password: hashedPassword,
 		};
 		const res = await this.users.create(createUserData).save();
 		const tokenData = this.createToken(res);
 		const cookie = this.createCookie(tokenData);
-		console.log(res.username);
 		return { cookie, findUser: res, token: tokenData.token };
+	}
+	private async genUsername(): Promise<string> {
+		const randomInt: string = Math.floor(100 + Math.random() * 900).toString();
+		const username = 'anon' + randomInt;
+		const userExist = await this.users.findOne({
+			where: { username: username },
+		});
+		if (!userExist) {
+			return username;
+		} else {
+			return this.genUsername();
+		}
 	}
 	public async updateAnonUser(
 		userData
@@ -166,8 +177,6 @@ class AuthService {
 		const dataStoredInToken: DataStoredInToken = { id: user.id };
 		const secret: string = JWT_SECRET;
 		const expiresIn: number = 60 * 60 * 24 * 3; // 3 days;
-		console.log('Secret is ', JWT_SECRET);
-		console.log('Secret something is  is ', dataStoredInToken);
 
 		return {
 			expiresIn,

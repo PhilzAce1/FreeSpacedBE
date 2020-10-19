@@ -1,6 +1,3 @@
-/* -------------------------------------------------------------------------- */
-/*                            External Dependencies                           */
-/* -------------------------------------------------------------------------- */
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
@@ -9,8 +6,6 @@ import hpp from 'hpp';
 import logger from 'morgan';
 import connectRedis from 'connect-redis';
 import session from 'express-session';
-
-/* -------------------------- Internal Dependencies ------------------------- */
 import Routes from './interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
 import { PORT } from './config';
@@ -44,7 +39,7 @@ class App {
 	}
 
 	private initializeMiddlewares() {
-		const whitelist = ['http://localhost:3000', 'https://freespaced.co'];
+		const whitelist = ['http://localhost:3000', 'freespaced.co'];
 		var corsOptions = {
 			origin: function (origin, callback) {
 				if (whitelist.indexOf(origin) !== -1) {
@@ -101,10 +96,9 @@ class App {
 		const options = {
 			swaggerDefinition: {
 				info: {
-					title: 'FreeSpace-API Docs',
+					title: 'REST API',
 					version: '1.0.0',
-					description:
-						'A Comprehensice documentationof the freespace application API for the Frontend Developer ',
+					description: 'Example docs',
 				},
 			},
 			apis: ['swagger.yaml'],

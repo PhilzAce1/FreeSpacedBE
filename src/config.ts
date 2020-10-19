@@ -24,4 +24,3 @@ export const __prod__ = process.env.NODE_ENV === 'production';
 export const FORGET_PASSWORD_PREFIX = process.env.FORGET_PASSWORD_PREFIX;
 export const SEND_GRID_API_KEY = process.env.SEND_GRID_API_KEY;
 export const FRONTEND_DOMAIN = process.env.FRONTEND_DOMAIN;
-console.log(process.env.JWT_SECRET);
