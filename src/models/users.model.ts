@@ -1,37 +1,46 @@
 import {
-  BaseEntity,
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
+	BaseEntity,
+	Column,
+	CreateDateColumn,
+	Entity,
+	OneToMany,
+	PrimaryGeneratedColumn,
+	UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../interfaces/users.interface';
-import { Story } from './story.model'
+import { Story } from './story.model';
+import { backcoverimage } from '../utils/helpers';
 @Entity()
 export class UserModel extends BaseEntity implements User {
-  @PrimaryGeneratedColumn()
-  id: number;
+	@PrimaryGeneratedColumn('uuid')
+	id: number;
 
-  @Column({ nullable: true })
-  email: string;
+	@Column({ nullable: true })
+	email: string;
 
-  @Column({ nullable: true })
-  password: string;
+	@Column({ type: 'text' })
+	username: string;
 
-  @Column('bool', { default: false })
-  verified: boolean
+	@Column({ nullable: true })
+	password: string;
 
-  @Column('numeric', { default: 0 })
-  role: number;
+	@Column('bool', { default: false })
+	verified: boolean;
 
-  @OneToMany(() => Story, (story) => story.creator)
-  stories: Story[]
+	@Column({ type: 'text', default: 'stuff', nullable: true })
+	profileimage: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
+	@Column({ type: 'text', default: backcoverimage, nullable: true })
+	profilecoverimage: string;
+	@Column('numeric', { default: 0 })
+	role: number;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+	@OneToMany(() => Story, (story) => story.creator)
+	stories: Story[];
+
+	@CreateDateColumn()
+	createdAt: Date;
+
+	@UpdateDateColumn()
+	updatedAt: Date;
 }

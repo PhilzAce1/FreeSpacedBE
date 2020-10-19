@@ -1,171 +1,200 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
   version: 0.0.0
   title: Free spaced api
   description: The Api for the free spaced application
-host: 'localhost'
-basePath: '/'
+host: "localhost"
+basePath: "/"
 
 tags:
-- name: Auth
-  description: Auth API
+  - name: Auth
+    description: Auth API
 
-
-
-paths: 
+paths:
   #[POST] auth
   /signup:
-   post:
+    post:
       tags:
-      - Auth
+        - Auth
       summary: Register New User
       parameters:
-      - name: body
-        in: body
-        description: user Data
-        required: true
-        schema:
-          $ref: '#/definitions/users'
+        - name: body
+          in: body
+          description: user Data
+          required: true
+          schema:
+            $ref: "#/definitions/users"
       responses:
         201:
-          description: 'Created'
+          description: "Created"
+          schema:
+            $ref: "#/definitions/signuprespose"
+        404:
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/errormessage"
         400:
-          description: 'Bad Request'
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/errormessage"
         409:
-          description: 'Conflict'
+          description: "Conflict"
+          schema:
+            $ref: "#/definitions/errormessage"
         500:
-          description: 'Server Error'
+          description: "Server Error"
+          schema:
+            $ref: "#/definitions/errormessage"
   #[POST] auth
   /login:
-   post:
+    post:
       tags:
-      - Auth
-      summary: Login user 
+        - Auth
+      summary: Login user
       parameters:
-      - name: body
-        in: body
-        description: user Data
-        required: true
-        schema:
-          $ref: '#/definitions/users'
+        - name: body
+          in: body
+          description: user Data
+          required: true
+          schema:
+            $ref: "#/definitions/users"
       responses:
         200:
-          description: 'Ok'
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/signuprespose"
         404:
-          description: 'Not Found'
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/errormessage"
         400:
-          description: 'Bad Request'
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/errormessage"
         409:
-          description: 'Conflict'
+          description: "Conflict"
+          schema:
+            $ref: "#/definitions/errormessage"
         500:
-          description: 'Server Error'        
+          description: "Server Error"
+          schema:
+            $ref: "#/definitions/errormessage"
   #[POST] auth
   /forgotpassword:
-   post:
+    post:
       tags:
-      - Auth
-      summary: Forgot password 
+        - Auth
+      summary: Forgot password
       parameters:
-      - name: body
-        in: body
-        description: user email
-        required: true
-        schema:
-          $ref: '#/definitions/forgot'
+        - name: body
+          in: body
+          description: user email
+          required: true
+          schema:
+            $ref: "#/definitions/forgot"
       responses:
         200:
-          description: 'Ok'
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/forgotpasswordres"
         404:
-          description: 'Not Found'
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/errormessage"
         400:
-          description: 'Bad Request'
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/errormessage"
         409:
-          description: 'Conflict'
+          description: "Conflict"
+          schema:
+            $ref: "#/definitions/errormessage"
         500:
-          description: 'Server Error'        
+          description: "Server Error"
+          schema:
+            $ref: "#/definitions/errormessage"
 
-
- #[POST] auth
+  #[POST] auth
   /changepassword:
-   post:
+    post:
       tags:
-      - Auth
+        - Auth
       summary: Change password
       parameters:
-      - name: body
-        in: body
-        description: token , newPassword
-        required: true
-        schema:
-          $ref: '#/definitions/changepassword'
+        - name: body
+          in: body
+          description: token , newPassword
+          required: true
+          schema:
+            $ref: "#/definitions/changepassword"
       responses:
         200:
-          description: 'Ok'
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/signuprespose"
         404:
-          description: 'Not Found'
+          description: "Not Found"
         400:
-          description: 'Bad Request'
+          description: "Bad Request"
         409:
-          description: 'Conflict'
+          description: "Conflict"
         500:
-          description: 'Server Error'        
+          description: "Server Error"
 
- #[POST] auth
+  #[POST] auth
   /users/sendverifyemail:
-   post:
+    post:
       tags:
-      - User
+        - User
       summary: Send Email verification link
       parameters:
-      - name: body
-        in: body
-        description: user email
-        required: true
-        schema:
-          $ref: '#/definitions/forgot'
+        - name: body
+          in: body
+          description: user email
+          required: true
+          schema:
+            $ref: "#/definitions/forgot"
       responses:
         200:
-          description: 'Ok'
+          description: "Ok"
         404:
-          description: 'Not Found'
+          description: "Not Found"
         400:
-          description: 'Bad Request'
+          description: "Bad Request"
         409:
-          description: 'Conflict'
+          description: "Conflict"
         500:
-          description: 'Server Error'        
+          description: "Server Error"
 
-
- #[POST] auth
+  #[POST] auth
   /users/verifyuser:
-   post:
+    post:
       tags:
-      - User
+        - User
       summary: Verify User
       parameters:
-      - name: body
-        in: body
-        description: user email
-        required: true
-        schema:
-          $ref: '#/definitions/forgot'
+        - name: body
+          in: body
+          description: user email
+          required: true
+          schema:
+            $ref: "#/definitions/forgot"
       responses:
         200:
-          description: 'Ok'
+          description: "Ok"
         404:
-          description: 'Not Found'
+          description: "Not Found"
         400:
-          description: 'Bad Request'
+          description: "Bad Request"
         409:
-          description: 'Conflict'
+          description: "Conflict"
         500:
-          description: 'Server Error'        
-
+          description: "Server Error"
 
 # # [GET] users
 #   /users:
 #     get:
-#       tags: 
+#       tags:
 #       - users
 #       summary: Find All Users
 #       responses:
@@ -175,26 +204,26 @@ paths:
 #           description: 'Server Error'
 
 # # [POST] users
-    # post:
-    #   tags:
-    #   - users
-    #   summary: Add User
-    #   parameters:
-    #   - name: body
-    #     in: body
-    #     description: user Data
-    #     required: true
-    #     schema:
-    #       $ref: '#/definitions/users'
-    #   responses:
-    #     201:
-    #       description: 'Created'
-    #     400:
-    #       description: 'Bad Request'
-    #     409:
-    #       description: 'Conflict'
-    #     500:
-    #       description: 'Server Error'
+# post:
+#   tags:
+#   - users
+#   summary: Add User
+#   parameters:
+#   - name: body
+#     in: body
+#     description: user Data
+#     required: true
+#     schema:
+#       $ref: '#/definitions/users'
+#   responses:
+#     201:
+#       description: 'Created'
+#     400:
+#       description: 'Bad Request'
+#     409:
+#       description: 'Conflict'
+#     500:
+#       description: 'Server Error'
 
 # # [GET] users/id
 #   /users/{id}:
@@ -264,22 +293,58 @@ paths:
 
 # definitions
 definitions:
-  changepassword: 
+  forgotpasswordres:
     type: object
-    required: 
+    properties:
+      success:
+        type: boolean
+      payload:
+        type: object
+        properties:
+          message:
+            type: string
+            description: email sent
+
+  errormessage:
+    type: object
+    properties:
+      success:
+        type: boolean
+        description:  false
+      message:
+        type: string
+        description: a message showing the cause of the error
+  signuprespose:
+    type: object
+    properties:
+      success:
+        type: boolean
+        description: true or false
+      payload:
+        type: object
+        properties:
+          Id:
+            type: number
+            description: user id
+          email:
+            type: string
+            description: user email
+  changepassword:
+    type: object
+    required:
       - token
       - newPassword
     properties:
-      token: 
+      token:
         type: string
         description: token created and sent to user's email
       newPassword:
         type: string
-        description: user's new Password 
+        description: user's new Password
   forgot:
     type: string
-    required: 
-      - email 
+    required:
+      - email
     properties:
       email:
         type: string
@@ -287,8 +352,8 @@ definitions:
   users:
     type: object
     required:
-        - email
-        - password
+      - email
+      - password
     properties:
       email:
         type: string
@@ -298,5 +363,5 @@ definitions:
         description: user Password
 
 schemes:
- - https
- - http
+  - https
+  - http

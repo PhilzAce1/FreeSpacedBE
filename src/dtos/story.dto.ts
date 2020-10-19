@@ -1,13 +1,13 @@
-import { IsInt, MinLength, IsString } from 'class-validator'
+import { MinLength, IsString } from 'class-validator';
 
 export class CreateStoryDto {
-    @IsString()
-    public title: string
+	@MinLength(2)
+	@IsString()
+	public title: string;
 
+	@IsString()
+	public text: string;
 
-    @IsString()
-    public text: string
-
-    // @IsInt()
-    public creatorId: number
+	// @IsInt()
+	public creatorId: number;
 }

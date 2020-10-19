@@ -15,7 +15,10 @@ async function connect() {
             entities: [UserModel, Story],
             name: "default"
         } as any)
-        : createConnection({ ...connectionOptions, name: "default" });
+        : createConnection({
+            ...connectionOptions, name: "default",
+            entities: [UserModel, Story],
+        });
 }
 export async function database() {
     let retries = 10;
