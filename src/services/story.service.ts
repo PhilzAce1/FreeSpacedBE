@@ -31,7 +31,7 @@ class StoryService {
 				text,
 				is_spacecare,
 				allow_therapist,
-				creatorId: parseInt(creatorId),
+				creatorId: creatorId,
 			})
 			.save();
 		return createdStory;

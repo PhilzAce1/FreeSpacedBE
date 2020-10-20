@@ -27,7 +27,7 @@ export class UserModel extends BaseEntity implements User {
 	@Column({ nullable: true })
 	lastname: string;
 
-	@Column({ type: 'text' })
+	@Column({ type: 'text', nullable: true })
 	username: string;
 
 	@Column({ nullable: true })

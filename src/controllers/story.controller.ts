@@ -5,12 +5,12 @@ import { NextFunction, Request, Response } from 'express';
 import { CreateStoryDto } from '../dtos/story.dto';
 
 /* -------------------------- Internal Dependencies ------------------------- */
-import UserService from '../services/users.service';
+import AuthService from '../services/auth.service';
 import StoryService from '../services/story.service';
 
 class StoryController {
 	public storyService = new StoryService();
-	public userService = new UserService();
+	public authService = new AuthService();
 	public getAllStories = async (
 		_: Request,
 		res: Response,
@@ -34,7 +34,7 @@ class StoryController {
 		const storyData: CreateStoryDto = req.body;
 
 		if (!storyData.creatorId) {
-			storyData.creatorId = await this.userService.createAnonUser();
+			storyData.creatorId = await this.authService.createAnonUser();
 		}
 		try {
 			const createdStory = await this.storyService.createStory(storyData);

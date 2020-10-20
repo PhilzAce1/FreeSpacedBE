@@ -46,6 +46,13 @@ class AuthService {
 		const cookie = this.createCookie(tokenData);
 		return { cookie, findUser: res, token: tokenData.token };
 	}
+
+	public async createAnonUser() {
+		const username = await this.genUsername();
+		const newUser = await this.users.create({ username }).save();
+		return newUser.id;
+	}
+
 	private async genUsername(): Promise<string> {
 		const randomInt: string = Math.floor(100 + Math.random() * 900).toString();
 		const username = 'anon' + randomInt;

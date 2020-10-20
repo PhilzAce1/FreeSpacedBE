@@ -45,10 +45,6 @@ class UserService {
 
 		return createUserData;
 	}
-	public async createAnonUser() {
-		const newUser = await this.users.create();
-		return newUser.id;
-	}
 
 	public async updateUser(_: number, userData: User): Promise<any> {
 		if (isEmptyObject(userData))

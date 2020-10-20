@@ -3,7 +3,6 @@ import Redis from 'ioredis';
 import { Story } from '../models/story.model';
 import { UserModel } from '../models/users.model';
 import { __prod__ } from '../config';
-console.log(process.env.DATABASE_URL, process.env.REDIS_URL);
 export const redisDb = __prod__
 	? new Redis(process.env.REDIS_URL)
 	: new Redis();
