@@ -104,8 +104,7 @@ class AuthService {
 			userData.password,
 			findUser.password
 		);
-		if (!isPasswordMatching)
-			throw new HttpException(409, "You're password not matching");
+		if (!isPasswordMatching) throw new HttpException(409, 'wrong password ');
 
 		const tokenData = this.createToken(findUser);
 		const cookie = this.createCookie(tokenData);
@@ -128,12 +127,12 @@ class AuthService {
 	}
 	public async logout(userData: User): Promise<User> {
 		if (isEmptyObject(userData))
-			throw new HttpException(400, "You're not userData");
+			throw new HttpException(400, "You're not logged in");
 
 		const findUser = await this.users.findOne({
 			where: { email: userData.email },
 		});
-		if (!findUser) throw new HttpException(409, "You're not user");
+		if (!findUser) throw new HttpException(409, 'User does not exist');
 
 		return findUser;
 	}

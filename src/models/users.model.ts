@@ -10,6 +10,9 @@ import {
 import { User } from '../interfaces/users.interface';
 import { Story } from './story.model';
 import { backcoverimage } from '../utils/helpers';
+// name -> {firstname , lastname}
+// profilecoverimage -> coverimage
+
 @Entity()
 export class UserModel extends BaseEntity implements User {
 	@PrimaryGeneratedColumn('uuid')
@@ -17,6 +20,12 @@ export class UserModel extends BaseEntity implements User {
 
 	@Column({ nullable: true })
 	email: string;
+
+	@Column({ nullable: true, default: 'anonymous' })
+	firstname: string;
+
+	@Column({ nullable: true })
+	lastname: string;
 
 	@Column({ type: 'text' })
 	username: string;
@@ -31,7 +40,8 @@ export class UserModel extends BaseEntity implements User {
 	profileimage: string;
 
 	@Column({ type: 'text', default: backcoverimage, nullable: true })
-	profilecoverimage: string;
+	coverimage: string;
+
 	@Column('numeric', { default: 0 })
 	role: number;
 

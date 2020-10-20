@@ -78,9 +78,10 @@ class AuthController {
 		const email: string = req.body.email;
 		try {
 			await this.authService.forgotPassword(email);
-			res
-				.status(200)
-				.json({ success: true, payload: { message: 'password email sent' } });
+			res.status(200).json({
+				success: true,
+				payload: { message: 'password recovery email sent' },
+			});
 		} catch (error) {
 			next(error);
 		}
@@ -110,7 +111,12 @@ class AuthController {
 		try {
 			const logOutUserData: User = await this.authService.logout(userData);
 			res.setHeader('Set-Cookie', ['Authorization=; Max-age=0']);
-			res.status(200).json({ payload: logOutUserData, success: true });
+			res.status(200).json({
+				payload: {
+					message: `${logOutUserData.email} has been logged out successfully`,
+				},
+				success: true,
+			});
 		} catch (error) {
 			next(error);
 		}
