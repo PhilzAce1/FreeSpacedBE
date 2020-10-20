@@ -20,7 +20,7 @@ export class Story extends BaseEntity {
 	@Column()
 	text: string;
 
-	@Column({ nullable: true })
+	@Column({ type: 'text', nullable: true, array: true })
 	tags: string[];
 
 	@Column({ nullable: true })

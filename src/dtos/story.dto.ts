@@ -1,4 +1,4 @@
-import { MinLength, IsString } from 'class-validator';
+import { MinLength, IsString, IsBoolean } from 'class-validator';
 
 export class CreateStoryDto {
 	@MinLength(2)
@@ -8,6 +8,11 @@ export class CreateStoryDto {
 	@IsString()
 	public text: string;
 
-	// @IsInt()
+	@IsBoolean()
+	public is_spacecare: boolean;
+
+	@IsBoolean()
+	public allow_therapist: boolean;
+
 	public creatorId: number;
 }
