@@ -9,6 +9,10 @@ class StoryService {
 		const stories = await this.story.find();
 		return stories;
 	}
+	public async getPostById(id) {
+		const story = await this.story.findOne({ where: { id } });
+		return story;
+	}
 	// public async getStoryById(storyId: number): Promise<Story> {
 	// const singleStory = await this.story.findOne({ where: { id: storyId } })
 

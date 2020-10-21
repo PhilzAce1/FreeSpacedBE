@@ -12,7 +12,7 @@ class StoryRoute implements Route {
 	}
 	private initializeRoutes() {
 		this.router.get(`${this.path}`, this.storyController.getAllStories);
-
+		this.router.get(`${this.path}/:id`, this.storyController.getPostById);
 		this.router.post(
 			`${this.path}/create`,
 			validationMiddleware(CreateStoryDto),

@@ -9,8 +9,8 @@ import HttpException from '../exceptions/HttpException';
 import { DataStoredInToken } from '../interfaces/auth.interface';
 import { UserModel } from '../models/users.model';
 import { JWT_SECRET } from '../config';
-
-async function authMiddleware(req, _, next) {
+import { RequestWithUser } from '../interfaces/auth.interface';
+async function authMiddleware(req: RequestWithUser, _, next) {
 	const cookies = req.cookies;
 	if (cookies && cookies.Authorization) {
 		const secret = JWT_SECRET;

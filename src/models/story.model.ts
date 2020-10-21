@@ -11,7 +11,7 @@ import {
 
 @Entity()
 export class Story extends BaseEntity {
-	@PrimaryGeneratedColumn()
+	@PrimaryGeneratedColumn('uuid')
 	id: number;
 
 	@Column()

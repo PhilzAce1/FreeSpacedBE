@@ -24,6 +24,10 @@ class AuthRoute implements Route {
 			validationMiddleware(CreateUserDto),
 			this.authController.logIn
 		);
+		this.router.get('/me', authMiddleware, (req, res) => {
+			const { password, ...user } = req.user;
+			res.json({ success: true, payload: user });
+		});
 		this.router.post('/forgotpassword', this.authController.forgotPassword);
 		this.router.post('/changepassword', this.authController.changePassword);
 		this.router.post(`/logout`, authMiddleware, this.authController.logOut);
