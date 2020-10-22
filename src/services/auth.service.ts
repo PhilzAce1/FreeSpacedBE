@@ -6,12 +6,7 @@ import { DataStoredInToken, TokenData } from '../interfaces/auth.interface';
 import { User } from '../interfaces/users.interface';
 import { UserModel as userModel } from '../models/users.model';
 import { isEmptyObject } from '../utils/util';
-import {
-	JWT_SECRET,
-	FORGET_PASSWORD_PREFIX,
-	__prod__,
-	FRONTEND_DOMAIN,
-} from '../config';
+import { JWT_SECRET, FORGET_PASSWORD_PREFIX, __prod__ } from '../config';
 import { sendMessage } from '../utils/sendMail';
 import { v4 } from 'uuid';
 import { redisDb } from '../utils/connectDB';
@@ -127,9 +122,9 @@ class AuthService {
 			throw new HttpException(404, 'email not found please check again');
 		}
 		const token = await this.cacheForgotPassword(findUser.id);
-		const link = FRONTEND_DOMAIN + '/' + token;
+		// const link =  token;
 		// send Email
-		await sendMessage(findUser.email, link);
+		await sendMessage(findUser.email, 'forgotpassword', token);
 		return true;
 	}
 	public async logout(userData: User): Promise<User> {

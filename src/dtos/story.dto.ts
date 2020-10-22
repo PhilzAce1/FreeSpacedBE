@@ -1,4 +1,4 @@
-import { MinLength, IsString, IsBoolean } from 'class-validator';
+import { MinLength, IsString, IsBoolean, IsArray } from 'class-validator';
 
 export class CreateStoryDto {
 	@MinLength(2)
@@ -13,6 +13,9 @@ export class CreateStoryDto {
 
 	@IsBoolean()
 	public allow_therapist: boolean;
+
+	@IsArray()
+	public tags;
 
 	public creatorId: number;
 }

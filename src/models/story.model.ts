@@ -7,7 +7,11 @@ import {
 	ManyToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
+	ManyToMany,
+	JoinTable,
 } from 'typeorm';
+
+import { Tag } from './tag.model';
 
 @Entity()
 export class Story extends BaseEntity {
@@ -20,8 +24,12 @@ export class Story extends BaseEntity {
 	@Column()
 	text: string;
 
-	@Column({ type: 'text', nullable: true, array: true })
-	tags: string[];
+	// @Column({ type: 'text', nullable: true, array: true })
+	// tags: string[];
+
+	@ManyToMany(() => Tag, (tag) => tag.stories)
+	@JoinTable()
+	tags: Tag[];
 
 	@Column({ nullable: true })
 	contributors: string;
@@ -41,7 +49,7 @@ export class Story extends BaseEntity {
 	@Column()
 	creatorId: number;
 
-	@ManyToOne(() => User, (user) => user.stories)
+	@ManyToOne(() => User, (creator) => creator.stories)
 	creator: User;
 
 	@CreateDateColumn()

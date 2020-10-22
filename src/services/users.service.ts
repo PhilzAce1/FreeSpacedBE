@@ -81,7 +81,7 @@ class UserService {
 		if (!findUser) throw new HttpException(404, 'user not found');
 		const token = await this.cacheVerifiedPwd(findUser.id);
 
-		await sendMessage(findUser.email, token);
+		await sendMessage(findUser.email, 'verifyemail', token);
 		return true;
 	}
 	public async verifyUser(token) {

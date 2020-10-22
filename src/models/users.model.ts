@@ -3,6 +3,7 @@ import {
 	Column,
 	CreateDateColumn,
 	Entity,
+	JoinTable,
 	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
@@ -46,6 +47,7 @@ export class UserModel extends BaseEntity implements User {
 	role: number;
 
 	@OneToMany(() => Story, (story) => story.creator)
+	@JoinTable()
 	stories: Story[];
 
 	@CreateDateColumn()

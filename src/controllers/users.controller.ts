@@ -8,7 +8,7 @@ import { User } from '../interfaces/users.interface';
 /* -------------------------- Internal Dependencies ------------------------- */
 import HttpException from '../exceptions/HttpException';
 import userService from '../services/users.service';
-
+import { Story } from '../models/story.model';
 class UsersController {
 	public userService = new userService();
 
@@ -21,6 +21,21 @@ class UsersController {
 		}
 	};
 
+	public getUserStories = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		const { userId } = req.params;
+		try {
+			const userStory = await Story.find({
+				where: { creatorId: userId },
+			});
+			res.json({ success: true, payload: userStory });
+		} catch (error) {
+			next(error);
+		}
+	};
 	public getUserById = async (
 		req: Request,
 		res: Response,
