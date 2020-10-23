@@ -34,7 +34,7 @@ export class Story extends BaseEntity {
 	@Column({ nullable: true })
 	contributors: string;
 
-	@Column({ nullable: true })
+	@Column({ nullable: true, default: 0 })
 	views: number;
 
 	@Column({ nullable: true })

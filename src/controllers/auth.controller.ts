@@ -26,6 +26,7 @@ class AuthController {
 					role: createdUser.role,
 					username: createdUser.username,
 					id: createdUser.id,
+					profileimage: createdUser.profileimage,
 				};
 				res.status(201).json({ payload: resData, success: true });
 			} else {
@@ -38,6 +39,7 @@ class AuthController {
 					token,
 					username: createdUser.username,
 					role: createdUser.role,
+					profileimage: createdUser.profileimage,
 					id: createdUser.id,
 				};
 				res.setHeader('Set-Cookie', [cookie]);
@@ -61,6 +63,7 @@ class AuthController {
 				token,
 				role: loggedInUser.role,
 				username: loggedInUser.username,
+				profileimage: loggedInUser.profileimage,
 				id: loggedInUser.id,
 			};
 			res.setHeader('Set-Cookie', [cookie]);

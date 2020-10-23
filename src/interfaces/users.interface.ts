@@ -6,4 +6,5 @@ export interface User {
 	role?: number;
 	story?: string;
 	verified?: boolean;
+	profileimage?: string;
 }

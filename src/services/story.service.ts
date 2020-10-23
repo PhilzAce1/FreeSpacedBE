@@ -15,12 +15,19 @@ class StoryService {
 			where: { id },
 			relations: ['tags'],
 		});
-		const { tag, ...mainStory } = story as any;
+
+		const { tags, ...mainStory } = story as any;
 		const newTagList: string[] = [];
-		for (const tagData of tag) {
+
+		for (const tagData of tags) {
 			newTagList.push(tagData.name);
 		}
-		mainStory.tag = newTagList;
+		mainStory.tags = newTagList;
+		if (story?.views || story?.views === 0) {
+			await this.story.update(id, { views: story?.views + 1 });
+			mainStory.views = mainStory.views + 1;
+		}
+
 		return mainStory;
 	}
 
@@ -33,32 +40,32 @@ class StoryService {
 		});
 		if (storyTitleExist)
 			throw new HttpException(400, 'This Title Already exist Please change it');
-		const {
-			title,
-			text,
-			creatorId,
-			is_spacecare,
-			allow_therapist,
-			tags,
-		} = storyData;
+		const { title, text, creatorId, allow_therapist, tags } = storyData;
 		const tagArr: Tag[] = [];
-		for (const tagData of tags) {
-			const newTag = await this.getStoryTag(tagData);
-			if (tagData) {
-				tagArr.push(newTag);
+		if (tags) {
+			for (const tagData of tags) {
+				const newTag = await this.getStoryTag(tagData);
+				if (tagData) {
+					tagArr.push(newTag);
+				}
 			}
 		}
 		const createdStory = await this.story
 			.create({
 				title,
 				text,
-				is_spacecare,
 				tags: tagArr,
 				allow_therapist,
 				creatorId: creatorId,
 			})
 			.save();
-		return createdStory;
+		const { tags: createdStoryTag, ...mainStory } = createdStory as any;
+		const newTagList: string[] = [];
+		for (const tagData of createdStoryTag) {
+			newTagList.push(tagData.name);
+		}
+		mainStory.tags = newTagList;
+		return mainStory;
 	}
 	private async getStoryTag(name: string): Promise<Tag> {
 		const storyTag = await this.tags.findOne({ where: { name } });

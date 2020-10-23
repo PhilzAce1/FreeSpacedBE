@@ -9,9 +9,6 @@ export class CreateStoryDto {
 	public text: string;
 
 	@IsBoolean()
-	public is_spacecare: boolean;
-
-	@IsBoolean()
 	public allow_therapist: boolean;
 
 	@IsArray()

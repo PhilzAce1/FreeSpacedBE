@@ -10,6 +10,8 @@ import { JWT_SECRET, FORGET_PASSWORD_PREFIX, __prod__ } from '../config';
 import { sendMessage } from '../utils/sendMail';
 import { v4 } from 'uuid';
 import { redisDb } from '../utils/connectDB';
+import { createIdenticon } from '../utils/genImage';
+import { ImageUrl } from '../config';
 class AuthService {
 	public users = userModel;
 	public redis = redisDb;
@@ -31,10 +33,12 @@ class AuthService {
 
 		const hashedPassword = await bcrypt.hash(userData.password, 10);
 		const generatedUsername = await this.genUsername();
+		const generatedImage = createIdenticon();
 		const createUserData: User = {
 			email: userData.email,
 			username: generatedUsername,
 			password: hashedPassword,
+			profileimage: ImageUrl + generatedImage,
 		};
 		const res = await this.users.create(createUserData).save();
 		const tokenData = this.createToken(res);
@@ -44,7 +48,10 @@ class AuthService {
 
 	public async createAnonUser() {
 		const username = await this.genUsername();
-		const newUser = await this.users.create({ username }).save();
+		const generatedImage = createIdenticon();
+		const newUser = await this.users
+			.create({ username, profileimage: ImageUrl + generatedImage })
+			.save();
 		return newUser.id;
 	}
 

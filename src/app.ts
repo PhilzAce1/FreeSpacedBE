@@ -11,6 +11,7 @@ import errorMiddleware from './middlewares/error.middleware';
 import { PORT } from './config';
 import { __prod__, COOKIE_NAME } from './config';
 import { redisDb as redis } from './utils/connectDB';
+// import path from 'path';
 const RedisStore = connectRedis(session);
 
 class App {
@@ -68,6 +69,7 @@ class App {
 				resave: false,
 			})
 		);
+		this.app.use('/images', express.static('images'));
 		if (this.env) {
 			this.app.use(hpp());
 			this.app.use(helmet());

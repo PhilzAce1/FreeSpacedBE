@@ -45,6 +45,18 @@ paths:
           description: "Server Error"
           schema:
             $ref: "#/definitions/errormessage"
+  #[GET] auth
+  /me:
+    get:
+      tags:
+        - Auth
+      summary: Get Auth User Data
+      responses:
+        200:
+          description: "An Object of Auth user data"
+        500:
+          description: "Server Error"
+
   #[POST] auth
   /login:
     post:
@@ -191,6 +203,66 @@ paths:
         500:
           description: "Server Error"
 
+  #[POST] auth
+  /story/create:
+    post:
+      tags:
+        - Story
+      summary: Create Story
+      parameters:
+        - name: body
+          in: body
+          description: Create a story
+          required: true
+          schema:
+            $ref: "#/definitions/createstorybody"
+      responses:
+        200:
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/createstoryresponse"
+        404:
+          description: "Not Found"
+        400:
+          description: "Bad Request"
+        409:
+          description: "Conflict"
+        500:
+          description: "Server Error"
+
+  # [GET] storiest
+  /story:
+    get:
+      tags:
+        - Story
+      summary: Find All Stories
+      responses:
+        200:
+          description: "An List of all Stories in the datebase"
+
+        500:
+          description: "Server Error"
+
+  # [GET] users/id
+  /story/{id}:
+    get:
+      tags:
+        - Story
+      summary: Find Story By Id
+      parameters:
+        - name: id
+          in: path
+          description: Story Id
+          required: true
+          type: string
+      responses:
+        200:
+          description: "OK"
+        409:
+          description: "Conflict"
+        500:
+          description: "Server Error"
+
 # # [GET] users
 #   /users:
 #     get:
@@ -293,6 +365,76 @@ paths:
 
 # definitions
 definitions:
+  createstoryresponse:
+    type: object
+    properties:
+      success:
+        type: boolean
+        description: true or false
+      payload:
+        type: object
+        properties:
+          Id:
+            type: string
+            description: story Id
+          title:
+            type: string
+            description: The title of the Story
+          text:
+            type: string
+            description: body of the story
+          allow_therapist:
+            type: boolean
+            description: "true | false"
+          creatorId:
+            type: string
+            description: "user Id"
+          contributors:
+            type: string
+            description: "null"
+          views:
+            type: string
+            description: "null"
+          share:
+            type: string
+            description: "null"
+          is_spacecare:
+            type: boolean
+            description: "true | false"
+          id:
+            type: string
+            description: story id
+          createdAt:
+            type: string
+            description: ddd
+          tags:
+            type: array
+            description: story tags arry
+
+  createstorybody:
+    type: object
+    required:
+      - title
+      - text
+      - tags
+      - allow_therapist
+    properties:
+      title:
+        type: string
+        description: the title of the Story
+      text:
+        type: string
+        description: The Body of the Story
+      tags:
+        type: array
+        description: an array of string,e.g ["love", "peace"]
+      allow_therapist:
+        type: boolean
+        description: true or false
+      creatorId:
+        type: string
+        description: userId should be provided for an Authenticated User
+
   forgotpasswordres:
     type: object
     properties:
@@ -310,7 +452,7 @@ definitions:
     properties:
       success:
         type: boolean
-        description:  false
+        description: "true | false"
       message:
         type: string
         description: a message showing the cause of the error

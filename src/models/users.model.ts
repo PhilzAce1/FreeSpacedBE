@@ -11,8 +11,9 @@ import {
 import { User } from '../interfaces/users.interface';
 import { Story } from './story.model';
 import { backcoverimage } from '../utils/helpers';
-// name -> {firstname , lastname}
-// profilecoverimage -> coverimage
+import { ImageUrl } from '../config';
+
+const imageFile = ImageUrl + 'one.png';
 
 @Entity()
 export class UserModel extends BaseEntity implements User {
@@ -37,7 +38,7 @@ export class UserModel extends BaseEntity implements User {
 	@Column('bool', { default: false })
 	verified: boolean;
 
-	@Column({ type: 'text', default: 'stuff', nullable: true })
+	@Column({ type: 'text', default: imageFile, nullable: true })
 	profileimage: string;
 
 	@Column({ type: 'text', default: backcoverimage, nullable: true })

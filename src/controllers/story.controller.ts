@@ -34,7 +34,6 @@ class StoryController {
 		next: NextFunction
 	) => {
 		const { id } = req.params;
-
 		try {
 			if (!uuidValidator(id)) {
 				res.status(404).json({
@@ -73,7 +72,7 @@ class StoryController {
 			const createdStory = await this.storyService.createStory(storyData);
 			res.status(200).json({
 				payload: createdStory,
-				message: 'storyCreated',
+				success: true,
 			});
 		} catch (error) {
 			next(error);

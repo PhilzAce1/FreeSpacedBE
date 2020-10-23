@@ -11,6 +11,7 @@ declare var process: {
 		FORGET_PASSWORD_PREFIX: string;
 		SEND_GRID_API_KEY: string;
 		FRONTEND_DOMAIN: string;
+		SERVER_URL: string;
 	};
 };
 export const JWT_SECRET = process.env.JWT_SECRET;
@@ -24,3 +25,4 @@ export const __prod__ = process.env.NODE_ENV === 'production';
 export const FORGET_PASSWORD_PREFIX = process.env.FORGET_PASSWORD_PREFIX;
 export const SEND_GRID_API_KEY = process.env.SEND_GRID_API_KEY;
 export const FRONTEND_DOMAIN = process.env.FRONTEND_DOMAIN;
+export const ImageUrl = process.env.SERVER_URL + '/images/';
