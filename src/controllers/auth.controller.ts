@@ -13,13 +13,11 @@ class AuthController {
 		const userData: CreateUserDto = req.body;
 		try {
 			if (userData.userId) {
-				const {
-					cookie,
-					findUser,
-					token,
-				} = await this.authService.updateAnonUser(userData);
+				const { findUser, token } = await this.authService.updateAnonUser(
+					userData
+				);
 				const { password, ...createdUser } = findUser;
-				res.setHeader('Set-Cookie', [cookie]);
+
 				const resData = {
 					email: createdUser.email,
 					token,
@@ -30,9 +28,7 @@ class AuthController {
 				};
 				res.status(201).json({ payload: resData, success: true });
 			} else {
-				const { cookie, findUser, token } = await this.authService.signup(
-					userData
-				);
+				const { findUser, token } = await this.authService.signup(userData);
 				const { password, ...createdUser } = findUser;
 				const resData = {
 					email: createdUser.email,
@@ -42,7 +38,7 @@ class AuthController {
 					profileimage: createdUser.profileimage,
 					id: createdUser.id,
 				};
-				res.setHeader('Set-Cookie', [cookie]);
+
 				res.status(201).json({ payload: resData, success: true });
 			}
 		} catch (error) {
@@ -54,9 +50,7 @@ class AuthController {
 		const userData: CreateUserDto = req.body;
 
 		try {
-			const { cookie, findUser, token } = await this.authService.login(
-				userData
-			);
+			const { findUser, token } = await this.authService.login(userData);
 			const { password, ...loggedInUser } = findUser;
 			const resData = {
 				email: loggedInUser.email,
@@ -66,8 +60,11 @@ class AuthController {
 				profileimage: loggedInUser.profileimage,
 				id: loggedInUser.id,
 			};
-			res.setHeader('Set-Cookie', [cookie]);
-			res.status(200).json({ payload: resData, success: true });
+
+			res
+				.header('x-auth-token', 'Somethingnice')
+				.status(200)
+				.json({ payload: resData, success: true });
 		} catch (error) {
 			next(error);
 		}
@@ -97,12 +94,12 @@ class AuthController {
 		// Remember to validate
 		const { token, newPassword } = req.body;
 		try {
-			const { cookie, user } = await this.authService.changePassword(
+			const { user } = await this.authService.changePassword(
 				token,
 				newPassword
 			);
 			const { password, ...loggedInUser } = user;
-			res.setHeader('Set-Cookie', [cookie]);
+
 			res.status(200).json({ payload: loggedInUser, success: true });
 		} catch (error) {
 			next(error);

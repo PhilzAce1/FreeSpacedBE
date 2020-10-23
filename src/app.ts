@@ -4,15 +4,16 @@ import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import logger from 'morgan';
-import connectRedis from 'connect-redis';
-import session from 'express-session';
+// import connectRedis from 'connect-redis';
+// import session from 'express-session';
 import Routes from './interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
 import { PORT } from './config';
-import { __prod__, COOKIE_NAME } from './config';
-import { redisDb as redis } from './utils/connectDB';
+import { __prod__ } from './config';
+// COOKIE_NAME
+// import { redisDb as redis } from './utils/connectDB';
 // import path from 'path';
-const RedisStore = connectRedis(session);
+// const RedisStore = connectRedis(session);
 
 class App {
 	public app: express.Application;
@@ -51,36 +52,37 @@ class App {
 		// 	},
 		// 	credentials: true,
 		// };
-		this.app.use(
-			session({
-				name: COOKIE_NAME,
-				store: new RedisStore({
-					client: redis,
-					disableTouch: true,
-				}),
-				cookie: {
-					maxAge: 1000 * 60 * 60 * 24 * 365 * 1, // 1 years
-					httpOnly: true,
-					sameSite: 'lax', // csrf
-					secure: __prod__, // cookie only works in https
-				},
-				saveUninitialized: false,
-				secret: 'qowiueojwojfalksdjoqiwueo',
-				resave: false,
-			})
-		);
+		// this.app.use(
+		// 	session({
+		// 		name: COOKIE_NAME,
+		// 		store: new RedisStore({
+		// 			client: redis,
+		// 			disableTouch: true,
+		// 		}),
+		// 		cookie: {
+		// 			maxAge: 1000 * 60 * 60 * 24 * 365 * 1, // 1 years
+		// 			httpOnly: true,
+		// 			sameSite: 'lax', // csrf
+		// 			secure: __prod__, // cookie only works in https
+		// 		},
+		// 		saveUninitialized: false,
+		// 		secret: 'qowiueojwojfalksdjoqiwueo',
+		// 		resave: false,
+		// 	})
+		// );
+
 		this.app.use('/images', express.static('images'));
 		if (this.env) {
 			this.app.use(hpp());
 			this.app.use(helmet());
 			this.app.use(logger('combined'));
 			// this.app.use(cors(corsOptions));
-			this.app.use(cors());
 		} else {
 			this.app.use(helmet());
 			this.app.use(logger('dev'));
 			this.app.use(cors({ origin: true, credentials: true }));
 		}
+		this.app.use(cors({ origin: true, credentials: true }));
 
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));

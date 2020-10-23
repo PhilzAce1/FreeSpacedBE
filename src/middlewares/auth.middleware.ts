@@ -11,12 +11,12 @@ import { UserModel } from '../models/users.model';
 import { JWT_SECRET } from '../config';
 import { RequestWithUser } from '../interfaces/auth.interface';
 async function authMiddleware(req: RequestWithUser, _, next) {
-	const cookies = req.cookies;
-	if (cookies && cookies.Authorization) {
+	const token = req.header('x-auth-token');
+	if (token) {
 		const secret = JWT_SECRET;
 		try {
 			const verificationResponse = jwt.verify(
-				cookies.Authorization,
+				token,
 				secret
 			) as DataStoredInToken;
 			const userId = verificationResponse.id;
