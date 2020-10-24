@@ -35,11 +35,11 @@ class StoryService {
 		if (isEmptyObject(storyData))
 			throw new HttpException(400, 'You have not inputed any Story Data');
 
-		const storyTitleExist = await this.story.findOne({
-			where: { title: storyData.title },
-		});
-		if (storyTitleExist)
-			throw new HttpException(400, 'This Title Already exist Please change it');
+		// const storyTitleExist = await this.story.findOne({
+		// 	where: { title: storyData.title },
+		// });
+		// if (storyTitleExist)
+		// 	throw new HttpException(400, 'This Title Already exist Please change it');
 		const { title, text, creatorId, allow_therapist, tags } = storyData;
 		const tagArr: Tag[] = [];
 		if (tags) {

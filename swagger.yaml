@@ -383,6 +383,11 @@ definitions:
           text:
             type: string
             description: body of the story
+          tags:
+            type: array
+            items:
+              type: string
+            description: an array of string,e.g ["love", "peace"]
           allow_therapist:
             type: boolean
             description: "true | false"
@@ -401,15 +406,9 @@ definitions:
           is_spacecare:
             type: boolean
             description: "true | false"
-          id:
-            type: string
-            description: story id
           createdAt:
             type: string
             description: ddd
-          tags:
-            type: array
-            description: story tags arry
 
   createstorybody:
     type: object
@@ -427,6 +426,8 @@ definitions:
         description: The Body of the Story
       tags:
         type: array
+        items:
+          type: string
         description: an array of string,e.g ["love", "peace"]
       allow_therapist:
         type: boolean
