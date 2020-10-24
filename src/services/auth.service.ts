@@ -12,10 +12,11 @@ import { v4 } from 'uuid';
 import { redisDb } from '../utils/connectDB';
 import { createIdenticon } from '../utils/genImage';
 import { ImageUrl } from '../config';
+import UserService from './users.service';
 class AuthService {
 	public users = userModel;
 	public redis = redisDb;
-
+	private userService = new UserService();
 	public async signup(
 		userData: CreateUserDto
 	): Promise<{ cookie: string; findUser: User; token: string }> {
@@ -43,6 +44,9 @@ class AuthService {
 		const res = await this.users.create(createUserData).save();
 		const tokenData = this.createToken(res);
 		const cookie = this.createCookie(tokenData);
+
+		await this.userService.sendVerifyUserEmail(userData.email);
+
 		return { cookie, findUser: res, token: tokenData.token };
 	}
 
@@ -93,6 +97,8 @@ class AuthService {
 		);
 		const tokenData = this.createToken(updateUser);
 		const cookie = this.createCookie(tokenData);
+
+		await this.userService.sendVerifyUserEmail(userData.email);
 
 		return { cookie, findUser: updateUser, token: tokenData.token };
 	}
