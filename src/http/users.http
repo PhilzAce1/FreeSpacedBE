@@ -36,3 +36,21 @@ Content-Type: application/json
 ###
 # Del User By Id
 DELETE {{baseURL}}/users/1
+
+POST {{baseURL}}/posts
+Content-Type: application/json
+
+{
+    "abc":"xyz",
+    "foo":"bar"
+}
+
+#######
+POST https://jsonplaceholder.typicode.com/posts
+Content-Type: application/json
+x-auth-token: stsfgsfgg
+
+{
+    "abc":"xyz",
+    "foo":"bar"
+}

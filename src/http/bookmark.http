@@ -1,0 +1,24 @@
+#bookmark API
+
+###
+# authToken
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJkMzZmZjBiLTg3MGMtNGY0Yy05NDViLTRhNzk1YmM2MDRmYSIsImlhdCI6MTYwMzk5NDExNCwiZXhwIjoxNjA0MjUzMzE0fQ.HDDXDOPhfzWY2ghfrV6vClFxmfAMH4EnngWyqpM7r5Y
+###
+# baseURL
+@baseURL = http://localhost:3000
+
+###
+# Create Bookmark
+ 
+POST {{baseURL}}/bookmark/create
+Content-Type: application/json
+x-auth-token: {{authToken}}
+
+{
+    "storyId":"a1e353cd-bd9e-45b0-8ce6-3d54995e38c2"
+}
+###
+
+GET {{baseURL}}/bookmark
+Content-Type: application/json
+x-auth-token: {{authToken}}

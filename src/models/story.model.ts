@@ -1,33 +1,51 @@
-import { UserModel as User } from './users.model';
 import {
 	BaseEntity,
 	Column,
 	CreateDateColumn,
 	Entity,
+	JoinTable,
+	ManyToMany,
 	ManyToOne,
+	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
-	ManyToMany,
-	JoinTable,
 } from 'typeorm';
-
+import { Bookmark } from './bookmark.model';
+import { Comment } from './comment.model';
 import { Tag } from './tag.model';
+import { UserModel as User } from './users.model';
 
 @Entity()
 export class Story extends BaseEntity {
 	@PrimaryGeneratedColumn('uuid')
-	id: number;
+	id: string;
 
-	@Column()
+	@Column({ nullable: true })
 	title: string;
 
 	@Column()
 	text: string;
 
-	// @Column({ type: 'text', nullable: true, array: true })
-	// tags: string[];
+	@OneToMany(() => Comment, (comment) => comment.story, {
+		nullable: true,
+		onDelete: 'CASCADE',
+	})
+	@JoinTable()
+	comments: Comment[];
 
-	@ManyToMany(() => Tag, (tag) => tag.stories)
+	@OneToMany(() => Bookmark, (bookmarks) => bookmarks.story, {
+		nullable: true,
+		onDelete: 'CASCADE',
+		onUpdate: 'CASCADE',
+	})
+	@JoinTable()
+	bookmarks: Bookmark[];
+
+	@ManyToMany(() => Tag, (tag) => tag.stories, {
+		nullable: true,
+		onDelete: 'CASCADE',
+		onUpdate: 'CASCADE',
+	})
 	@JoinTable()
 	tags: Tag[];
 
@@ -47,9 +65,14 @@ export class Story extends BaseEntity {
 	allow_therapist: boolean;
 
 	@Column()
-	creatorId: number;
+	creatorId: string;
 
-	@ManyToOne(() => User, (creator) => creator.stories)
+	@ManyToOne(() => User, (creator) => creator.stories, {
+		onUpdate: 'CASCADE',
+		onDelete: 'CASCADE',
+		nullable: true,
+	})
+	@JoinTable()
 	creator: User;
 
 	@CreateDateColumn()

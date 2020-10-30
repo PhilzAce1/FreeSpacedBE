@@ -1,6 +1,25 @@
-import { MinLength, IsString, IsBoolean, IsArray } from 'class-validator';
+import {
+	MinLength,
+	IsString,
+	IsBoolean,
+	IsArray,
+	IsUUID,
+} from 'class-validator';
 
 export class CreateStoryDto {
+	@IsString()
+	public text: string;
+
+	@IsBoolean()
+	public allow_therapist: boolean;
+
+	@IsArray()
+	public tags;
+
+	public creatorId: string;
+}
+
+export class UpdateStoryDto {
 	@MinLength(2)
 	@IsString()
 	public title: string;
@@ -14,5 +33,9 @@ export class CreateStoryDto {
 	@IsArray()
 	public tags;
 
-	public creatorId: number;
+	public creatorId: string;
+
+	@IsString()
+	@IsUUID()
+	public id: string;
 }

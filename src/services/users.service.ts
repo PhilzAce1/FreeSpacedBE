@@ -8,8 +8,10 @@ import { __prod__ } from '../config';
 import { redisDb } from '../utils/connectDB';
 import { v4 } from 'uuid';
 import { sendMessage } from '../utils/sendMail';
+import { Story } from '../models/story.model';
 class UserService {
 	public users = userModel;
+	private story = Story;
 	public redis = redisDb;
 
 	public async findAllUser(): Promise<User[]> {
@@ -21,6 +23,11 @@ class UserService {
 		const findUser = await this.users.findOne({ where: { id: userId } });
 		if (!findUser) throw new HttpException(409, "You're not user");
 		return findUser;
+	}
+
+	public async getAllUserStory(userId: string): Promise<Story[]> {
+		const userStories = await this.story.find({ where: { creatorId: userId } });
+		return userStories;
 	}
 
 	public async createUser(userData: CreateUserDto): Promise<User> {
@@ -38,7 +45,7 @@ class UserService {
 
 		const hashedPassword = await bcrypt.hash(userData.password, 10);
 		const createUserData = {
-			id: this.users.length + 1,
+			id: String(this.users.length + 1),
 			...userData,
 			password: hashedPassword,
 		};
@@ -88,13 +95,12 @@ class UserService {
 		const userId = await this.redis.get(token);
 		if (!userId)
 			throw new HttpException(404, 'user no longer exist or token expired');
-		const userIdNum = parseInt(userId);
-		const user = await this.users.findOne(userIdNum);
+		const user = await this.users.findOne(userId);
 		if (!user)
 			throw new HttpException(404, 'user no longer exist or token expired');
 		await this.users.update(
 			{
-				id: userIdNum,
+				id: userId,
 			},
 			{
 				verified: true,

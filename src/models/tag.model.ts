@@ -13,12 +13,16 @@ import { Story } from './story.model';
 @Entity()
 export class Tag extends BaseEntity {
 	@PrimaryGeneratedColumn('uuid')
-	id: number;
+	id: string;
 
 	@Column()
 	name: string;
 
-	@ManyToMany(() => Story, (story) => story.tags)
+	@ManyToMany(() => Story, (story) => story.tags, {
+		nullable: true,
+		onDelete: 'CASCADE',
+		onUpdate: 'CASCADE',
+	})
 	@JoinTable()
 	stories: Story[];
 

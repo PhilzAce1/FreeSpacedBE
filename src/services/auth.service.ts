@@ -156,15 +156,14 @@ class AuthService {
 		const userId = await this.redis.get(key);
 		if (!userId) throw new HttpException(404, 'Token expired or invalid');
 
-		const userIdNum = parseInt(userId);
-		const user = await this.users.findOne(userIdNum);
+		const user = await this.users.findOne(userId);
 
 		if (!user) throw new HttpException(404, 'User no longer exist');
 		const hashedPassword = await bcrypt.hash(newPassword, 10);
 
 		await this.users.update(
 			{
-				id: userIdNum,
+				id: userId,
 			},
 			{
 				password: hashedPassword,

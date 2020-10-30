@@ -5,12 +5,15 @@
 @baseURL = http://localhost:3000
 
 ###
+# authToken
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3N2VhOTA3LTQ4OTMtNGQ4Zi1iODRkLTJkMjI2Nzk1NzI2YiIsImlhdCI6MTYwNDA4NjQ0NiwiZXhwIjoxNjA0MzQ1NjQ2fQ.nvwu5zrur-Ezc5AUCsEOeD3l6kqFPxT-vgYqG9hERlE
+###
 # signup
 POST {{baseURL}}/signup
 Content-Type: application/json
 
 {
-    "email": "example@gmail.com",
+    "email": "example1@gmail.com",
 	"password": "qwer1234"
 }
 
@@ -20,16 +23,26 @@ POST {{baseURL}}/login
 Content-Type: application/json
 
 {
-    "email": "lim@gmail.com",
-	"password": "q1w2e3r4"
+    "email": "example1@gmail.com",
+	"password": "qwer1234"
 }
 
+# {
+#     "email": "lim@gmail.com",
+# 	"password": "q1w2e3r4"
+# }
+
 ###
-# Logout
-POST {{baseURL}}/logout
+# me
+GET   {{baseURL}}/me
+Content-Type: application/json
+x-auth-token: {{authToken}}
+
+###
+# forgotpassword
+POST  {{baseURL}}/forgotpassword
 Content-Type: application/json
 
 {
-    "email": "lim@gmail.com",
-	"password": "q1w2e3r4"
+    "email": "example@gmail.com"
 }

@@ -17,7 +17,16 @@ class UsersRoute implements Route {
 	private initializeRoutes() {
 		this.router.get(`${this.path}`, this.usersController.getUsers);
 		this.router.get(`${this.path}/:id(\\d+)`, this.usersController.getUserById);
-		this.router.get(`/userstory/:userId`, this.usersController.getUserStories);
+		// todo - write docs
+		this.router.get(
+			`${this.path}/story/:userId`,
+			this.usersController.getUserStories
+		);
+		this.router.get(
+			`${this.path}/authuser/story/`,
+			authMiddleware,
+			this.usersController.getAuthUserStoried
+		);
 		this.router.post(
 			`${this.path}`,
 			validationMiddleware(CreateUserDto),

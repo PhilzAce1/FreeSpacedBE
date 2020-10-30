@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { RequestWithUser } from '../interfaces/auth.interface';
 import AuthController from '../controllers/auth.controller';
 import { CreateUserDto } from '../dtos/users.dto';
 import Route from '../interfaces/routes.interface';
@@ -24,8 +25,8 @@ class AuthRoute implements Route {
 			validationMiddleware(CreateUserDto),
 			this.authController.logIn
 		);
-		this.router.get('/me', authMiddleware, (req, res) => {
-			const { password, ...user } = req.user;
+		this.router.get('/me', authMiddleware, (req: RequestWithUser, res) => {
+			const { ...user } = req.user;
 			res.json({ success: true, payload: user });
 		});
 		this.router.post('/forgotpassword', this.authController.forgotPassword);

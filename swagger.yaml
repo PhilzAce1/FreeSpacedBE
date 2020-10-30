@@ -153,6 +153,38 @@ paths:
         500:
           description: "Server Error"
 
+  /user/story/{id}:
+    get:
+      tags:
+        - User
+      summary: Get all Anon Users Stories
+      parameters:
+        - name: userId
+          in: path
+          description: User id
+          required: true
+          type: string
+      responses:
+        200:
+          description: "OK"
+        409:
+          description: "Conflict"
+        500:
+          description: "Server Error"
+
+  /user/authuser/story/:
+    get:
+      tags:
+        - User
+      summary: Get all auth Users Stories
+      responses:
+        200:
+          description: "OK"
+        409:
+          description: "Conflict"
+        500:
+          description: "Server Error"
+
   #[POST] auth
   /users/sendverifyemail:
     post:
@@ -230,7 +262,7 @@ paths:
         500:
           description: "Server Error"
 
-  # [GET] storiest
+  # [GET] stories
   /story:
     get:
       tags:
@@ -243,7 +275,7 @@ paths:
         500:
           description: "Server Error"
 
-  # [GET] users/id
+  # [GET] story by Id
   /story/{id}:
     get:
       tags:
@@ -262,107 +294,208 @@ paths:
           description: "Conflict"
         500:
           description: "Server Error"
+  # [GET] storiest
+  /story/popular/getstories:
+    get:
+      tags:
+        - Story
+      summary: Find top 6 popular stories
+      responses:
+        200:
+          description: "An List of all Stories in the datebase"
 
-# # [GET] users
-#   /users:
-#     get:
-#       tags:
-#       - users
-#       summary: Find All Users
-#       responses:
-#         200:
-#           description: 'OK'
-#         500:
-#           description: 'Server Error'
+        500:
+          description: "Server Error"
 
-# # [POST] users
-# post:
-#   tags:
-#   - users
-#   summary: Add User
-#   parameters:
-#   - name: body
-#     in: body
-#     description: user Data
-#     required: true
-#     schema:
-#       $ref: '#/definitions/users'
-#   responses:
-#     201:
-#       description: 'Created'
-#     400:
-#       description: 'Bad Request'
-#     409:
-#       description: 'Conflict'
-#     500:
-#       description: 'Server Error'
+  # [PATCH] users/id
+  /story/update:
+    patch:
+      tags:
+        - Story
+      summary: Update Story By Id
+      parameters:
+        - name: Id
+          in: path
+          description: Storyid
+          required: true
+          type: integer
+        - name: body
+          in: body
+          description: this is an Auth route, and user must be logged in
+          required: true
+          schema:
+            type: object
+            required:
+              - title
+              - text
+              - tags
+              - allow_therapist
+              - id
+            properties:
+              title:
+                type: string
+                description: the title of the Story
+              text:
+                type: string
+                description: The Body of the Story
+              tags:
+                type: array
+                items:
+                  type: string
+                description: an array of string,e.g ["love", "peace"]
+              allow_therapist:
+                type: boolean
+                description: true or false
+              creatorId:
+                type: string
+                description: userId should be provided for an Authenticated User
+              id:
+                type: string
+                description: id of the story you want to edit
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Bad Request"
+        409:
+          description: "Conflict"
+        500:
+          description: "Server Error"
 
-# # [GET] users/id
-#   /users/{id}:
-#     get:
-#       tags:
-#       - users
-#       summary: Find User By Id
-#       parameters:
-#       - name: id
-#         in: path
-#         description: User Id
-#         required: true
-#         type: integer
-#       responses:
-#         200:
-#           description: 'OK'
-#         409:
-#           description: 'Conflict'
-#         500:
-#           description: 'Server Error'
+  /story/delete/{Id}:
+    delete:
+      tags:
+        - Story
+      summary: this is an auth route and Authtoken must be passed
+      parameters:
+        - name: id
+          in: path
+          type: string
+          description: story id
+          required: true
 
-# # [PUT] users/id
-#     put:
-#       tags:
-#       - users
-#       summary: Update User By Id
-#       parameters:
-#       - name: id
-#         in: path
-#         description: user Id
-#         required: true
-#         type: integer
-#       - name: body
-#         in: body
-#         description: user Data
-#         required: true
-#         schema:
-#           $ref: '#/definitions/users'
-#       responses:
-#         200:
-#           description: 'OK'
-#         400:
-#           description: 'Bad Request'
-#         409:
-#           description: 'Conflict'
-#         500:
-#           description: 'Server Error'
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Bad Request"
+        409:
+          description: "Conflict"
+        500:
+          description: "Server Error"
 
-# # [DELETE] users/id
-#     delete:
-#       tags:
-#       - users
-#       summary: Delete User By Id
-#       parameters:
-#       - name: id
-#         in: path
-#         description: user Id
-#         required: true
-#         type: integer
-#       responses:
-#         200:
-#           description: 'OK'
-#         409:
-#           description: 'Conflict'
-#         500:
-#           description: 'Server Error'
+  #[POST] comment
+  /comment/create:
+    post:
+      tags:
+        - Comment
+      summary: Create Comment
+      parameters:
+        - name: body
+          in: body
+          description: Comment body
+          required: true
+          schema:
+            type: object
+            properties:
+              storyId:
+                type: string
+                description: the id of the comment you will like to Reply
+              content:
+                type: string
+                description: text content of the reply
+      responses:
+        200:
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/createstoryresponse"
+        404:
+          description: "Not Found"
+        400:
+          description: "Bad Request"
+        409:
+          description: "Conflict"
+        500:
+          description: "Server Error"
 
+  #[POST] comment
+  /comment/reply:
+    post:
+      tags:
+        - Comment
+      summary: Reply Comment
+      parameters:
+        - name: body
+          in: body
+          description: Reply Comment body
+          required: true
+          schema:
+            type: object
+            properties:
+              commentId:
+                type: string
+                description: the id of the comment you will like to Reply
+              content:
+                type: string
+                description: text content of the reply
+      responses:
+        200:
+          description: "Ok"
+
+        404:
+          description: "Not Found"
+        400:
+          description: "Bad Request"
+        409:
+          description: "Conflict"
+        500:
+          description: "Server Error"
+
+  #[POST] auth
+
+  #[POST] auth
+  /boolmark/create:
+    post:
+      tags:
+        - Bookmark
+      summary: Bookmark A story [Auth Route]
+      parameters:
+        - name: body
+          in: body
+          description: Bookmark Body
+          required: true
+          schema:
+            type: object
+            properties:
+              storyId:
+                type: string
+                description: the id of the comment you will like to Reply
+              content:
+                type: string
+                description: text content of the reply
+      responses:
+        200:
+          description: "Ok"
+
+        404:
+          description: "Not Found"
+        400:
+          description: "Bad Request"
+        409:
+          description: "Conflict"
+        500:
+          description: "Server Error"
+  #[GET] get user bookmars
+  /bookmark/:
+    get:
+      tags:
+        - Bookmark
+      summary: Get all Authenticated User bookmarks
+      responses:
+        200:
+          description: "An Object of Auth user bookmarks"
+        500:
+          description: "Server Error"
 # definitions
 definitions:
   createstoryresponse:

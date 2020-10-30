@@ -8,7 +8,7 @@ import { User } from '../interfaces/users.interface';
 /* -------------------------- Internal Dependencies ------------------------- */
 import HttpException from '../exceptions/HttpException';
 import userService from '../services/users.service';
-import { Story } from '../models/story.model';
+import { RequestWithUser } from '../interfaces/auth.interface';
 class UsersController {
 	public userService = new userService();
 
@@ -26,11 +26,9 @@ class UsersController {
 		res: Response,
 		next: NextFunction
 	) => {
-		const { userId } = req.params;
+		const userId: string = req.params.userId;
 		try {
-			const userStory = await Story.find({
-				where: { creatorId: userId },
-			});
+			const userStory = await this.userService.getAllUserStory(userId);
 			res.json({ success: true, payload: userStory });
 		} catch (error) {
 			next(error);
@@ -50,7 +48,22 @@ class UsersController {
 			next(error);
 		}
 	};
-
+	/**
+	 * getAuthUserStoried
+	 */
+	public getAuthUserStoried = async (
+		req: RequestWithUser,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const userId: string = String(req.user?.id);
+			const userStories = await this.userService.getAllUserStory(userId);
+			res.json({ success: true, payload: userStories });
+		} catch (error) {
+			next(error);
+		}
+	};
 	public createUser = async (
 		req: Request,
 		res: Response,

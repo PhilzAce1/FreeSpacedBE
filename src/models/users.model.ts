@@ -8,17 +8,20 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../interfaces/users.interface';
-import { Story } from './story.model';
-import { backcoverimage } from '../utils/helpers';
 import { ImageUrl } from '../config';
+import { User } from '../interfaces/users.interface';
+import { backcoverimage } from '../utils/helpers';
+import { Bookmark } from './bookmark.model';
+import { Comment } from './comment.model';
+import { Reply } from './reply.model';
+import { Story } from './story.model';
 
 const imageFile = ImageUrl + 'one.png';
 
 @Entity()
 export class UserModel extends BaseEntity implements User {
 	@PrimaryGeneratedColumn('uuid')
-	id: number;
+	id: string;
 
 	@Column({ nullable: true })
 	email: string;
@@ -47,9 +50,30 @@ export class UserModel extends BaseEntity implements User {
 	@Column('numeric', { default: 0 })
 	role: number;
 
-	@OneToMany(() => Story, (story) => story.creator)
+	@OneToMany(() => Bookmark, (bookmarks) => bookmarks.creator, {
+		nullable: true,
+		onUpdate: 'CASCADE',
+	})
+	@JoinTable()
+	bookmarks: Bookmark[];
+
+	@OneToMany(() => Comment, (comments) => comments.creator, {
+		nullable: true,
+	})
+	@JoinTable()
+	comments: Comment[];
+
+	@OneToMany(() => Story, (story) => story.creator, {
+		nullable: true,
+		onDelete: 'CASCADE',
+		onUpdate: 'CASCADE',
+	})
 	@JoinTable()
 	stories: Story[];
+
+	@OneToMany(() => Reply, (replies) => replies.creator)
+	@JoinTable()
+	replies: Reply[];
 
 	@CreateDateColumn()
 	createdAt: Date;

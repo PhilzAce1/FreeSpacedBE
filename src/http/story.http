@@ -1,0 +1,74 @@
+# Story API
+
+###
+# baseURL
+@baseURL = http://localhost:3000
+
+###
+# authToken
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3N2VhOTA3LTQ4OTMtNGQ4Zi1iODRkLTJkMjI2Nzk1NzI2YiIsImlhdCI6MTYwNDA4NjQ0NiwiZXhwIjoxNjA0MzQ1NjQ2fQ.nvwu5zrur-Ezc5AUCsEOeD3l6kqFPxT-vgYqG9hERlE
+###
+@storyId = a1e353cd-bd9e-45b0-8ce6-3d54995e38c2
+
+###
+# GET ALL 
+GET {{baseURL}}/story
+
+###
+# GET BY ID
+GET {{baseURL}}/story/{{storyId}}
+Content-Type: application/json
+
+###
+#
+GET {{baseURL}}/story/popular/getstories
+###
+# Create a story
+POST {{baseURL}}/story/create
+Content-Type: application/json
+
+{
+    "title":"something", 
+    "text":"they are saying that this must be a string", 
+    "allow_therapist":true, 
+    "tags":["fight", "war"]
+}
+
+###
+# create story as a loged in user 
+
+POST {{baseURL}}/story/create
+Content-Type: application/json
+
+{
+    "text":"they are saying that this must be a string", 
+    "allow_therapist":true, 
+    "tags":["fight", "war"],
+    "creatorId": "bd36ff0b-870c-4f4c-945b-4a795bc604fa"
+ 
+}
+
+###
+PATCH {{baseURL}}/story/update  
+Content-Type: application/json
+x-auth-token: {{authToken}}
+
+{
+    "title":"something more than gold", 
+    "text":"adfvonolkadflk adfadfkadlf vadfk dfv adflkvd afvaf", 
+    "allow_therapist": true, 
+    "tags":["somethingnew", "anotherthing"],
+    "id": "1156876b-665c-4863-bd07-b1b865a3e648"
+}
+###
+DELETE  {{baseURL}}/story/delete/{{storyId}}
+Content-Type: application/json
+x-auth-token: {{authToken}}
+
+{
+    "title":"something more than gold", 
+    "text":"adfvonolkadflk adfadfkadlf vadfk dfv adflkvd afvaf", 
+    "allow_therapist": true, 
+    "tags":["somethingnew", "anotherthing"],
+    "id": "1156876b-665c-4863-bd07-b1b865a3e648"
+}
