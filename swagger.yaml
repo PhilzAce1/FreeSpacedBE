@@ -454,7 +454,7 @@ paths:
   #[POST] auth
 
   #[POST] auth
-  /boolmark/create:
+  /bookmark/create:
     post:
       tags:
         - Bookmark
