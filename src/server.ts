@@ -1,4 +1,3 @@
-console.clear();
 /* -------------------------- Internal Dependencies ------------------------- */
 import 'dotenv/config';
 import 'reflect-metadata';
