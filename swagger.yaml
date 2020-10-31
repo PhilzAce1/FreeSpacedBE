@@ -159,7 +159,7 @@ paths:
         - User
       summary: Get all Anon Users Stories
       parameters:
-        - name: userId
+        - name: id
           in: path
           description: User id
           required: true

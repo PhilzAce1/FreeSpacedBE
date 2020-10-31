@@ -101,9 +101,9 @@ class App {
 		const options = {
 			swaggerDefinition: {
 				info: {
-					title: 'REST API',
+					title: 'Free spaced api',
+					description: 'The Api for the free spaced application',
 					version: '1.0.0',
-					description: 'Example docs',
 				},
 			},
 			apis: ['swagger.yaml'],
