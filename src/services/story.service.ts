@@ -4,6 +4,7 @@ import { Story } from '../interfaces/story.interface';
 import { isEmptyObject } from '../utils/util';
 import { UpdateStoryDto } from '../dtos/story.dto';
 import HttpException from '../exceptions/HttpException';
+import { genSlug } from '../utils/helpers';
 class StoryService {
 	private story = storyModel;
 	private tags = Tag;
@@ -17,35 +18,45 @@ class StoryService {
 	public async getPopularStories() {
 		const stories = await this.story.find({
 			order: { views: 'DESC' },
+			relations: ['creator', 'tags'],
 			take: 6,
 		});
-		// const stuff = await this.story.find({});
-		// delelte this code
-		// stuff.forEach(async (data) => {
-		// 	if (data.views === null) {
-		// 		await this.story.delete({ id: data.id });
-		// 	}
-		// });
 
-		return stories;
+		return this.pruneStory(stories);
+	}
+	public async getCommentsByStoryId(storyId) {
+		const storyComment = await this.story.findOne({
+			where: { id: storyId },
+			select: ['id'],
+			relations: [
+				'comments',
+				'comments.replies',
+				'comments.creator',
+				'comments.replies.creator',
+			],
+		});
+		return this.pruneComments(storyComment);
 	}
 	public async getPostById(id: string): Promise<Story> {
 		const story = await this.story.findOne({
 			where: { id },
-			relations: ['tags', 'creator', 'comments'],
+			relations: ['tags', 'creator'],
 		});
 
 		if (!story) {
 			throw new HttpException(404, 'story not found');
 		}
-		const { tags, ...mainStory } = story as any;
+		const { tags, creator, ...mainStory } = story as any;
 		const newTagList: string[] = this.getTagName(tags);
 		mainStory.tags = newTagList;
 		if (story?.views || story?.views === 0) {
 			await this.story.update(id, { views: story?.views + 1 });
 			mainStory.views = mainStory.views + 1;
 		}
-
+		mainStory.creator = {
+			profileimage: creator.profileimage,
+			username: creator.username,
+		};
 		return mainStory;
 	}
 
@@ -56,6 +67,8 @@ class StoryService {
 		const { title, text, creatorId, allow_therapist, tags } = storyData;
 		console.log(title);
 		const tagArr: Tag[] = await this.pruneTag(tags);
+		const textAsTitle = title === undefined ? text.slice(0, 35) : title;
+		const storySlug: string = await this.createStorySlug(textAsTitle);
 		const createdStory = await this.story
 			.create({
 				title,
@@ -63,6 +76,7 @@ class StoryService {
 				tags: tagArr,
 				allow_therapist,
 				creatorId: creatorId,
+				slug: storySlug,
 			})
 			.save();
 		const { tags: createdStoryTag, ...mainStory } = createdStory as any;
@@ -114,19 +128,58 @@ class StoryService {
 
 		return deletedStory;
 	}
+	private async createStorySlug(title: string): Promise<string> {
+		const createdSlug = genSlug(title);
+		const slugExist = await this.story.findOne({
+			where: { slug: createdSlug },
+		});
+		if (slugExist) {
+			return await this.createStorySlug(title);
+		}
+		return createdSlug;
+	}
+	private pruneComments(data) {
+		data.comments = data.comments.map((comment) => {
+			const { id, content, createdAt, creator } = comment;
+			const replies = (comment.replies = comment.replies.map((reply) => {
+				const { id, content, creatorId, commentId } = reply;
+				return (reply = {
+					id,
+					content,
+					creatorId,
+					commentId,
+					creator: {
+						username: reply.creator.username,
+						profileimage: reply.creator.profileimage,
+					},
+				});
+			}));
+			return (comment = {
+				id,
+				content,
+				createdAt,
+				replies,
+				creator: {
+					username: creator.username,
+					profileimage: creator.profileimage,
+				},
+			});
+		});
 
+		return data;
+	}
 	private pruneStory(arr): Story[] {
 		const newArr: Story[] = [];
 		arr.forEach((data) => {
-			const creator = data;
-			const { profileimage, username, firstname, lastname } = data.creator;
-			creator.creator = {
+			const story = data;
+			const storyTagName = this.getTagName(data.tags);
+			const { profileimage, username } = data.creator;
+			story.creator = {
 				profileimage,
 				username,
-				firstname,
-				lastname,
 			};
-			newArr.push(creator);
+			story.tags = storyTagName;
+			newArr.push(story);
 		});
 		return newArr;
 	}

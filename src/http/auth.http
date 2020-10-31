@@ -4,6 +4,7 @@
 # baseURL
 @baseURL = http://localhost:3000
 
+
 ###
 # authToken
 @authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3N2VhOTA3LTQ4OTMtNGQ4Zi1iODRkLTJkMjI2Nzk1NzI2YiIsImlhdCI6MTYwNDA4NjQ0NiwiZXhwIjoxNjA0MzQ1NjQ2fQ.nvwu5zrur-Ezc5AUCsEOeD3l6kqFPxT-vgYqG9hERlE

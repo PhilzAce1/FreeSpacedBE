@@ -383,7 +383,7 @@ export function mailtemp(emailtype: emailtype, token) {
                       That's okay, it happens! Click on the button below to reset your password.
                     </h3>
                     <p>
-                      <a href="https://freespaace.com/reset/${token}" class="btn btn-primary">Reset Password</a>
+                      <a href="https://freespaace.com/changepassword/${token}" class="btn btn-primary">Reset Password</a>
                       <br />
                       If you didn’t ask to reset your password, please ignore this email
                       <br />

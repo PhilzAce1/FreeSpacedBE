@@ -75,6 +75,26 @@ class StoryController {
 			next(error);
 		}
 	};
+	public getCommentsByStoryId = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		const storyId = req.params.id;
+		if (storyId === undefined)
+			throw new HttpException(400, 'Story id is required');
+		try {
+			const storyComment = await this.storyService.getCommentsByStoryId(
+				storyId
+			);
+			res.status(200).json({
+				success: true,
+				payload: storyComment,
+			});
+		} catch (error) {
+			next(error);
+		}
+	};
 	public createPost = async (
 		req: Request,
 		res: Response,

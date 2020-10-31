@@ -18,6 +18,10 @@ class StoryRoute implements Route {
 			`${this.path}/popular/getstories`,
 			this.storyController.getPopularStories
 		);
+		this.router.get(
+			`${this.path}/comments/:id`,
+			this.storyController.getCommentsByStoryId
+		);
 		this.router.post(
 			`${this.path}/create`,
 			validationMiddleware(CreateStoryDto),

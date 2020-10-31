@@ -16,7 +16,7 @@ Content-Type: application/json
 x-auth-token: {{authToken}}
 
 {
- "storyId":"1863b961-077e-407e-a500-6623e2b3ea29", 
+ "storyId":"be6212a8-d99f-485a-8e23-7dbf3ac60ad3", 
  "content":"somethigl"
 }
 
@@ -26,7 +26,7 @@ Content-Type: application/json
 x-auth-token:{{authToken}}
 
 {
-    "commentId":"87dc3428-42bc-4391-9c6b-55fb00664169", 
+    "commentId":"8d2df095-9679-4736-8e99-3b96e40f3eb9", 
     "content":"I like what I am seeing",
     "thugnssds":"afiodfd"
 }

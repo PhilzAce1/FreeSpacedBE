@@ -23,7 +23,7 @@ class UsersRoute implements Route {
 			this.usersController.getUserStories
 		);
 		this.router.get(
-			`${this.path}/authuser/story/`,
+			`${this.path}/story/`,
 			authMiddleware,
 			this.usersController.getAuthUserStoried
 		);

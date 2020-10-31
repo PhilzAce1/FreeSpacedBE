@@ -172,7 +172,7 @@ paths:
         500:
           description: "Server Error"
 
-  /user/authuser/story/:
+  /user/story/:
     get:
       tags:
         - User
@@ -281,6 +281,26 @@ paths:
       tags:
         - Story
       summary: Find Story By Id
+      parameters:
+        - name: id
+          in: path
+          description: Story Id
+          required: true
+          type: string
+      responses:
+        200:
+          description: "OK"
+        409:
+          description: "Conflict"
+        500:
+          description: "Server Error"
+          
+  # [GET] story by Id
+  /story/comments/{id}:
+    get:
+      tags:
+        - Story
+      summary: Get Comments of a Story by id
       parameters:
         - name: id
           in: path
