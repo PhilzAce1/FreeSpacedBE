@@ -153,7 +153,7 @@ paths:
         500:
           description: "Server Error"
 
-  /user/story/{id}:
+  /users/story/{id}:
     get:
       tags:
         - User
@@ -172,7 +172,7 @@ paths:
         500:
           description: "Server Error"
 
-  /user/story/:
+  /users/story/:
     get:
       tags:
         - User
@@ -294,7 +294,7 @@ paths:
           description: "Conflict"
         500:
           description: "Server Error"
-          
+
   # [GET] story by Id
   /story/comments/{id}:
     get:

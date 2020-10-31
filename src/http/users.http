@@ -28,7 +28,7 @@ Content-Type: application/json
 
 ###
 # Get unauth user by id 
-GET {{baseURL}}/users/story/720867ee-ae54-4287-8415-161ae77a9bbc
+GET {{baseURL}}/users/story/4bd2cc09-832f-44a9-bc37-31a5e02cda1c
 
 ###
 GET {{baseURL}}/users/story HTTP/1.1
