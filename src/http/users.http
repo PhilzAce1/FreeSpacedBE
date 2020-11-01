@@ -5,7 +5,8 @@
 @baseURL = http://localhost:3000
 
 ###
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJkMzZmZjBiLTg3MGMtNGY0Yy05NDViLTRhNzk1YmM2MDRmYSIsImlhdCI6MTYwMzk5NDExNCwiZXhwIjoxNjA0MjUzMzE0fQ.HDDXDOPhfzWY2ghfrV6vClFxmfAMH4EnngWyqpM7r5Y
+# @authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYTE5NzU5LThmNWEtNDJmOC05NDgxLTExODM4YmU1MGE4YiIsImlhdCI6MTYwNDI1NjgxOSwiZXhwIjoxNjA0NTE2MDE5fQ.KSGsqw93uCgfO5rUbbKbcIJ7WJNv6h6Bo689w0YNG-A
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiNjAzZWJhLTEzOGQtNDA0ZC1hMjljLTdjZmQ3NjZhZDM3YSIsImlhdCI6MTYwNDI2OTM3NCwiZXhwIjoxNjA0NTI4NTc0fQ.-8Qr8JIW87M2hN4PuCz2bCxAoD4t5XOmQ2rNZG8SdP0
 
 ###
 # Find All Users
@@ -28,7 +29,8 @@ Content-Type: application/json
 
 ###
 # Get unauth user by id 
-GET {{baseURL}}/users/story/4bd2cc09-832f-44a9-bc37-31a5e02cda1c
+GET {{baseURL}}/users/story/1b603eba-138d-404d-a29c-7cfd766ad37a
+
 
 ###
 GET {{baseURL}}/users/story HTTP/1.1

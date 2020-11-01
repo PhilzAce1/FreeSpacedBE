@@ -1,6 +1,5 @@
 /* -------------------------- External Dependencies ------------------------- */
 import { NextFunction, Request, Response } from 'express';
-import { validate as uuidValidator } from 'uuid';
 import { RequestWithUser } from '../interfaces/auth.interface';
 /* -------------------------- Validators and Interfaces  ------------------------- */
 import { CreateStoryDto, UpdateStoryDto } from '../dtos/story.dto';
@@ -15,12 +14,12 @@ class StoryController {
 	public storyService = new StoryService();
 	public authService = new AuthService();
 	public getAllStories = async (
-		_: Request,
+		req: Request,
 		res: Response,
 		next: NextFunction
 	) => {
 		try {
-			const data = await this.storyService.getAllStories();
+			const data = await this.storyService.getAllStories(req.query);
 			res.status(200).json({
 				success: true,
 				payload: data,
@@ -37,24 +36,17 @@ class StoryController {
 	) => {
 		const { id } = req.params;
 		try {
-			if (!uuidValidator(id)) {
-				res.status(404).json({
-					success: false,
-					message: 'invalid story Id',
+			const data = await this.storyService.getPostById(id);
+			if (typeof data !== 'undefined') {
+				res.status(200).json({
+					success: true,
+					payload: data,
 				});
 			} else {
-				const data = await this.storyService.getPostById(id);
-				if (typeof data !== 'undefined') {
-					res.status(200).json({
-						success: true,
-						payload: data,
-					});
-				} else {
-					res.status(404).json({
-						success: true,
-						message: 'Story not found',
-					});
-				}
+				res.status(404).json({
+					success: true,
+					message: 'Story not found',
+				});
 			}
 		} catch (error) {
 			next(error);

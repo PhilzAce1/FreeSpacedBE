@@ -26,7 +26,7 @@ export class Story extends BaseEntity {
 	@Column()
 	text: string;
 
-	@Column({ nullable: true })
+	@Column({ type: 'text', nullable: true })
 	slug: string;
 
 	@OneToMany(() => Comment, (comment) => comment.story, {

@@ -6,8 +6,9 @@
 
 ###
 # authToken
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJkMzZmZjBiLTg3MGMtNGY0Yy05NDViLTRhNzk1YmM2MDRmYSIsImlhdCI6MTYwMzk5NDExNCwiZXhwIjoxNjA0MjUzMzE0fQ.HDDXDOPhfzWY2ghfrV6vClFxmfAMH4EnngWyqpM7r5Y
-@storyId = 1863b961-077e-407e-a500-6623e2b3ea29
+
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYTE5NzU5LThmNWEtNDJmOC05NDgxLTExODM4YmU1MGE4YiIsImlhdCI6MTYwNDI1NjgxOSwiZXhwIjoxNjA0NTE2MDE5fQ.KSGsqw93uCgfO5rUbbKbcIJ7WJNv6h6Bo689w0YNG-A
+@storyId = 1881cf31-b84f-45ff-b05e-6706b6f9e4ef
 
 ###
 
@@ -16,7 +17,7 @@ Content-Type: application/json
 x-auth-token: {{authToken}}
 
 {
- "storyId":"be6212a8-d99f-485a-8e23-7dbf3ac60ad3", 
+ "storyId":"1881cf31-b84f-45ff-b05e-6706b6f9e4ef", 
  "content":"somethigl"
 }
 
@@ -26,7 +27,7 @@ Content-Type: application/json
 x-auth-token:{{authToken}}
 
 {
-    "commentId":"8d2df095-9679-4736-8e99-3b96e40f3eb9", 
+    "commentId":"e68eb4dc-2b33-4192-a07e-2ccad97db65e", 
     "content":"I like what I am seeing",
     "thugnssds":"afiodfd"
 }

@@ -26,8 +26,11 @@ class UserService {
 	}
 
 	public async getAllUserStory(userId: string): Promise<Story[]> {
-		const userStories = await this.story.find({ where: { creatorId: userId } });
-		return userStories;
+		const userStories = await this.story.find({
+			where: { creatorId: userId },
+			relations: ['creator'],
+		});
+		return this.removeUserData(userStories);
 	}
 
 	public async createUser(userData: CreateUserDto): Promise<User> {
@@ -90,6 +93,20 @@ class UserService {
 
 		await sendMessage(findUser.email, 'verifyemail', token);
 		return true;
+	}
+	private removeUserData(arr) {
+		const newUserStory = arr.map((story) => {
+			const { username, profileimage } = story.creator;
+
+			return (story = {
+				...story,
+				creator: {
+					username,
+					profileimage,
+				},
+			});
+		});
+		return newUserStory;
 	}
 	public async verifyUser(token) {
 		const userId = await this.redis.get(token);

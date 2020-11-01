@@ -83,19 +83,25 @@ class AuthService {
 		if ((userExist && userExist.email !== null) || !userExist) {
 			return this.signup(userData);
 		}
+		const userWithEmailExist = await this.users.findOne({
+			where: { email: userData.email },
+		});
+		if (userWithEmailExist) {
+			throw new HttpException(409, 'user with this email, already exist');
+		}
 		const hashedPassword = await bcrypt.hash(userData.password, 10);
 		const updateUser = {
-			username: userData.username,
 			email: userData.email,
 			password: hashedPassword,
 		};
+		console.log(userData);
 		await this.users.update(
 			{
-				id: userData.id,
+				id: userData.userId,
 			},
 			updateUser
 		);
-		const tokenData = this.createToken(updateUser);
+		const tokenData = this.createToken({ ...updateUser, id: userData.userId });
 		const cookie = this.createCookie(tokenData);
 
 		await this.userService.sendVerifyUserEmail(userData.email);

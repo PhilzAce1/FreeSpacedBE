@@ -4,6 +4,7 @@ import StoryController from '../controllers/story.controller';
 import validationMiddleware from '../middlewares/validation.middleware';
 import { CreateStoryDto, UpdateStoryDto } from '../dtos/story.dto';
 import authMiddleware from '../middlewares/auth.middleware';
+import storyMiddelware from '../middlewares/story.middleware';
 class StoryRoute implements Route {
 	public path = '/story';
 	public router = Router();
@@ -25,6 +26,7 @@ class StoryRoute implements Route {
 		this.router.post(
 			`${this.path}/create`,
 			validationMiddleware(CreateStoryDto),
+			storyMiddelware,
 			this.storyController.createPost
 		);
 		this.router.patch(

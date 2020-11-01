@@ -5,13 +5,20 @@ import { isEmptyObject } from '../utils/util';
 import { UpdateStoryDto } from '../dtos/story.dto';
 import HttpException from '../exceptions/HttpException';
 import { genSlug } from '../utils/helpers';
+import { validate as uuidValidator } from 'uuid';
+// import { getRepository } from 'typeorm';
+
 class StoryService {
 	private story = storyModel;
 	private tags = Tag;
-	public async getAllStories(): Promise<Story[]> {
+	public async getAllStories(query): Promise<Story[]> {
+		let take = Number(query.limit) || 10;
+		let skip = Number(query.skip) || 10;
 		const stories = await this.story.find({
 			relations: ['tags', 'creator'],
 			order: { createdAt: 'DESC' },
+			skip,
+			take,
 		});
 		return this.pruneStory(stories);
 	}
@@ -25,7 +32,7 @@ class StoryService {
 		return this.pruneStory(stories);
 	}
 	public async getCommentsByStoryId(storyId) {
-		const storyComment = await this.story.findOne({
+		let storyComment = await this.story.findOne({
 			where: { id: storyId },
 			select: ['id'],
 			relations: [
@@ -35,19 +42,34 @@ class StoryService {
 				'comments.replies.creator',
 			],
 		});
+
 		return this.pruneComments(storyComment);
 	}
 	public async getPostById(id: string): Promise<Story> {
-		const story = await this.story.findOne({
-			where: { id },
-			relations: ['tags', 'creator'],
-		});
+		let story;
+		if (uuidValidator(id)) {
+			story = await this.story.find({
+				where: { id },
+				relations: ['tags', 'creator'],
+				take: 1,
+			});
+		} else {
+			console.log('story id is invalid', id);
+			story = await this.story.find({
+				where: { slug: id },
+				relations: ['tags', 'creator'],
+				take: 1,
+			});
+		}
 
 		if (!story) {
 			throw new HttpException(404, 'story not found');
 		}
-		const { tags, creator, ...mainStory } = story as any;
-		const newTagList: string[] = this.getTagName(tags);
+		const { tags, creator, ...mainStory } = story[0] as any;
+		let newTagList: string[] = [];
+		if (tags) {
+			this.getTagName(tags);
+		}
 		mainStory.tags = newTagList;
 		if (story?.views || story?.views === 0) {
 			await this.story.update(id, { views: story?.views + 1 });
@@ -65,7 +87,6 @@ class StoryService {
 			throw new HttpException(400, 'You have not inputed any Story Data');
 
 		const { title, text, creatorId, allow_therapist, tags } = storyData;
-		console.log(title);
 		const tagArr: Tag[] = await this.pruneTag(tags);
 		const textAsTitle = title === undefined ? text.slice(0, 35) : title;
 		const storySlug: string = await this.createStorySlug(textAsTitle);
@@ -139,21 +160,36 @@ class StoryService {
 		return createdSlug;
 	}
 	private pruneComments(data) {
-		data.comments = data.comments.map((comment) => {
+		function sortComment(arr) {
+			const newArr = arr.sort((a, b) => {
+				const first = new Date(a.createdAt);
+				const second = new Date(b.createdAt);
+				const firstDate = first.getTime();
+				const lastDate = second.getTime();
+				return lastDate - firstDate;
+			});
+			return newArr;
+		}
+
+		const sortedComments = sortComment(data.comments);
+
+		data.comments = sortedComments.map((comment) => {
 			const { id, content, createdAt, creator } = comment;
-			const replies = (comment.replies = comment.replies.map((reply) => {
-				const { id, content, creatorId, commentId } = reply;
+			const sortedReplies = sortComment(comment.replies);
+			const replies = sortedReplies.map((reply) => {
+				const { id, content, creatorId, commentId, createdAt } = reply;
 				return (reply = {
 					id,
 					content,
 					creatorId,
 					commentId,
+					createdAt,
 					creator: {
 						username: reply.creator.username,
 						profileimage: reply.creator.profileimage,
 					},
 				});
-			}));
+			});
 			return (comment = {
 				id,
 				content,
@@ -205,9 +241,10 @@ class StoryService {
 	}
 	private getTagName(tags: Tag[]): string[] {
 		const newTagList: string[] = [];
-
-		for (const tagData of tags) {
-			newTagList.push(tagData.name);
+		if (tags.length > 0) {
+			for (const tagData of tags) {
+				newTagList.push(tagData.name);
+			}
 		}
 		return newTagList;
 	}

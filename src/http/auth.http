@@ -3,7 +3,7 @@
 ###
 # baseURL
 @baseURL = http://localhost:3000
-
+# @baseURL = https://freespace-api.herokuapp.com
 
 ###
 # authToken
@@ -14,24 +14,31 @@ POST {{baseURL}}/signup
 Content-Type: application/json
 
 {
-    "email": "example1@gmail.com",
-	"password": "qwer1234"
+    "email": "ellocodewddonders@gmail.com",
+    "password": "12345678",
+    "userId": "1b603eba-138d-404d-a29c-7cfd766ad37a"
 }
+
+# {
+#     "email": "hellocodewondersss@gmail.com",
+# 	"password": "12345678",
+#     "userId":"da79a190-c7fb-4bd1-a4b3-04e5673a000f"
+# }
 
 ###
 # Login
 POST {{baseURL}}/login
 Content-Type: application/json
 
-{
-    "email": "example1@gmail.com",
-	"password": "qwer1234"
-}
-
 # {
-#     "email": "lim@gmail.com",
-# 	"password": "q1w2e3r4"
+#     "email": "hellocodewddonders@gmail.com",
+#     "password": "12345678"
 # }
+
+{
+    "email": "lim@gmail.com",
+	"password": "q1w2e3r4"
+}
 
 ###
 # me

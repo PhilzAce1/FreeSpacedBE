@@ -7,7 +7,7 @@
 
 ###
 # authToken
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3N2VhOTA3LTQ4OTMtNGQ4Zi1iODRkLTJkMjI2Nzk1NzI2YiIsImlhdCI6MTYwNDA4NjQ0NiwiZXhwIjoxNjA0MzQ1NjQ2fQ.nvwu5zrur-Ezc5AUCsEOeD3l6kqFPxT-vgYqG9hERlE
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiNjAzZWJhLTEzOGQtNDA0ZC1hMjljLTdjZmQ3NjZhZDM3YSIsImlhdCI6MTYwNDI2OTM3NCwiZXhwIjoxNjA0NTI4NTc0fQ.-8Qr8JIW87M2hN4PuCz2bCxAoD4t5XOmQ2rNZG8SdP0
 ###
 @storyId = be6212a8-d99f-485a-8e23-7dbf3ac60ad3
 # a1e353cd-bd9e-45b0-8ce6-3d54995e38c2
@@ -18,7 +18,7 @@ GET {{baseURL}}/story
 
 ###
 # GET BY ID
-GET {{baseURL}}/story/{{storyId}}
+GET {{baseURL}}/story/something-1048
 Content-Type: application/json
 
 ###
@@ -32,6 +32,7 @@ GET {{baseURL}}/story/popular/getstories
 # Create a story
 POST {{baseURL}}/story/create
 Content-Type: application/json
+x-auth-token: {{authToken}}
 
 {
     "title":"something", 
@@ -50,7 +51,7 @@ Content-Type: application/json
     "text":"they are saying that this must be a string", 
     "allow_therapist":true, 
     "tags":["fight", "war"],
-    "creatorId": "bd36ff0b-870c-4f4c-945b-4a795bc604fa"
+    "creatorId": "fda19759-8f5a-42f8-9481-11838be50a8b"
  
 }
 
