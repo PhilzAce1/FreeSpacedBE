@@ -9,11 +9,14 @@ import { redisDb } from '../utils/connectDB';
 import { v4 } from 'uuid';
 import { sendMessage } from '../utils/sendMail';
 import { Story } from '../models/story.model';
+import { Story as StoryInterface } from '../interfaces/story.interface';
+import StoryService from '../services/story.service';
 class UserService {
 	public users = userModel;
 	private story = Story;
-	public redis = redisDb;
 
+	public redis = redisDb;
+	public storyService = new StoryService();
 	public async findAllUser(): Promise<User[]> {
 		const users: userModel[] = await this.users.find();
 		return users;
@@ -25,12 +28,13 @@ class UserService {
 		return findUser;
 	}
 
-	public async getAllUserStory(userId: string): Promise<Story[]> {
-		const userStories = await this.story.find({
+	public async getAllUserStory(userId: string): Promise<StoryInterface[]> {
+		const userStories: Story[] = await this.story.find({
 			where: { creatorId: userId },
-			relations: ['creator'],
+			relations: ['creator', 'tags'],
+			order: { createdAt: 'DESC' },
 		});
-		return this.removeUserData(userStories);
+		return this.storyService.pruneStory(userStories);
 	}
 
 	public async createUser(userData: CreateUserDto): Promise<User> {
@@ -94,7 +98,7 @@ class UserService {
 		await sendMessage(findUser.email, 'verifyemail', token);
 		return true;
 	}
-	private removeUserData(arr) {
+	public removeUserData(arr) {
 		const newUserStory = arr.map((story) => {
 			const { username, profileimage } = story.creator;
 

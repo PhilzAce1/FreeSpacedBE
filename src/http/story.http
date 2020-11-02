@@ -27,6 +27,7 @@ GET {{baseURL}}/story/comments/{{storyId}}
 Content-Type: application/json
 ###
 #
+
 GET {{baseURL}}/story/popular/getstories
 ###
 # Create a story
@@ -38,7 +39,7 @@ x-auth-token: {{authToken}}
     "title":"something", 
     "text":"they are saying that this must be a string", 
     "allow_therapist":true, 
-    "tags":["fight", "war"]
+    "tags":[]
 }
 
 ###

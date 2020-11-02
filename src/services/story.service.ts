@@ -12,8 +12,8 @@ class StoryService {
 	private story = storyModel;
 	private tags = Tag;
 	public async getAllStories(query): Promise<Story[]> {
-		let take = Number(query.limit) || 10;
-		let skip = Number(query.skip) || 10;
+		let take = Number(query.limit) || 10000;
+		let skip = Number(query.skip) || 0;
 		const stories = await this.story.find({
 			relations: ['tags', 'creator'],
 			order: { createdAt: 'DESC' },
@@ -47,6 +47,7 @@ class StoryService {
 	}
 	public async getPostById(id: string): Promise<Story> {
 		let story;
+		console.log(id);
 		if (uuidValidator(id)) {
 			story = await this.story.find({
 				where: { id },
@@ -62,13 +63,16 @@ class StoryService {
 			});
 		}
 
-		if (!story) {
+		if (story.length < 1) {
 			throw new HttpException(404, 'story not found');
 		}
+		console.log(story);
+
 		const { tags, creator, ...mainStory } = story[0] as any;
 		let newTagList: string[] = [];
 		if (tags) {
-			this.getTagName(tags);
+			console.log(tags);
+			newTagList = await this.getTagName(tags);
 		}
 		mainStory.tags = newTagList;
 		if (story?.views || story?.views === 0) {
@@ -204,7 +208,7 @@ class StoryService {
 
 		return data;
 	}
-	private pruneStory(arr): Story[] {
+	public pruneStory(arr): Story[] {
 		const newArr: Story[] = [];
 		arr.forEach((data) => {
 			const story = data;
@@ -229,7 +233,7 @@ class StoryService {
 	}
 	private async pruneTag(tags: string[]): Promise<Tag[] | []> {
 		const tagArr: Tag[] = [];
-		if (tags) {
+		if (tags.length > 0) {
 			for (const tagData of tags) {
 				const newTag = await this.getStoryTag(tagData);
 				if (tagData) {
