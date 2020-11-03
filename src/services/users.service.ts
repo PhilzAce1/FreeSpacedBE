@@ -98,7 +98,7 @@ class UserService {
 		await sendMessage(findUser.email, 'verifyemail', token);
 		return true;
 	}
-	public removeUserData(arr) {
+	static removeUserData(arr) {
 		const newUserStory = arr.map((story) => {
 			const { username, profileimage } = story.creator;
 

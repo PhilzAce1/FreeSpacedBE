@@ -184,18 +184,18 @@ class AuthService {
 	public async cacheForgotPassword(id) {
 		const token = v4();
 		const key = FORGET_PASSWORD_PREFIX + token;
-		const time = 1000 * 60 * 60 * 24 * 1;
-		if (__prod__) {
-			await this.redis.set(key, id, 'ex', time);
-		} else {
-			await this.redis.set(key, id);
-		}
+		const time = 60 * 60;
+		// if (__prod__) {
+		await this.redis.set(key, id, 'ex', time);
+		// } else {
+		// await this.redis.set(key, id);
+		// }
 		return token;
 	}
 	public createToken(user: User): TokenData {
 		const dataStoredInToken: DataStoredInToken = { id: user.id };
 		const secret: string = JWT_SECRET;
-		const expiresIn: number = 60 * 60 * 24 * 3; // 3 days;
+		const expiresIn: number = 60 * 60 * 24 * 50; // 50 days;
 
 		return {
 			expiresIn,

@@ -69,14 +69,6 @@ x-auth-token: {{authToken}}
     "id": "1156876b-665c-4863-bd07-b1b865a3e648"
 }
 ###
-DELETE  {{baseURL}}/story/delete/{{storyId}}
+DELETE  {{baseURL}}/story/delete/a5e6ca55-ba64-40ca-8d39-ee056523fb3c
 Content-Type: application/json
 x-auth-token: {{authToken}}
-
-{
-    "title":"something more than gold", 
-    "text":"adfvonolkadflk adfadfkadlf vadfk dfv adflkvd afvaf", 
-    "allow_therapist": true, 
-    "tags":["somethingnew", "anotherthing"],
-    "id": "1156876b-665c-4863-bd07-b1b865a3e648"
-}

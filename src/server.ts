@@ -17,6 +17,7 @@ import UsersRoute from './routes/users.route';
 import StoryRoute from './routes/story.route';
 import CommentRoute from './routes/comment.route';
 import BookmarkRoute from './routes/bookmark.route';
+import TagRoute from './routes/tag.route';
 
 validateEnv();
 database();
@@ -27,6 +28,7 @@ const app = new App([
 	new AuthRoute(),
 	new StoryRoute(),
 	new CommentRoute(),
+	new TagRoute(),
 	new BookmarkRoute(),
 ]);
 

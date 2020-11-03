@@ -37,8 +37,6 @@ class StoryRoute implements Route {
 		);
 		this.router.delete(
 			`${this.path}/delete/:id`,
-
-			validationMiddleware(UpdateStoryDto),
 			authMiddleware,
 			this.storyController.deleteStory
 		);
