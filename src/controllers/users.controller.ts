@@ -79,16 +79,22 @@ class UsersController {
 		}
 	};
 	public changePassword = async (
-		req: Request,
+		req: RequestWithUser,
 		res: Response,
 		next: NextFunction
 	) => {
-		const { id, newPassword } = req.body;
+		if (req.user?.id === undefined) {
+			throw new HttpException(403, 'user has to be logged in');
+		}
+		const id = req.user.id;
+		const { newPassword, oldPassword } = req.body;
+		console.log('oldPassword', oldPassword);
 
 		try {
 			const success: boolean = await this.userService.changePassword({
 				id,
 				newPassword,
+				oldPassword,
 			});
 			if (!success) throw new HttpException(400, 'something went wrong');
 			res.status(200).json({ success: true, message: 'password changed' });

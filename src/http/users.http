@@ -6,7 +6,7 @@
 
 ###
 # @authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYTE5NzU5LThmNWEtNDJmOC05NDgxLTExODM4YmU1MGE4YiIsImlhdCI6MTYwNDI1NjgxOSwiZXhwIjoxNjA0NTE2MDE5fQ.KSGsqw93uCgfO5rUbbKbcIJ7WJNv6h6Bo689w0YNG-A
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiNjAzZWJhLTEzOGQtNDA0ZC1hMjljLTdjZmQ3NjZhZDM3YSIsImlhdCI6MTYwNDI2OTM3NCwiZXhwIjoxNjA0NTI4NTc0fQ.-8Qr8JIW87M2hN4PuCz2bCxAoD4t5XOmQ2rNZG8SdP0
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYTE5NzU5LThmNWEtNDJmOC05NDgxLTExODM4YmU1MGE4YiIsImlhdCI6MTYwNDUyNjM5MCwiZXhwIjoxNjA4ODQ2MzkwfQ.fEkxEtVdhW_WnqGRqoUNz1SkDn5yq5Axva13T7JTJbI
 
 ###
 # Find All Users
@@ -36,6 +36,18 @@ GET {{baseURL}}/users/story/1b603eba-138d-404d-a29c-7cfd766ad37a
 GET {{baseURL}}/users/story HTTP/1.1
 Content-Type: application/json
 x-auth-token: {{authToken}}
+###
+
+
+
+PUT  {{baseURL}}/users/changepassword HTTP/1.1
+Content-Type: application/json
+x-auth-token: {{authToken}}
+
+{
+    "newPassword":"something", 
+    "oldPassword":"q1w2e3r4"
+}
 ###
 # Edit User By Id
 PUT {{baseURL}}/users/1

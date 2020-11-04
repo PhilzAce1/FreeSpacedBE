@@ -9,3 +9,10 @@ export class CreateUserDto {
 
 	public userId: string;
 }
+
+export class ChangePasswordDto {
+	@IsString()
+	newPassword: string;
+	@IsString()
+	oldPassword: string;
+}

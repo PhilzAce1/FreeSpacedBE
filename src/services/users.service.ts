@@ -70,7 +70,15 @@ class UserService {
 		return findUser;
 	}
 
-	public async changePassword({ id, newPassword }): Promise<boolean> {
+	public async changePassword({
+		id,
+		newPassword,
+		oldPassword,
+	}: {
+		id: string;
+		newPassword: string;
+		oldPassword: string;
+	}): Promise<boolean> {
 		const findUser = await this.users.findOne({ where: { id } });
 		if (!findUser) {
 			throw new HttpException(
@@ -78,6 +86,13 @@ class UserService {
 				`user is either not loggedin or does not exist`
 			);
 		}
+
+		const isPasswordMatching: boolean = await bcrypt.compare(
+			oldPassword,
+			findUser.password
+		);
+		if (!isPasswordMatching) throw new HttpException(409, 'wrong old password');
+
 		const hashedPassword = await bcrypt.hash(newPassword, 10);
 		await this.users.update(id, { password: hashedPassword });
 		return true;

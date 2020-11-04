@@ -184,7 +184,7 @@ class AuthService {
 	public async cacheForgotPassword(id) {
 		const token = v4();
 		const key = FORGET_PASSWORD_PREFIX + token;
-		const time = 60 * 60;
+		const time = 60 * 60 * 1;
 		// if (__prod__) {
 		await this.redis.set(key, id, 'ex', time);
 		// } else {

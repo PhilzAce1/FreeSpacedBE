@@ -1,7 +1,7 @@
-import { RequestHandler, Router } from 'express';
+import { Router } from 'express';
 import authMiddleware from '../middlewares/auth.middleware';
 import UsersController from '../controllers/users.controller';
-import { CreateUserDto } from '../dtos/users.dto';
+import { CreateUserDto, ChangePasswordDto } from '../dtos/users.dto';
 import Route from '../interfaces/routes.interface';
 import validationMiddleware from '../middlewares/validation.middleware';
 
@@ -47,7 +47,8 @@ class UsersRoute implements Route {
 		);
 		this.router.put(
 			`${this.path}/changepassword`,
-			authMiddleware as RequestHandler,
+			validationMiddleware(ChangePasswordDto),
+			authMiddleware,
 			this.usersController.changePassword
 		);
 		this.router.delete(
