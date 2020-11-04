@@ -45,8 +45,8 @@ Content-Type: application/json
 x-auth-token: {{authToken}}
 
 {
-    "newPassword":"something", 
-    "oldPassword":"q1w2e3r4"
+    "oldPassword":"something", 
+    "newPassword":"q1w2e3r4"
 }
 ###
 # Edit User By Id

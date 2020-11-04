@@ -88,7 +88,6 @@ class UsersController {
 		}
 		const id = req.user.id;
 		const { newPassword, oldPassword } = req.body;
-		console.log('oldPassword', oldPassword);
 
 		try {
 			const success: boolean = await this.userService.changePassword({

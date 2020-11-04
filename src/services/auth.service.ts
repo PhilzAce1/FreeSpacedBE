@@ -94,7 +94,6 @@ class AuthService {
 			email: userData.email,
 			password: hashedPassword,
 		};
-		console.log(userData);
 		await this.users.update(
 			{
 				id: userData.userId,

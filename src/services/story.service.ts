@@ -47,7 +47,6 @@ class StoryService {
 	}
 	public async getPostById(id: string): Promise<Story> {
 		let story;
-		console.log(id);
 		if (uuidValidator(id)) {
 			story = await this.story.find({
 				where: { id },
@@ -55,7 +54,6 @@ class StoryService {
 				take: 1,
 			});
 		} else {
-			console.log('story id is invalid', id);
 			story = await this.story.find({
 				where: { slug: id },
 				relations: ['tags', 'creator'],
@@ -66,12 +64,10 @@ class StoryService {
 		if (story.length < 1) {
 			throw new HttpException(404, 'story not found');
 		}
-		console.log(story);
 
 		const { tags, creator, ...mainStory } = story[0] as any;
 		let newTagList: string[] = [];
 		if (tags) {
-			console.log(tags);
 			newTagList = await this.getTagName(tags);
 		}
 		mainStory.tags = newTagList;
