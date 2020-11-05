@@ -15,7 +15,7 @@ class StoryService {
 		let take = Number(query.limit) || 10000;
 		let skip = Number(query.skip) || 0;
 		const stories = await this.story.find({
-			relations: ['tags', 'creator'],
+			relations: ['tags', 'creator', 'comments', 'comments.creator'],
 			order: { createdAt: 'DESC' },
 			skip,
 			take,
@@ -247,6 +247,9 @@ class StoryService {
 			}
 		}
 		return newTagList;
+	}
+	public mapContibutors(story) {
+		console.log(story);
 	}
 }
 
