@@ -19,6 +19,15 @@ export class CreateStoryDto {
 	public creatorId: string;
 }
 
+export class PublishStoryDto {
+	@IsUUID()
+	storyId: string;
+
+	@IsBoolean()
+	publish: boolean;
+
+	creatorId: string;
+}
 export class UpdateStoryDto {
 	@MinLength(2)
 	@IsString()

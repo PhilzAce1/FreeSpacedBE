@@ -2,7 +2,7 @@ import { Story as storyModel } from '../models/story.model';
 import { Tag } from '../models/tag.model';
 import { Story } from '../interfaces/story.interface';
 import { isEmptyObject } from '../utils/util';
-import { UpdateStoryDto } from '../dtos/story.dto';
+import { PublishStoryDto, UpdateStoryDto } from '../dtos/story.dto';
 import HttpException from '../exceptions/HttpException';
 import { genSlug, mapContributors } from '../utils/helpers';
 import { validate as uuidValidator } from 'uuid';
@@ -11,12 +11,23 @@ import { validate as uuidValidator } from 'uuid';
 class StoryService {
 	private story = storyModel;
 	private tags = Tag;
+	public async publishStory(publishStoryData: PublishStoryDto) {
+		const { publish, storyId, creatorId } = publishStoryData;
+		const storyExist = await this.story.findOne({ where: { id: storyId } });
+		if (!creatorId || creatorId !== storyExist?.creatorId)
+			throw new HttpException(403, 'you are not the owner of this story');
+
+		if (!storyExist) throw new HttpException(404, 'story has not been created');
+		await this.story.update(storyId, { published: publish });
+		return storyExist;
+	}
 	public async getAllStories(query): Promise<Story[]> {
 		let take = Number(query.limit) || 10000;
 		let skip = Number(query.skip) || 0;
 		const stories = await this.story.find({
 			relations: ['tags', 'creator', 'comments', 'comments.creator'],
 			order: { createdAt: 'DESC' },
+			// where: { published: true },
 			skip,
 			take,
 		});
@@ -25,6 +36,7 @@ class StoryService {
 	public async getPopularStories() {
 		const stories = await this.story.find({
 			order: { views: 'DESC' },
+			where: { published: true },
 			relations: ['creator', 'tags'],
 			take: 6,
 		});

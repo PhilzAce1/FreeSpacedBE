@@ -2,7 +2,11 @@
 import { NextFunction, Request, Response } from 'express';
 import { RequestWithUser } from '../interfaces/auth.interface';
 /* -------------------------- Validators and Interfaces  ------------------------- */
-import { CreateStoryDto, UpdateStoryDto } from '../dtos/story.dto';
+import {
+	CreateStoryDto,
+	UpdateStoryDto,
+	PublishStoryDto,
+} from '../dtos/story.dto';
 
 /* -------------------------- Internal Dependencies ------------------------- */
 import AuthService from '../services/auth.service';
@@ -13,6 +17,26 @@ import { Story } from '../models/story.model';
 class StoryController {
 	public storyService = new StoryService();
 	public authService = new AuthService();
+
+	public publishStory = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const publishStoryData: PublishStoryDto = req.body;
+			const publishedStory = await this.storyService.publishStory(
+				publishStoryData
+			);
+
+			res.status(200).json({
+				success: true,
+				payload: publishedStory,
+			});
+		} catch (error) {
+			next(error);
+		}
+	};
 	public getAllStories = async (
 		req: Request,
 		res: Response,

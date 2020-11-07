@@ -29,6 +29,9 @@ export class Story extends BaseEntity {
 	@Column({ type: 'text', nullable: true })
 	slug: string;
 
+	@Column({ nullable: true, type: 'boolean', default: false })
+	published: boolean;
+
 	@OneToMany(() => Comment, (comment) => comment.story, {
 		nullable: true,
 		onDelete: 'CASCADE',

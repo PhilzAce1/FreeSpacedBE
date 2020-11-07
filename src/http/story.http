@@ -7,7 +7,7 @@
 
 ###
 # authToken
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiNjAzZWJhLTEzOGQtNDA0ZC1hMjljLTdjZmQ3NjZhZDM3YSIsImlhdCI6MTYwNDI2OTM3NCwiZXhwIjoxNjA0NTI4NTc0fQ.-8Qr8JIW87M2hN4PuCz2bCxAoD4t5XOmQ2rNZG8SdP0
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYTE5NzU5LThmNWEtNDJmOC05NDgxLTExODM4YmU1MGE4YiIsImlhdCI6MTYwNDcxNDMzNywiZXhwIjoxNjA5MDM0MzM3fQ.nBg40GUNF7k9x6rtzaModUEH7t-ZZccMMnuzG4QVQNY
 ###
 @storyId = be6212a8-d99f-485a-8e23-7dbf3ac60ad3
 # a1e353cd-bd9e-45b0-8ce6-3d54995e38c2
@@ -18,7 +18,7 @@ GET {{baseURL}}/story
 
 ###
 # GET BY ID
-GET {{baseURL}}/story/something-1048
+GET {{baseURL}}/story/795b04ad-4954-474e-974a-0cbd41c41bb0
 Content-Type: application/json
 
 ###
@@ -72,3 +72,13 @@ x-auth-token: {{authToken}}
 DELETE  {{baseURL}}/story/delete/a5e6ca55-ba64-40ca-8d39-ee056523fb3c
 Content-Type: application/json
 x-auth-token: {{authToken}}
+###
+
+PUT  {{baseURL}}/story/publish
+Content-Type: application/json
+x-auth-token: {{authToken}}
+
+{
+    "storyId":"100d01b9-fc1f-4cea-8e1f-319689dd15e7",
+    "publish":true
+}

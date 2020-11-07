@@ -2,7 +2,11 @@ import { Router } from 'express';
 import Route from '../interfaces/routes.interface';
 import StoryController from '../controllers/story.controller';
 import validationMiddleware from '../middlewares/validation.middleware';
-import { CreateStoryDto, UpdateStoryDto } from '../dtos/story.dto';
+import {
+	CreateStoryDto,
+	UpdateStoryDto,
+	PublishStoryDto,
+} from '../dtos/story.dto';
 import authMiddleware from '../middlewares/auth.middleware';
 import storyMiddelware from '../middlewares/story.middleware';
 class StoryRoute implements Route {
@@ -28,6 +32,13 @@ class StoryRoute implements Route {
 			validationMiddleware(CreateStoryDto),
 			storyMiddelware,
 			this.storyController.createPost
+		);
+		this.router.put(
+			`${this.path}/publish`,
+
+			validationMiddleware(PublishStoryDto),
+			storyMiddelware,
+			this.storyController.publishStory
 		);
 		this.router.patch(
 			`${this.path}/update`,
