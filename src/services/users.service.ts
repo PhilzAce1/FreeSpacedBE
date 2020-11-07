@@ -97,13 +97,11 @@ class UserService {
 		await this.users.update(id, { password: hashedPassword });
 		return true;
 	}
-	public async deleteUser(userId: number): Promise<User[]> {
+	public async deleteUser(userId: string): Promise<boolean> {
 		const findUser = await this.users.find({ where: { id: userId } });
-		if (!findUser) throw new HttpException(409, "You're not user");
-
-		const deleteUserData = await this.users.delete(userId);
-		console.log(deleteUserData);
-		return findUser;
+		if (!findUser) throw new HttpException(409, 'user does not exist');
+		await this.users.delete(userId);
+		return true;
 	}
 	public async sendVerifyUserEmail(email) {
 		const findUser = await this.users.findOne({ where: { email } });

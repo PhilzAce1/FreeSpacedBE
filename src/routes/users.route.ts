@@ -52,7 +52,8 @@ class UsersRoute implements Route {
 			this.usersController.changePassword
 		);
 		this.router.delete(
-			`${this.path}/:id(\\d+)`,
+			`${this.path}/`,
+			authMiddleware,
 			this.usersController.deleteUser
 		);
 	}

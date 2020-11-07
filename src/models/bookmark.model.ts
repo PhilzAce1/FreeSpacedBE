@@ -21,6 +21,7 @@ export class Bookmark extends BaseEntity {
 	@ManyToOne(() => User, (creator) => creator.bookmarks, {
 		nullable: true,
 		onUpdate: 'CASCADE',
+		onDelete: 'CASCADE',
 	})
 	@JoinTable()
 	creator: User;

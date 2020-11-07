@@ -263,7 +263,14 @@ paths:
           description: "Conflict"
 
       deprecated: false
+  /users/:
+    delete:
+      summary: auth route to delete authuser
+      responses:
+        200:
+          description: deleted story
 
+      deprecated: false
   #[POST] auth
   /story/create:
     post:

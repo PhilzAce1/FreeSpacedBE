@@ -121,15 +121,19 @@ class UsersController {
 	};
 
 	public deleteUser = async (
-		req: Request,
+		req: RequestWithUser,
 		res: Response,
 		next: NextFunction
 	) => {
-		const userId: number = Number(req.params.id);
-
+		if (!req.user?.id) throw new HttpException(400, 'creatorId is required');
+		const userId = req.user.id;
 		try {
-			const deleteUserData: User[] = await this.userService.deleteUser(userId);
-			res.status(200).json({ data: deleteUserData, message: 'deleted' });
+			const userHasBeenDeleted: boolean = await this.userService.deleteUser(
+				userId
+			);
+			if (!userHasBeenDeleted)
+				throw new HttpException(400, 'something went wrong');
+			res.status(200).json({ message: 'user has been deleted', success: true });
 		} catch (error) {
 			next(error);
 		}
