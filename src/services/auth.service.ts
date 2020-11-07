@@ -124,7 +124,8 @@ class AuthService {
 			userData.password,
 			findUser.password
 		);
-		if (!isPasswordMatching) throw new HttpException(409, 'wrong password ');
+		if (!isPasswordMatching)
+			throw new HttpException(409, 'Invalid credentials');
 
 		const tokenData = this.createToken(findUser);
 		const cookie = this.createCookie(tokenData);
