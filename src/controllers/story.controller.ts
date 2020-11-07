@@ -8,7 +8,7 @@ import { CreateStoryDto, UpdateStoryDto } from '../dtos/story.dto';
 import AuthService from '../services/auth.service';
 import StoryService from '../services/story.service';
 import HttpException from '../exceptions/HttpException';
-import { Story } from 'src/models/story.model';
+import { Story } from '../models/story.model';
 
 class StoryController {
 	public storyService = new StoryService();

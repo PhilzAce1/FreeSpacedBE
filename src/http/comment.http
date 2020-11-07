@@ -7,7 +7,9 @@
 ###
 # authToken
 
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYTE5NzU5LThmNWEtNDJmOC05NDgxLTExODM4YmU1MGE4YiIsImlhdCI6MTYwNDI1NjgxOSwiZXhwIjoxNjA0NTE2MDE5fQ.KSGsqw93uCgfO5rUbbKbcIJ7WJNv6h6Bo689w0YNG-A
+# @authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYTE5NzU5LThmNWEtNDJmOC05NDgxLTExODM4YmU1MGE4YiIsImlhdCI6MTYwNDI1NjgxOSwiZXhwIjoxNjA0NTE2MDE5fQ.KSGsqw93uCgfO5rUbbKbcIJ7WJNv6h6Bo689w0YNG-A
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYTE5NzU5LThmNWEtNDJmOC05NDgxLTExODM4YmU1MGE4YiIsImlhdCI6MTYwNDU4NjEwNywiZXhwIjoxNjA4OTA2MTA3fQ.f9hxYfalpivS_qc-DNDIp6JZQBRn15ErQmwlskHy4_E
+
 @storyId = 1881cf31-b84f-45ff-b05e-6706b6f9e4ef
 
 ###
@@ -17,7 +19,7 @@ Content-Type: application/json
 x-auth-token: {{authToken}}
 
 {
- "storyId":"1881cf31-b84f-45ff-b05e-6706b6f9e4ef", 
+ "storyId":"a1e353cd-bd9e-45b0-8ce6-3d54995e38c2", 
  "content":"somethigl"
 }
 
@@ -27,7 +29,7 @@ Content-Type: application/json
 x-auth-token:{{authToken}}
 
 {
-    "commentId":"e68eb4dc-2b33-4192-a07e-2ccad97db65e", 
+    "commentId":"5df4c946-0ac7-403d-ad8c-b867c8e9f67a", 
     "content":"I like what I am seeing",
     "thugnssds":"afiodfd"
 }

@@ -411,7 +411,7 @@ paths:
         500:
           description: "Server Error"
 
-  /story/delete/{Id}:
+  /story/delete/{id}:
     delete:
       tags:
         - Story
@@ -545,6 +545,49 @@ paths:
           description: "An Object of Auth user bookmarks"
         500:
           description: "Server Error"
+  /tag:
+    get:
+      responses:
+        200:
+          description: "An Object of Auth user bookmarks"
+        500:
+          description: "Server Error"
+
+      deprecated: false
+  /tag/relatedstories/{storyId}:
+    get:
+      tags:
+        - Tags
+      parameters:
+        - name: storyId
+          in: path
+          description: Story id
+          required: true
+          type: string
+
+      responses:
+        200:
+          description: "An Object containing an Array of  similar Stories and  More Stories from User"
+        500:
+          description: "Server Error"
+
+  /tag/{name}:
+    get:
+      tags:
+        - Tags
+      parameters:
+        - name: name
+          in: path
+          description: Tagname
+          required: true
+          type: string
+
+      responses:
+        200:
+          description: "An Object containing an Array of  similar Stories and  More Stories from User"
+        500:
+          description: "Server Error"
+
 # definitions
 definitions:
   createstoryresponse:

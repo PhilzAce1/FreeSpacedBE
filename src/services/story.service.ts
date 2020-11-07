@@ -4,7 +4,7 @@ import { Story } from '../interfaces/story.interface';
 import { isEmptyObject } from '../utils/util';
 import { UpdateStoryDto } from '../dtos/story.dto';
 import HttpException from '../exceptions/HttpException';
-import { genSlug } from '../utils/helpers';
+import { genSlug, mapContributors } from '../utils/helpers';
 import { validate as uuidValidator } from 'uuid';
 // import { getRepository } from 'typeorm';
 
@@ -20,7 +20,7 @@ class StoryService {
 			skip,
 			take,
 		});
-		return this.pruneStory(stories);
+		return mapContributors(this.pruneStory(stories));
 	}
 	public async getPopularStories() {
 		const stories = await this.story.find({

@@ -1,6 +1,7 @@
 import { Bookmark } from '../models/bookmark.model';
 import { Story } from '../models/story.model';
 import { CreateBookmarkDto } from '../dtos/bookmark.dto';
+import { mapContributorsForBookmarkRes } from '../utils/helpers';
 import HttpException from '../exceptions/HttpException';
 import UserService from '../services/users.service';
 class BookmarkService {
@@ -30,9 +31,17 @@ class BookmarkService {
 	public async getUserBookmarks(creatorId: string) {
 		const userBookmarks = await this.bookmark.find({
 			where: { creatorId: creatorId },
-			relations: ['story', 'creator'],
+			relations: [
+				'story',
+				'creator',
+				'story.creator',
+				'story.comments',
+				'story.comments.creator',
+			],
 		});
-		return UserService.removeUserData(userBookmarks);
+		return mapContributorsForBookmarkRes(
+			UserService.removeUserData(userBookmarks)
+		);
 	}
 }
 export default BookmarkService;

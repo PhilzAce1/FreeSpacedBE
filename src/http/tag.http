@@ -6,3 +6,7 @@
 
 
 GET {{baseURL}}/tag
+###
+GET  {{baseURL}}/tag/war
+###
+GET {{baseURL}}/tag/relatedstories/be6212a8-d99f-485a-8e23-7dbf3ac60ad3
