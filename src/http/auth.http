@@ -7,7 +7,7 @@
 
 ###
 # authToken
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM3N2VhOTA3LTQ4OTMtNGQ4Zi1iODRkLTJkMjI2Nzk1NzI2YiIsImlhdCI6MTYwNDA4NjQ0NiwiZXhwIjoxNjA0MzQ1NjQ2fQ.nvwu5zrur-Ezc5AUCsEOeD3l6kqFPxT-vgYqG9hERlE
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiNjAzZWJhLTEzOGQtNDA0ZC1hMjljLTdjZmQ3NjZhZDM3YSIsImlhdCI6MTYwNDg0NDQ4OCwiZXhwIjo0MTk2ODQ0NDg4fQ.FMskLE_fGR-FmgZHoOJjrzqLMFSD93TxjL3MjoP_9Xc
 ###
 # signup
 POST {{baseURL}}/signup
@@ -36,8 +36,9 @@ Content-Type: application/json
 # }
 
 {
-    "email": "lim@gmail.com",
-	"password": "q1w2e3r4"
+    "email": "ellocodewddonders@gmail.com",
+    "password": "12345678",
+    "userId": "1b603eba-138d-404d-a29c-7cfd766ad37a"
 }
 
 ###

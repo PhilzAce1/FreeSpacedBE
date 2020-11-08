@@ -2,7 +2,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 /* -------------------------- Validators and Interfaces  ------------------------- */
-import { CreateUserDto } from '../dtos/users.dto';
+import { CreateUserDto, UpdateProfileDto } from '../dtos/users.dto';
 import { User } from '../interfaces/users.interface';
 
 /* -------------------------- Internal Dependencies ------------------------- */
@@ -102,12 +102,17 @@ class UsersController {
 		}
 	};
 	public updateUser = async (
-		req: Request,
+		req: RequestWithUser,
 		res: Response,
 		next: NextFunction
 	) => {
-		const userId: number = Number(req.params.id);
-		const userData: User = req.body;
+		if (req.user?.id === undefined)
+			throw new HttpException(
+				403,
+				'You have to be logged in to update your Profile'
+			);
+		const userId: string = req.user.id;
+		const userData: UpdateProfileDto = req.body;
 
 		try {
 			const updateUserData: User = await this.userService.updateUser(

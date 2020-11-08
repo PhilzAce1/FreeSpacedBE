@@ -6,7 +6,7 @@
 
 ###
 # @authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYTE5NzU5LThmNWEtNDJmOC05NDgxLTExODM4YmU1MGE4YiIsImlhdCI6MTYwNDI1NjgxOSwiZXhwIjoxNjA0NTE2MDE5fQ.KSGsqw93uCgfO5rUbbKbcIJ7WJNv6h6Bo689w0YNG-A
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYTE5NzU5LThmNWEtNDJmOC05NDgxLTExODM4YmU1MGE4YiIsImlhdCI6MTYwNDcxNTc4MiwiZXhwIjoxNjA5MDM1NzgyfQ.s2CJ2aMKW_SaizDSTkAd4JQ59mfsnyOYfIw19-70xIo
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiNjAzZWJhLTEzOGQtNDA0ZC1hMjljLTdjZmQ3NjZhZDM3YSIsImlhdCI6MTYwNDg0NDQ4OCwiZXhwIjo0MTk2ODQ0NDg4fQ.FMskLE_fGR-FmgZHoOJjrzqLMFSD93TxjL3MjoP_9Xc
 
 ###
 # Find All Users
@@ -48,6 +48,21 @@ x-auth-token: {{authToken}}
     "oldPassword":"something", 
     "newPassword":"q1w2e3r4"
 }
+###
+PUT {{baseURL}}/users/updateprofile
+Content-Type: application/json
+x-auth-token: {{authToken}}
+
+{
+    "firstname":"anewUser", 
+    "lastname":"theuserlastname", 
+    "username":"needstobe",
+    "another":"sofa", 
+    "profileimage": "http://localhost:3000/images/six.png",
+    "coverimage": "https://images.pexels.com/photos/261055/pexels-photo-261055.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+
+}
+
 ###
 # Edit User By Id
 PUT {{baseURL}}/users/1

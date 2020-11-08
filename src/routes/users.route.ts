@@ -1,7 +1,11 @@
 import { Router } from 'express';
 import authMiddleware from '../middlewares/auth.middleware';
 import UsersController from '../controllers/users.controller';
-import { CreateUserDto, ChangePasswordDto } from '../dtos/users.dto';
+import {
+	CreateUserDto,
+	ChangePasswordDto,
+	UpdateProfileDto,
+} from '../dtos/users.dto';
 import Route from '../interfaces/routes.interface';
 import validationMiddleware from '../middlewares/validation.middleware';
 
@@ -41,8 +45,9 @@ class UsersRoute implements Route {
 			this.usersController.verifyUser
 		);
 		this.router.put(
-			`${this.path}/:id(\\d+)`,
-			validationMiddleware(CreateUserDto, true),
+			`${this.path}/updateprofile`,
+			validationMiddleware(UpdateProfileDto),
+			authMiddleware,
 			this.usersController.updateUser
 		);
 		this.router.put(

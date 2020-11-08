@@ -24,8 +24,16 @@ class StoryRoute implements Route {
 			this.storyController.getPopularStories
 		);
 		this.router.get(
+			`${this.path}/filter/sortstories`,
+			this.storyController.filterStories
+		);
+		this.router.get(
 			`${this.path}/comments/:id`,
 			this.storyController.getCommentsByStoryId
+		);
+		this.router.get(
+			`${this.path}/updateproddb/publishall`,
+			this.storyController.publishAllStories
 		);
 		this.router.post(
 			`${this.path}/create`,

@@ -17,7 +17,9 @@ export function genSlug(name: string) {
 		.toLowerCase();
 	return slug;
 }
-
+function getUniqueListBy(arr, key) {
+	return [...new Map(arr.map((item) => [item[key], item])).values()];
+}
 export function mapContributors(storyArr) {
 	return storyArr.map((story) => {
 		const contributorArr: contributors[] = [];
@@ -28,9 +30,10 @@ export function mapContributors(storyArr) {
 				username,
 			});
 		});
+		const filterdContributorsArr = getUniqueListBy(contributorArr, 'username');
 		const contributors = {
-			allContributors: story.comments.length,
-			contributorsProfile: contributorArr,
+			allContributors: filterdContributorsArr.length,
+			contributorsProfile: filterdContributorsArr,
 		};
 		const { comments, ...filStory } = story;
 		return {
@@ -51,13 +54,15 @@ export function mapContributorsForBookmarkRes(data) {
 			};
 		});
 		delete bookmark.story.comments;
+		const filterdContributorsArr = getUniqueListBy(storyComments, 'username');
+
 		return {
 			...bookmark,
 			story: {
 				...story,
 				contributors: {
-					allContributors: storyComments.length,
-					contributorsProfile: storyComments,
+					allContributors: filterdContributorsArr.length,
+					contributorsProfile: filterdContributorsArr,
 				},
 				creator: {
 					username: story.creator.username,

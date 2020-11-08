@@ -263,8 +263,52 @@ paths:
           description: "Conflict"
 
       deprecated: false
+  /users/updateprofile:
+    put:
+      tags:
+        - User
+      summary: Update User Details (Auth Route)
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              firstname:
+                type: string
+                description: User's firstname
+
+              lastname:
+                type: string
+                description: User's lastname
+
+              username:
+                type: string
+                description: User's username
+
+              profileimage:
+                type: string
+                description: User's profile image
+              coverimage:
+                type: string
+                description: User's profile image
+
+      responses:
+        200:
+          description: "Ok"
+        404:
+          description: "Not Found"
+        400:
+          description: "Bad Request"
+        409:
+          description: "Conflict"
+
+      deprecated: false
   /users/:
     delete:
+      tags:
+        - User
       summary: auth route to delete authuser
       responses:
         200:
@@ -336,6 +380,18 @@ paths:
       tags:
         - Story
       summary: Find All Stories
+      responses:
+        200:
+          description: "An List of all Stories in the datebase"
+
+        500:
+          description: "Server Error"
+
+  /story/filter/sortstories:
+    get:
+      tags:
+        - Story
+      summary: filter by /sort=mostpopular || lastest ||freespacecertified, limit=3, skip=3
       responses:
         200:
           description: "An List of all Stories in the datebase"
@@ -586,6 +642,8 @@ paths:
           description: "Server Error"
   /tag:
     get:
+      tags:
+        - Tags
       responses:
         200:
           description: "An Object of Auth user bookmarks"

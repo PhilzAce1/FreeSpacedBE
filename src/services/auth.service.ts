@@ -195,7 +195,7 @@ class AuthService {
 	public createToken(user: User): TokenData {
 		const dataStoredInToken: DataStoredInToken = { id: user.id };
 		const secret: string = JWT_SECRET;
-		const expiresIn: number = 60 * 60 * 24 * 50; // 50 days;
+		const expiresIn: number = 1000 * 60 * 60 * 24 * 30; // 50 days;
 
 		return {
 			expiresIn,

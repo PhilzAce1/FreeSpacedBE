@@ -16,3 +16,15 @@ export class ChangePasswordDto {
 	@IsString()
 	oldPassword: string;
 }
+export class UpdateProfileDto {
+	@IsString()
+	firstname: string;
+	@IsString()
+	lastname: string;
+	@IsString()
+	username: string;
+	@IsString()
+	profileimage: string;
+	@IsString()
+	coverimage: string;
+}

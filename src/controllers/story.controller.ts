@@ -37,6 +37,7 @@ class StoryController {
 			next(error);
 		}
 	};
+
 	public getAllStories = async (
 		req: Request,
 		res: Response,
@@ -47,6 +48,38 @@ class StoryController {
 			res.status(200).json({
 				success: true,
 				payload: data,
+			});
+		} catch (error) {
+			next(error);
+		}
+	};
+
+	public publishAllStories = async (
+		_: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const data = await this.storyService.publishAllStory();
+			res.status(200).json({
+				success: true,
+				payload: data,
+			});
+		} catch (error) {
+			next(error);
+		}
+	};
+
+	public filterStories = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const filteredStories = await this.storyService.filterStories(req.query);
+			res.status(200).json({
+				success: true,
+				payload: filteredStories,
 			});
 		} catch (error) {
 			next(error);

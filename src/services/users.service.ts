@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto } from '../dtos/users.dto';
+import { CreateUserDto, UpdateProfileDto } from '../dtos/users.dto';
 import HttpException from '../exceptions/HttpException';
 import { User } from '../interfaces/users.interface';
 import { UserModel as userModel } from '../models/users.model';
@@ -60,14 +60,31 @@ class UserService {
 		return createUserData;
 	}
 
-	public async updateUser(_: number, userData: User): Promise<any> {
+	public async updateUser(
+		userId: string,
+		userData: UpdateProfileDto
+	): Promise<any> {
 		if (isEmptyObject(userData))
 			throw new HttpException(400, "You're not userData");
 
-		const findUser = this.users.findOne({ where: { email: userData.email } });
+		const findUser = this.users.findOne({ where: { id: userId } });
 		if (!findUser) throw new HttpException(409, "You're not user");
-
-		return findUser;
+		const {
+			firstname,
+			lastname,
+			profileimage,
+			username,
+			coverimage,
+		} = userData;
+		await this.users.update(userId, {
+			firstname,
+			lastname,
+			profileimage,
+			username,
+			coverimage,
+		});
+		const updatedUser = await this.users.findOne(userId);
+		return updatedUser;
 	}
 
 	public async changePassword({

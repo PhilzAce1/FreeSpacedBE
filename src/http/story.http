@@ -18,8 +18,12 @@ GET {{baseURL}}/story
 
 ###
 # GET BY ID
-GET {{baseURL}}/story/795b04ad-4954-474e-974a-0cbd41c41bb0
+GET {{baseURL}}/story/1863b961-077e-407e-a500-6623e2b3ea29
 Content-Type: application/json
+
+###
+
+GET  {{baseURL}}/story/filter/sortstories?limit=3&sort=lastest
 
 ###
 # GET COMMENTS BY Story Id

@@ -11,6 +11,16 @@ import { validate as uuidValidator } from 'uuid';
 class StoryService {
 	private story = storyModel;
 	private tags = Tag;
+
+	public async publishAllStory() {
+		const storiesInDb = await this.story.find();
+
+		storiesInDb.forEach(
+			async (story) => await this.story.update(story.id, { published: true })
+		);
+		return true;
+	}
+
 	public async publishStory(publishStoryData: PublishStoryDto) {
 		const { publish, storyId, creatorId } = publishStoryData;
 		const storyExist = await this.story.findOne({ where: { id: storyId } });
@@ -27,7 +37,7 @@ class StoryService {
 		const stories = await this.story.find({
 			relations: ['tags', 'creator', 'comments', 'comments.creator'],
 			order: { createdAt: 'DESC' },
-			// where: { published: true },
+			where: { published: true },
 			skip,
 			take,
 		});
@@ -42,6 +52,33 @@ class StoryService {
 		});
 
 		return this.pruneStory(stories);
+	}
+	public async filterStories(query) {
+		const findOptions = {
+			relations: ['tags', 'creator', 'comments', 'comments.creator'],
+			where: { published: true },
+		} as any;
+		const { sort, limit, skip } = query;
+		if (sort) {
+			if (sort === 'mostpopular') {
+				findOptions.order = { views: 'DESC' };
+			}
+			if (sort === 'lastest') {
+				findOptions.order = { createdAt: 'DESC' };
+			}
+			if (sort === 'freespacecertified') {
+				findOptions.where = { is_spacecare: true };
+			}
+		}
+
+		if (limit) {
+			findOptions.take = limit;
+		}
+		if (skip) {
+			findOptions.skip = skip;
+		}
+		const stories = await this.story.find(findOptions);
+		return mapContributors(this.pruneStory(stories));
 	}
 	public async getCommentsByStoryId(storyId) {
 		let storyComment = await this.story.findOne({
@@ -62,13 +99,13 @@ class StoryService {
 		if (uuidValidator(id)) {
 			story = await this.story.find({
 				where: { id },
-				relations: ['tags', 'creator'],
+				relations: ['tags', 'creator', 'comments', 'comments.creator'],
 				take: 1,
 			});
 		} else {
 			story = await this.story.find({
 				where: { slug: id },
-				relations: ['tags', 'creator'],
+				relations: ['tags', 'creator', 'comments', 'comments.creator'],
 				take: 1,
 			});
 		}
@@ -91,7 +128,7 @@ class StoryService {
 			profileimage: creator.profileimage,
 			username: creator.username,
 		};
-		return mainStory;
+		return mapContributors([mainStory])[0];
 	}
 
 	public async createStory(storyData): Promise<Story> {
@@ -259,9 +296,6 @@ class StoryService {
 			}
 		}
 		return newTagList;
-	}
-	public mapContibutors(story) {
-		console.log(story);
 	}
 }
 
