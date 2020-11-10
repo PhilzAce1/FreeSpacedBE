@@ -55,7 +55,7 @@ export function mapContributorsForBookmarkRes(data) {
 		});
 		delete bookmark.story.comments;
 		const filterdContributorsArr = getUniqueListBy(storyComments, 'username');
-
+		const getTagNames = getTagName(story.tags);
 		return {
 			...bookmark,
 			story: {
@@ -64,6 +64,7 @@ export function mapContributorsForBookmarkRes(data) {
 					allContributors: filterdContributorsArr.length,
 					contributorsProfile: filterdContributorsArr,
 				},
+				tags: getTagNames,
 				creator: {
 					username: story.creator.username,
 					profileimage: story.creator.profileimage,
@@ -72,4 +73,14 @@ export function mapContributorsForBookmarkRes(data) {
 		};
 	});
 	return prunedArr;
+}
+
+export function getTagName(tags) {
+	const newTagList: any[] = [];
+	if (tags.length > 0) {
+		for (const tagData of tags) {
+			newTagList.push(tagData.name);
+		}
+	}
+	return newTagList;
 }

@@ -113,13 +113,14 @@ class UsersController {
 			);
 		const userId: string = req.user.id;
 		const userData: UpdateProfileDto = req.body;
-
 		try {
 			const updateUserData: User = await this.userService.updateUser(
 				userId,
 				userData
 			);
-			res.status(200).json({ payload: updateUserData, success: true });
+			const { password, ...updatedUserData } = updateUserData;
+
+			res.status(200).json({ payload: updatedUserData, success: true });
 		} catch (error) {
 			next(error);
 		}

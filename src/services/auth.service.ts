@@ -112,20 +112,20 @@ class AuthService {
 		userData: CreateUserDto
 	): Promise<{ cookie: string; findUser: User; token: string }> {
 		if (isEmptyObject(userData))
-			throw new HttpException(400, "You're not userData");
+			throw new HttpException(400, `Invalid email or password`);
 
 		const findUser = await this.users.findOne({
 			where: { email: userData.email },
 		});
 		if (!findUser)
-			throw new HttpException(409, `You're email ${userData.email} not found`);
+			throw new HttpException(409, `Invalid email or password`);
 
 		const isPasswordMatching: boolean = await bcrypt.compare(
 			userData.password,
 			findUser.password
 		);
 		if (!isPasswordMatching)
-			throw new HttpException(409, 'Invalid credentials');
+			throw new HttpException(409, `Invalid email or password`);
 
 		const tokenData = this.createToken(findUser);
 		const cookie = this.createCookie(tokenData);

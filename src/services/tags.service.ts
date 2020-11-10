@@ -27,19 +27,25 @@ class TagService {
 				qb.andWhere('tags.name IN (:...tagname)', { tagname: tagName });
 			},
 			relations: ['creator', 'tags'],
-			take: 3,
+			take: 4,
 		});
 		const moreFromUser = await this.story.find({
 			where: {
 				creatorId: story.creatorId,
 			},
 			relations: ['creator', 'tags'],
-			take: 5,
+			take: 4,
 		});
-
+		const filteredRelatedStories = relatedStories
+			.filter((relatedStory) => relatedStory.id !== story.id)
+			.slice(0, 3);
+		const filteredMoreFromUser = moreFromUser
+			.filter((userStory) => userStory.id !== story.id)
+			.slice(0, 3);
+		console.log(moreFromUser);
 		return {
-			relatedStories: this.storyService.pruneStory(relatedStories),
-			moreFromuser: this.storyService.pruneStory(moreFromUser),
+			relatedStories: this.storyService.pruneStory(filteredRelatedStories),
+			moreFromuser: this.storyService.pruneStory(filteredMoreFromUser),
 		};
 	}
 	public async getStoriesByTagName(name) {
@@ -47,8 +53,7 @@ class TagService {
 			where: { name },
 			relations: ['stories', 'stories.creator', 'stories.tags'],
 		});
-		if (!storiesByTag)
-			throw new HttpException(404, 'No Story was created with this Tag');
+		if (!storiesByTag) return [];
 		const prunedStories = this.storyService.pruneStory(storiesByTag.stories);
 		return {
 			...storiesByTag,

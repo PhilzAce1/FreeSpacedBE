@@ -55,9 +55,9 @@ Content-Type: application/json
 {
     "text":"they are saying that this must be a string", 
     "allow_therapist":true, 
+     "creatorId": "ee4d44a5-e76b-4135-87e0-ad780fa50f91",
     "tags":["fight", "war"],
-    "creatorId": "fda19759-8f5a-42f8-9481-11838be50a8b"
- 
+    "title":"something" 
 }
 
 ###

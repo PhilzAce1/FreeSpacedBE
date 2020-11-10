@@ -6,7 +6,7 @@
 
 ###
 # @authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYTE5NzU5LThmNWEtNDJmOC05NDgxLTExODM4YmU1MGE4YiIsImlhdCI6MTYwNDI1NjgxOSwiZXhwIjoxNjA0NTE2MDE5fQ.KSGsqw93uCgfO5rUbbKbcIJ7WJNv6h6Bo689w0YNG-A
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiNjAzZWJhLTEzOGQtNDA0ZC1hMjljLTdjZmQ3NjZhZDM3YSIsImlhdCI6MTYwNDg0NDQ4OCwiZXhwIjo0MTk2ODQ0NDg4fQ.FMskLE_fGR-FmgZHoOJjrzqLMFSD93TxjL3MjoP_9Xc
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVlNGQ0NGE1LWU3NmItNDEzNS04N2UwLWFkNzgwZmE1MGY5MSIsImlhdCI6MTYwNDk5MTM0NiwiZXhwIjo0MTk2OTkxMzQ2fQ.zg2KccUUS6wUyKPB0qwCau4KHBMQQ4jO29kICgnuS2M
 
 ###
 # Find All Users
@@ -29,7 +29,7 @@ Content-Type: application/json
 
 ###
 # Get unauth user by id 
-GET {{baseURL}}/users/story/1b603eba-138d-404d-a29c-7cfd766ad37a
+GET {{baseURL}}/users/story/ee4d44a5-e76b-4135-87e0-ad780fa50f91
 
 
 ###

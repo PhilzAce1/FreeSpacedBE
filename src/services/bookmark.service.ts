@@ -37,6 +37,7 @@ class BookmarkService {
 				'story.creator',
 				'story.comments',
 				'story.comments.creator',
+				'story.tags',
 			],
 		});
 		return mapContributorsForBookmarkRes(
