@@ -23,7 +23,12 @@ class UserService {
 	}
 
 	public async findUserById(userId: number): Promise<User> {
-		const findUser = await this.users.findOne({ where: { id: userId } });
+		const findUser = await this.users.findOne({
+			where: { id: userId },
+			order: {
+				createdAt: 'DESC',
+			},
+		});
 		if (!findUser) throw new HttpException(409, "You're not user");
 		return findUser;
 	}

@@ -117,8 +117,7 @@ class AuthService {
 		const findUser = await this.users.findOne({
 			where: { email: userData.email },
 		});
-		if (!findUser)
-			throw new HttpException(409, `Invalid email or password`);
+		if (!findUser) throw new HttpException(409, `Invalid email or password`);
 
 		const isPasswordMatching: boolean = await bcrypt.compare(
 			userData.password,
@@ -185,11 +184,8 @@ class AuthService {
 		const token = v4();
 		const key = FORGET_PASSWORD_PREFIX + token;
 		const time = 60 * 60 * 1;
-		// if (__prod__) {
+		//
 		await this.redis.set(key, id, 'ex', time);
-		// } else {
-		// await this.redis.set(key, id);
-		// }
 		return token;
 	}
 	public createToken(user: User): TokenData {

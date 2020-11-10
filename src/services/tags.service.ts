@@ -4,6 +4,7 @@ import { Story } from '../models/story.model';
 import HttpException from '../exceptions/HttpException';
 import { In } from 'typeorm';
 import StoryService from './story.service';
+import moment from 'moment';
 class TagService {
 	private tag = Tag;
 	// private user = User;
@@ -32,7 +33,22 @@ class TagService {
 
 		const filStories = tags
 			.map((tag) => {
-				return { ...tag, stories: tag.stories.length };
+				const { stories } = tag;
+				const recentStories = stories.filter((story) => {
+					const { createdAt } = story;
+					const today = Date.now();
+					const thisMonth = new Date(today).getMonth();
+					const storyMonth = new Date(createdAt).getMonth();
+
+					const thisYear = new Date(today).getFullYear();
+					const storyYear = new Date(createdAt).getFullYear();
+					const valid =
+						!moment(createdAt).isAfter(moment().subtract(4, 'days')) &&
+						thisYear <= storyYear &&
+						thisMonth <= storyMonth;
+					return valid;
+				});
+				return { ...tag, stories: recentStories.length };
 			})
 			.sort((a, b) => b.stories - a.stories)
 			.slice(0, 6);
