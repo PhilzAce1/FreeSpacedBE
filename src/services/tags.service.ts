@@ -13,6 +13,28 @@ class TagService {
 		const tags = await this.tag.find();
 		return tags;
 	}
+	public async getTrendingTags() {
+		// const tags = await getRepository(this.tag)
+		// 	.createQueryBuilder('tags')
+		// 	.innerJoinAndSelect('tags.stories', 'S')
+		// 	.addSelect('COUNT(S.id)', 'storysount')
+		// 	.groupBy('tags.id')
+		// 	.addGroupBy('S.id')
+		// 	.getMany();
+
+		const tags = await this.tag.find({
+			relations: ['stories'],
+		});
+
+		const filStories = tags
+			.map((tag) => {
+				return { ...tag, stories: tag.stories.length };
+			})
+			.sort((a, b) => b.stories - a.stories)
+			.slice(0, 6);
+
+		return filStories;
+	}
 	public async getRelatedStories(id) {
 		const story = await this.story.findOne({
 			where: { id: id },

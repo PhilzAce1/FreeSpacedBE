@@ -43,13 +43,33 @@ class StoryService {
 		});
 		return mapContributors(this.pruneStory(stories));
 	}
-	public async getPopularStories() {
-		const stories = await this.story.find({
+	public async getPopularStories(query) {
+		const { tag, limit } = query;
+		if (tag) {
+			const popularStories = (await this.tags.findOne({
+				where: { name: tag },
+				relations: ['stories', 'stories.tags', 'stories.creator'],
+			})) as any;
+			if (!popularStories) {
+				return [];
+			}
+			const { stories } = popularStories;
+			const lim = Number(limit) || 6;
+			const sortedStories = stories
+				.sort((a, b) => b.views - a.views)
+				.slice(0, lim);
+
+			return this.pruneStory(sortedStories);
+		}
+		const findOptions = {
 			order: { views: 'DESC' },
 			where: { published: true },
 			relations: ['creator', 'tags'],
-			take: 6,
-		});
+		} as any;
+		if (limit) {
+			findOptions.take = Number(limit);
+		}
+		const stories = await this.story.find(findOptions);
 
 		return this.pruneStory(stories);
 	}

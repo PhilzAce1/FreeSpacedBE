@@ -110,12 +110,13 @@ class StoryController {
 		}
 	};
 	public getPopularStories = async (
-		_: Request,
+		req: Request,
 		res: Response,
 		next: NextFunction
 	) => {
 		try {
-			const stories = await this.storyService.getPopularStories();
+			const { query } = req;
+			const stories = await this.storyService.getPopularStories(query);
 			res.status(200).json({
 				success: true,
 				payload: stories,

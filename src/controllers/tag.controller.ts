@@ -4,6 +4,21 @@ import TagService from '../services/tags.service';
 class TagController {
 	tagService = new TagService();
 
+	public getTrendingTags = async (
+		_: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const trendingTags = await this.tagService.getTrendingTags();
+			res.status(200).json({
+				success: true,
+				payload: trendingTags,
+			});
+		} catch (error) {
+			next(error);
+		}
+	};
 	public getAllTags = async (_, res: Response, next: NextFunction) => {
 		try {
 			const data = await this.tagService.getAllTags();

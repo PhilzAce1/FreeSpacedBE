@@ -12,12 +12,16 @@ class TagRoute implements Route {
 	private initializeRoute() {
 		this.router.get(`${this.path}`, this.tagController.getAllTags);
 		this.router.get(
-			`${this.path}/:name`,
+			`${this.path}/name/:name`,
 			this.tagController.getStoriesFromTagName
 		);
 		this.router.get(
 			`${this.path}/relatedstories/:storyId`,
 			this.tagController.getRelatedStories
+		);
+		this.router.get(
+			`${this.path}/trending`,
+			this.tagController.getTrendingTags
 		);
 	}
 }

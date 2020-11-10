@@ -32,7 +32,7 @@ Content-Type: application/json
 ###
 #
 
-GET {{baseURL}}/story/popular/getstories
+GET {{baseURL}}/story/popular/getstories?tag=war
 ###
 # Create a story
 POST {{baseURL}}/story/create
