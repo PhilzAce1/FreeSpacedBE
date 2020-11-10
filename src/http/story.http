@@ -14,7 +14,7 @@
 
 ###
 # GET ALL 
-GET {{baseURL}}/story
+GET {{baseURL}}/story?limit=4
 
 ###
 # GET BY ID

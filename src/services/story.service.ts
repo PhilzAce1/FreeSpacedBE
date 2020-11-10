@@ -32,15 +32,32 @@ class StoryService {
 		return storyExist;
 	}
 	public async getAllStories(query): Promise<Story[]> {
-		let take = Number(query.limit) || 10000;
-		let skip = Number(query.skip) || 0;
-		const stories = await this.story.find({
+		const { sort, limit, skip } = query;
+		const findOptions = {
 			relations: ['tags', 'creator', 'comments', 'comments.creator'],
 			order: { createdAt: 'DESC' },
 			where: { published: true },
-			skip,
-			take,
-		});
+		} as any;
+
+		if (sort) {
+			if (sort === 'mostpopular') {
+				findOptions.order = { views: 'DESC' };
+			}
+			if (sort === 'lastest') {
+				findOptions.order = { createdAt: 'DESC' };
+			}
+			if (sort === 'freespacecertified') {
+				findOptions.where = { is_spacecare: true };
+			}
+		}
+
+		if (limit) {
+			findOptions.take = limit;
+		}
+		if (skip) {
+			findOptions.skip = skip;
+		}
+		const stories = await this.story.find(findOptions);
 		return mapContributors(this.pruneStory(stories));
 	}
 	public async getPopularStories(query) {

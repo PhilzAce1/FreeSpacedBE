@@ -379,6 +379,21 @@ paths:
     get:
       tags:
         - Story
+      parameters:
+        - name: sort
+          in: query
+          type: string
+          description: mostpopular || lastest ||freespacecertified
+        - name: limit
+          in: query
+          type: string
+          description: the numbers of items to return
+        - name: skip
+          in: query
+          type: string
+          description: The number of items to skip before starting to collect the result set
+
+
       summary: Find All Stories
       responses:
         200:

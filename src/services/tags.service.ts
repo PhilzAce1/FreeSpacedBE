@@ -10,18 +10,22 @@ class TagService {
 	private story = Story;
 	private storyService = new StoryService();
 	public async getAllTags() {
-		const tags = await this.tag.find();
-		return tags;
+		const tags = await this.tag.find({
+			relations: ['stories'],
+		});
+		const tagsWithStoryCount = tags
+			.map((tag) => {
+				const { stories, ...tagData } = tag;
+
+				return {
+					...tagData,
+					numberOfStories: stories.length,
+				};
+			})
+			.sort((a, b) => b.numberOfStories - a.numberOfStories);
+		return tagsWithStoryCount;
 	}
 	public async getTrendingTags() {
-		// const tags = await getRepository(this.tag)
-		// 	.createQueryBuilder('tags')
-		// 	.innerJoinAndSelect('tags.stories', 'S')
-		// 	.addSelect('COUNT(S.id)', 'storysount')
-		// 	.groupBy('tags.id')
-		// 	.addGroupBy('S.id')
-		// 	.getMany();
-
 		const tags = await this.tag.find({
 			relations: ['stories'],
 		});
@@ -79,7 +83,6 @@ class TagService {
 		const prunedStories = this.storyService.pruneStory(storiesByTag.stories);
 		return {
 			...storiesByTag,
-			numberOfStories: prunedStories.length,
 			stories: prunedStories,
 		};
 	}
