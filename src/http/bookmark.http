@@ -23,3 +23,8 @@ x-auth-token: {{authToken}}
 GET {{baseURL}}/bookmark
 Content-Type: application/json
 x-auth-token: {{authToken}}
+
+###
+DELETE {{baseURL}}/bookmark/b5d45437-4a0e-4d32-b461-1488ff7e82dd
+Content-Type: application/json
+x-auth-token: {{authToken}}

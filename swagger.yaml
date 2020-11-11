@@ -393,7 +393,6 @@ paths:
           type: string
           description: The number of items to skip before starting to collect the result set
 
-
       summary: Find All Stories
       responses:
         200:
@@ -675,6 +674,31 @@ paths:
           description: "An Object of Auth user bookmarks"
         500:
           description: "Server Error"
+  /bookmark/{bookmarkId}:
+    delete:
+      tags:
+        - Bookmark
+      summary: Delete bookmark by bookmarkId
+      parameters:
+        - name: bookmarkId
+          in: path
+          type: string
+          required: true
+          
+
+      responses:
+        200:
+          description: "Ok"
+
+        404:
+          description: "Not Found"
+        400:
+          description: "Bad Request"
+        403:
+          description: "Unauthorized"
+        500:
+          description: "Server Error"
+
   /tag:
     get:
       tags:

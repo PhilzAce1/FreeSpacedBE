@@ -7,6 +7,22 @@ import UserService from '../services/users.service';
 class BookmarkService {
 	private bookmark = Bookmark;
 	private story = Story;
+
+	public async deleteBookmark(userId, bookmarkId): Promise<boolean> {
+		// check if bookmark exist
+		const bookmarkExist = await this.bookmark.findOne({
+			where: { id: bookmarkId },
+		});
+		if (!bookmarkExist) throw new HttpException(400, 'Bookmark does not exist');
+
+		if (bookmarkExist.creatorId !== userId) {
+			throw new HttpException(403, ' this bookmark was not created by you');
+		}
+
+		await this.bookmark.delete({ id: bookmarkId });
+
+		return true;
+	}
 	public async createBookmark(
 		bookmarkData: CreateBookmarkDto
 	): Promise<Bookmark> {

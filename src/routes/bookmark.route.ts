@@ -25,6 +25,11 @@ class BookmarkRoute implements Route {
 			authMiddleware,
 			this.bookmarkController.getUserBookmarks
 		);
+		this.router.delete(
+			`${this.path}/:bookmarkId`,
+			authMiddleware,
+			this.bookmarkController.deleteBookmark
+		);
 	}
 }
 
