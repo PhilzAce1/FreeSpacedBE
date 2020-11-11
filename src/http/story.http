@@ -18,7 +18,7 @@ GET {{baseURL}}/story?limit=4
 
 ###
 # GET BY ID
-GET {{baseURL}}/story/1863b961-077e-407e-a500-6623e2b3ea29
+GET {{baseURL}}/story/795b04ad-4954-474e-974a-0cbd41c41bb0
 Content-Type: application/json
 
 ###

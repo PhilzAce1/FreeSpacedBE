@@ -5,7 +5,7 @@ import { isEmptyObject } from '../utils/util';
 import { PublishStoryDto, UpdateStoryDto } from '../dtos/story.dto';
 import HttpException from '../exceptions/HttpException';
 import { genSlug, mapContributors } from '../utils/helpers';
-import { validate as uuidValidator } from 'uuid';
+import { validate as uuidValidator, v4 } from 'uuid';
 // import { getRepository } from 'typeorm';
 
 class StoryService {
@@ -131,8 +131,10 @@ class StoryService {
 
 		return this.pruneComments(storyComment);
 	}
-	public async getPostById(id: string): Promise<Story> {
+	public async getPostById(id: string, req): Promise<Story> {
 		let story;
+
+		// check if req param is by storyID or Slug
 		if (uuidValidator(id)) {
 			story = await this.story.find({
 				where: { id },
@@ -147,24 +149,48 @@ class StoryService {
 			});
 		}
 
+		// If no story was found return 404 error
 		if (story.length < 1) {
 			throw new HttpException(404, 'story not found');
 		}
 
+		// destructure tags and creator from storyData
 		const { tags, creator, ...mainStory } = story[0] as any;
 		let newTagList: string[] = [];
+
+		// if tags are present, flatten to get only name
 		if (tags) {
 			newTagList = await this.getTagName(tags);
 		}
+		const userViews = req.session.userViews;
+		const userViewsId = v4();
+		// replace the orignal tag object to only tag name
 		mainStory.tags = newTagList;
-		if (story?.views || story?.views === 0) {
-			await this.story.update(id, { views: story?.views + 1 });
-			mainStory.views = mainStory.views + 1;
+		if (mainStory.views || mainStory.views === 0) {
+			if (!userViews) {
+				await this.story.update(id, { views: mainStory.views + 1 });
+				mainStory.views = mainStory.views + 1;
+				req.session.userViews = {
+					id: userViewsId,
+					views: [{ id: mainStory.id }],
+				};
+			} else {
+				const userHasAlreadyViewedStory = userViews.views.some(
+					(story) => story.id === mainStory.id
+				);
+				if (!userHasAlreadyViewedStory) {
+					await this.story.update(id, { views: mainStory.views + 1 });
+					mainStory.views = mainStory.views + 1;
+					userViews.views.push({ id: mainStory.id });
+					req.session.userViews = userViews;
+				}
+			}
 		}
 		mainStory.creator = {
 			profileimage: creator.profileimage,
 			username: creator.username,
 		};
+
 		return mapContributors([mainStory])[0];
 	}
 

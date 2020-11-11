@@ -1,19 +1,18 @@
-import cookieParser from 'cookie-parser';
+// import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import logger from 'morgan';
-// import connectRedis from 'connect-redis';
-// import session from 'express-session';
+import connectRedis from 'connect-redis';
+import session from 'express-session';
 import Routes from './interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
 import { PORT } from './config';
 import { __prod__ } from './config';
 // COOKIE_NAME
-// import { redisDb as redis } from './utils/connectDB';
-// import path from 'path';
-// const RedisStore = connectRedis(session);
+import { redisDb as redis } from './utils/connectDB';
+const RedisStore = connectRedis(session);
 
 class App {
 	public app: express.Application;
@@ -52,24 +51,24 @@ class App {
 		// 	},
 		// 	credentials: true,
 		// };
-		// this.app.use(
-		// 	session({
-		// 		name: COOKIE_NAME,
-		// 		store: new RedisStore({
-		// 			client: redis,
-		// 			disableTouch: true,
-		// 		}),
-		// 		cookie: {
-		// 			maxAge: 1000 * 60 * 60 * 24 * 365 * 1, // 1 years
-		// 			httpOnly: true,
-		// 			sameSite: 'lax', // csrf
-		// 			secure: __prod__, // cookie only works in https
-		// 		},
-		// 		saveUninitialized: false,
-		// 		secret: 'qowiueojwojfalksdjoqiwueo',
-		// 		resave: false,
-		// 	})
-		// );
+		this.app.use(
+			session({
+				name: 'qid',
+				store: new RedisStore({
+					client: redis,
+					disableTouch: true,
+				}),
+				cookie: {
+					maxAge: 1000 * 60 * 60 * 24 * 1, // 1 years
+					httpOnly: true,
+					sameSite: 'lax', // csrf
+					secure: __prod__, // cookie only works in https
+				},
+				saveUninitialized: false,
+				secret: 'qowiueojwojfalksdjoqiwueo',
+				resave: false,
+			})
+		);
 
 		this.app.use('/images', express.static('images'));
 		if (this.env) {
@@ -86,7 +85,7 @@ class App {
 
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
-		this.app.use(cookieParser());
+		// this.app.use(cookieParser());
 	}
 
 	private initializeRoutes(routes: Routes[]) {

@@ -93,7 +93,7 @@ class StoryController {
 	) => {
 		const { id } = req.params;
 		try {
-			const data = await this.storyService.getPostById(id);
+			const data = await this.storyService.getPostById(id, req);
 			if (typeof data !== 'undefined') {
 				res.status(200).json({
 					success: true,
