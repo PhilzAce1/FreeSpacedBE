@@ -37,12 +37,13 @@ class UserService {
 		await this.users.update(userId, { email: userData.email });
 		return userData.email;
 	}
-	public async findUserById(userId: number): Promise<User> {
+	public async findUserById(userId): Promise<User> {
 		const findUser = await this.users.findOne({
 			where: { id: userId },
 			order: {
 				createdAt: 'DESC',
 			},
+			relations: ['stories'],
 		});
 		if (!findUser) throw new HttpException(409, "You're not user");
 		return findUser;

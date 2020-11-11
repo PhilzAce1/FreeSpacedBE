@@ -10,6 +10,7 @@ import { DataStoredInToken } from '../interfaces/auth.interface';
 import { UserModel } from '../models/users.model';
 import { JWT_SECRET } from '../config';
 import { RequestWithUser } from '../interfaces/auth.interface';
+
 async function authMiddleware(req: RequestWithUser, _, next) {
 	const token = req.header('x-auth-token');
 	if (token) {

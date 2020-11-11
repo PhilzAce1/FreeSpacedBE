@@ -45,8 +45,8 @@ x-auth-token: {{authToken}}
     "allow_therapist":true, 
     "tags":[]
 }
-
 ###
+# a2c73854-8137-4420-b8bc-222a8354ed4b
 # create story as a loged in user 
 
 POST {{baseURL}}/story/create

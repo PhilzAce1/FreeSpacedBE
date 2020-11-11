@@ -50,9 +50,7 @@ class TagService {
 						thisYear <= storyYear &&
 						thisMonth <= storyMonth &&
 						thisDay <= storyDay;
-					if (!valid) {
-						console.log(createdAt);
-					}
+
 					return valid;
 				});
 				return { ...tag, stories: recentStories.length };

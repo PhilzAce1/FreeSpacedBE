@@ -77,7 +77,7 @@ class UsersController {
 		res: Response,
 		next: NextFunction
 	) => {
-		const userId: number = Number(req.params.id);
+		const userId = req.params.id;
 
 		try {
 			const findOneUserData: User = await this.userService.findUserById(userId);

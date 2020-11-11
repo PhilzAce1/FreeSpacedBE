@@ -21,7 +21,7 @@ class UsersRoute implements Route {
 
 	private initializeRoutes() {
 		this.router.get(`${this.path}`, this.usersController.getUsers);
-		this.router.get(`${this.path}/:id(\\d+)`, this.usersController.getUserById);
+		// this.router.get(`${this.path}/:id`, this.usersController.getUserById);
 		// todo - write docs
 		this.router.get(
 			`${this.path}/story/:userId`,
