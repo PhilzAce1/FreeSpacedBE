@@ -1,5 +1,9 @@
 import * as bcrypt from 'bcrypt';
-import { CreateUserDto, UpdateProfileDto } from '../dtos/users.dto';
+import {
+	CreateUserDto,
+	UpdateProfileDto,
+	UpdateUserEmailDto,
+} from '../dtos/users.dto';
 import HttpException from '../exceptions/HttpException';
 import { User } from '../interfaces/users.interface';
 import { UserModel as userModel } from '../models/users.model';
@@ -22,6 +26,17 @@ class UserService {
 		return users;
 	}
 
+	public async updateEmail(
+		userData: UpdateUserEmailDto,
+		userId: string
+	): Promise<string> {
+		const emailExist = await this.users.findOne({
+			where: { email: userData.email },
+		});
+		if (emailExist) throw new HttpException(409, 'email exist');
+		await this.users.update(userId, { email: userData.email });
+		return userData.email;
+	}
 	public async findUserById(userId: number): Promise<User> {
 		const findUser = await this.users.findOne({
 			where: { id: userId },

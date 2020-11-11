@@ -10,6 +10,10 @@ export class CreateUserDto {
 	public userId: string;
 }
 
+export class UpdateUserEmailDto {
+	@IsEmail()
+	public email: string;
+}
 export class ChangePasswordDto {
 	@IsString()
 	newPassword: string;

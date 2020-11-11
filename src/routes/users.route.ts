@@ -5,6 +5,7 @@ import {
 	CreateUserDto,
 	ChangePasswordDto,
 	UpdateProfileDto,
+	UpdateUserEmailDto,
 } from '../dtos/users.dto';
 import Route from '../interfaces/routes.interface';
 import validationMiddleware from '../middlewares/validation.middleware';
@@ -55,6 +56,12 @@ class UsersRoute implements Route {
 			validationMiddleware(ChangePasswordDto),
 			authMiddleware,
 			this.usersController.changePassword
+		);
+		this.router.put(
+			`${this.path}/changeemail`,
+			validationMiddleware(UpdateUserEmailDto),
+			authMiddleware,
+			this.usersController.changeUserEmail
 		);
 		this.router.delete(
 			`${this.path}/`,

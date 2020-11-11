@@ -8,24 +8,7 @@
 # @authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYTE5NzU5LThmNWEtNDJmOC05NDgxLTExODM4YmU1MGE4YiIsImlhdCI6MTYwNDI1NjgxOSwiZXhwIjoxNjA0NTE2MDE5fQ.KSGsqw93uCgfO5rUbbKbcIJ7WJNv6h6Bo689w0YNG-A
 @authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVlNGQ0NGE1LWU3NmItNDEzNS04N2UwLWFkNzgwZmE1MGY5MSIsImlhdCI6MTYwNDk5MTM0NiwiZXhwIjo0MTk2OTkxMzQ2fQ.zg2KccUUS6wUyKPB0qwCau4KHBMQQ4jO29kICgnuS2M
 
-###
-# Find All Users
-GET {{baseURL}}/users
 
-###
-# Find User By Id
-GET {{baseURL}}/users/1
-
-
-###
-# Add User
-POST {{baseURL}}/users
-Content-Type: application/json
-
-{
-    "email": "example@gmail.com",
-	"password": "qwer1234"
-}
 
 ###
 # Get unauth user by id 
@@ -48,6 +31,17 @@ x-auth-token: {{authToken}}
     "oldPassword":"something", 
     "newPassword":"q1w2e3r4"
 }
+
+###
+#change user email
+PUT  {{baseURL}}/users/changeemail HTTP/1.1
+Content-Type: application/json
+x-auth-token: {{authToken}}
+
+{
+    "email":"somethingelsde@gmail.com" 
+}
+
 ###
 PUT {{baseURL}}/users/updateprofile
 Content-Type: application/json

@@ -2,7 +2,11 @@
 import { NextFunction, Request, Response } from 'express';
 
 /* -------------------------- Validators and Interfaces  ------------------------- */
-import { CreateUserDto, UpdateProfileDto } from '../dtos/users.dto';
+import {
+	CreateUserDto,
+	UpdateProfileDto,
+	UpdateUserEmailDto,
+} from '../dtos/users.dto';
 import { User } from '../interfaces/users.interface';
 
 /* -------------------------- Internal Dependencies ------------------------- */
@@ -12,6 +16,40 @@ import { RequestWithUser } from '../interfaces/auth.interface';
 class UsersController {
 	public userService = new userService();
 
+	public changeUserEmail = async (
+		req: RequestWithUser,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			if (req.user?.id === undefined || req.user.email === undefined)
+				throw new HttpException(409, 'You need to be logged in');
+
+			const userId = req.user.id;
+			const userData: UpdateUserEmailDto = req.body;
+			const currentEmail = req.user.email;
+
+			if (currentEmail === userData.email) {
+				res.status(200).json({
+					success: true,
+					payload: {
+						message: 'The Email Provided is your current email',
+					},
+				});
+			} else {
+				const updatedEmail: string = await this.userService.updateEmail(
+					userData,
+					userId
+				);
+				res.status(200).json({
+					success: true,
+					payload: `email changed to ${updatedEmail}`,
+				});
+			}
+		} catch (error) {
+			next(error);
+		}
+	};
 	public getUsers = async (_: Request, res: Response, next: NextFunction) => {
 		try {
 			const findAllUsersData: User[] = await this.userService.findAllUser();
