@@ -37,19 +37,27 @@ class TagService {
 				const recentStories = stories.filter((story) => {
 					const { createdAt } = story;
 					const today = Date.now();
+
+					const thisDay = new Date(today).getDate();
+					const storyDay = new Date(createdAt).getDate();
 					const thisMonth = new Date(today).getMonth();
 					const storyMonth = new Date(createdAt).getMonth();
 
 					const thisYear = new Date(today).getFullYear();
 					const storyYear = new Date(createdAt).getFullYear();
 					const valid =
-						!moment(createdAt).isAfter(moment().subtract(4, 'days')) &&
+						!moment(createdAt).isAfter(moment().subtract(2, 'hours')) &&
 						thisYear <= storyYear &&
-						thisMonth <= storyMonth;
+						thisMonth <= storyMonth &&
+						thisDay <= storyDay;
+					if (!valid) {
+						console.log(createdAt);
+					}
 					return valid;
 				});
 				return { ...tag, stories: recentStories.length };
 			})
+			.filter((story) => story.stories !== 0)
 			.sort((a, b) => b.stories - a.stories)
 			.slice(0, 6);
 
