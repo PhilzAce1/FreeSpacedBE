@@ -211,7 +211,7 @@ class StoryService {
 	public async getPostById(id: string, req): Promise<Story> {
 		let story;
 		let userBookmarks: string[] = [];
-		if (req.body.creatorId) {
+		if (uuidValidator(req.body.creatorId)) {
 			let bookmarks = await this.bookmark.find({
 				where: { creatorId: req.body.creatorId },
 			});
