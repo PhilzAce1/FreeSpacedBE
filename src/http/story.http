@@ -15,7 +15,7 @@
 
 ###
 # GET ALL 
-GET {{baseURL}}/story 
+GET {{baseURL}}/story
 x-auth-token: {{authToken}}
 
 ###
@@ -78,7 +78,7 @@ x-auth-token: {{authToken}}
     "id": "1156876b-665c-4863-bd07-b1b865a3e648"
 }
 ###
-DELETE  {{baseURL}}/story/delete/a5e6ca55-ba64-40ca-8d39-ee056523fb3c
+DELETE  {{baseURL}}/story/delete/cdc6e928-6867-4fff-a049-4b2fd0ba3884
 Content-Type: application/json
 x-auth-token: {{authToken}}
 ###

@@ -32,7 +32,7 @@ class StoryService {
 		await this.story.update(storyId, { published: publish });
 		return storyExist;
 	}
-	public async getAllStories(query, userId?): Promise<Story[]> {
+	public async getAllStories(query, userId?) {
 		let userBookmarks: string[] = [];
 		if (userId) {
 			let bookmarks = await this.bookmark.find({
@@ -44,7 +44,7 @@ class StoryService {
 		}
 		const { sort, limit, skip } = query;
 		const findOptions = {
-			relations: ['tags', 'creator', 'comments', 'comments.creator'],
+			relations: ['tags', 'creator', 'comments', 'comments.creator', 'reports'],
 			order: { createdAt: 'DESC' },
 			where: { published: true },
 		} as any;
@@ -61,17 +61,14 @@ class StoryService {
 			}
 		}
 
-		if (limit) {
+		if (limit >= 1) {
 			findOptions.take = limit;
 		}
-		if (skip) {
+		if (skip >= 0) {
 			findOptions.skip = skip;
 		}
-		const stories = await this.story.find({
-			relations: ['tags', 'creator', 'comments', 'comments.creator'],
-			order: { createdAt: 'DESC' },
-			// where: { published: true },
-		});
+		const stories = await this.story.find(findOptions);
+		console.log(stories.length);
 		const mapedStory = mapContributors(this.pruneStory(stories));
 		return this.userBookmarkedStory(mapedStory, userBookmarks);
 	}
@@ -151,6 +148,8 @@ class StoryService {
 				'comments.replies',
 				'comments.creator',
 				'comments.replies.creator',
+				'comments.reports',
+				'comments.replies.reports',
 			],
 		});
 
@@ -334,6 +333,7 @@ class StoryService {
 						username: reply.creator.username,
 						profileimage: reply.creator.profileimage,
 					},
+					reports: reply.reports.length,
 				});
 			});
 			return (comment = {
@@ -345,6 +345,7 @@ class StoryService {
 					username: creator.username,
 					profileimage: creator.profileimage,
 				},
+				reports: comment.reports,
 			});
 		});
 
@@ -397,9 +398,16 @@ class StoryService {
 	private userBookmarkedStory(storyArr: Story[], bookmarkArr: string[]) {
 		return storyArr.map((story) => {
 			const bookMarked = bookmarkArr.some((x) => x === story.id);
+			if (story.reports === undefined) {
+				return {
+					...story,
+					bookMarked,
+				};
+			}
 			return {
 				...story,
 				bookMarked,
+				reports: story.reports.length,
 			};
 		});
 	}

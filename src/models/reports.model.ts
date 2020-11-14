@@ -18,7 +18,7 @@ export class Reports extends BaseEntity {
 	@PrimaryGeneratedColumn('uuid')
 	id: string;
 
-	@Column()
+	@Column({ nullable: true })
 	complain: string;
 
 	@Column()

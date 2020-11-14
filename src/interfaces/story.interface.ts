@@ -3,4 +3,5 @@ export interface Story {
 	title: string;
 	creatorId: string;
 	text: string;
+	reports?: [];
 }
