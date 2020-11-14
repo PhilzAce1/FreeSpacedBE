@@ -26,13 +26,13 @@ async function authMiddleware(req: RequestWithUser, _, next) {
 				req.user = findUser;
 				next();
 			} else {
-				next(new HttpException(401, 'Wrong authentication token'));
+				next(new HttpException(401, 'Error, Please Login '));
 			}
 		} catch (error) {
-			next(new HttpException(401, 'Wrong authentication token'));
+			next(new HttpException(401, 'Something Went wrong'));
 		}
 	} else {
-		next(new HttpException(404, 'Authentication token missing'));
+		next(new HttpException(404, 'Please Login '));
 	}
 	// return next(new HttpException(404, 'something went wrong'));
 }

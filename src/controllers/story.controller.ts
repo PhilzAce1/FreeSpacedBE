@@ -44,7 +44,10 @@ class StoryController {
 		next: NextFunction
 	) => {
 		try {
-			const data = await this.storyService.getAllStories(req.query);
+			const data = await this.storyService.getAllStories(
+				req.query,
+				req.body.creatorId
+			);
 			res.status(200).json({
 				success: true,
 				payload: data,
@@ -116,7 +119,11 @@ class StoryController {
 	) => {
 		try {
 			const { query } = req;
-			const stories = await this.storyService.getPopularStories(query);
+
+			const stories = await this.storyService.getPopularStories(
+				query,
+				req.body.creatorId
+			);
 			res.status(200).json({
 				success: true,
 				payload: stories,

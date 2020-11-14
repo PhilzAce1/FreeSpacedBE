@@ -6,12 +6,13 @@ import { PublishStoryDto, UpdateStoryDto } from '../dtos/story.dto';
 import HttpException from '../exceptions/HttpException';
 import { genSlug, mapContributors } from '../utils/helpers';
 import { validate as uuidValidator, v4 } from 'uuid';
+import { Bookmark } from '../models/bookmark.model';
 // import { getRepository } from 'typeorm';
 
 class StoryService {
 	private story = storyModel;
 	private tags = Tag;
-
+	public bookmark = Bookmark;
 	public async publishAllStory() {
 		const storiesInDb = await this.story.find();
 
@@ -31,7 +32,16 @@ class StoryService {
 		await this.story.update(storyId, { published: publish });
 		return storyExist;
 	}
-	public async getAllStories(query): Promise<Story[]> {
+	public async getAllStories(query, userId?): Promise<Story[]> {
+		let userBookmarks: string[] = [];
+		if (userId) {
+			let bookmarks = await this.bookmark.find({
+				where: { creatorId: userId },
+			});
+			userBookmarks = bookmarks.map((x) => {
+				return x.storyId;
+			});
+		}
 		const { sort, limit, skip } = query;
 		const findOptions = {
 			relations: ['tags', 'creator', 'comments', 'comments.creator'],
@@ -58,9 +68,19 @@ class StoryService {
 			findOptions.skip = skip;
 		}
 		const stories = await this.story.find(findOptions);
-		return mapContributors(this.pruneStory(stories));
+		const mapedStory = mapContributors(this.pruneStory(stories));
+		return this.userBookmarkedStory(mapedStory, userBookmarks);
 	}
-	public async getPopularStories(query) {
+	public async getPopularStories(query, userId?) {
+		let userBookmarks: string[] = [];
+		if (userId) {
+			let bookmarks = await this.bookmark.find({
+				where: { creatorId: userId },
+			});
+			userBookmarks = bookmarks.map((x) => {
+				return x.storyId;
+			});
+		}
 		const { tag, limit } = query;
 		if (tag) {
 			const popularStories = (await this.tags.findOne({
@@ -75,8 +95,9 @@ class StoryService {
 			const sortedStories = stories
 				.sort((a, b) => b.views - a.views)
 				.slice(0, lim);
+			const prunedStory = this.pruneStory(sortedStories);
 
-			return this.pruneStory(sortedStories);
+			return this.userBookmarkedStory(prunedStory, userBookmarks);
 		}
 		const findOptions = {
 			order: { views: 'DESC' },
@@ -87,8 +108,8 @@ class StoryService {
 			findOptions.take = Number(limit);
 		}
 		const stories = await this.story.find(findOptions);
-
-		return this.pruneStory(stories);
+		const prunedStory = this.pruneStory(stories);
+		return this.userBookmarkedStory(prunedStory, userBookmarks);
 	}
 	public async filterStories(query) {
 		const findOptions = {
@@ -359,6 +380,15 @@ class StoryService {
 			}
 		}
 		return newTagList;
+	}
+	private userBookmarkedStory(storyArr: Story[], bookmarkArr: string[]) {
+		return storyArr.map((story) => {
+			const bookMarked = bookmarkArr.some((x) => x === story.id);
+			return {
+				...story,
+				bookMarked,
+			};
+		});
 	}
 }
 

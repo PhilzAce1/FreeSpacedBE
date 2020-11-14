@@ -17,10 +17,18 @@ class StoryRoute implements Route {
 		this.initializeRoutes();
 	}
 	private initializeRoutes() {
-		this.router.get(`${this.path}`, this.storyController.getAllStories);
+		this.router.get(
+			`${this.path}`,
+			storyMiddelware,
+			this.storyController.getAllStories
+		);
+
 		this.router.get(`${this.path}/:id`, this.storyController.getPostById);
+
 		this.router.get(
 			`${this.path}/popular/getstories`,
+			storyMiddelware,
+
 			this.storyController.getPopularStories
 		);
 		this.router.get(

@@ -7,14 +7,16 @@
 
 ###
 # authToken
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImZkYTE5NzU5LThmNWEtNDJmOC05NDgxLTExODM4YmU1MGE4YiIsImlhdCI6MTYwNDcxNDMzNywiZXhwIjoxNjA5MDM0MzM3fQ.nBg40GUNF7k9x6rtzaModUEH7t-ZZccMMnuzG4QVQNY
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiNjAzZWJhLTEzOGQtNDA0ZC1hMjljLTdjZmQ3NjZhZDM3YSIsImlhdCI6MTYwNTM1NjYxMiwiZXhwIjo0MTk3MzU2NjEyfQ.2z0kyGqOXumISWAdCeMc2lAFXQXrlQ791EjJspgzsk0
+
 ###
 @storyId = be6212a8-d99f-485a-8e23-7dbf3ac60ad3
 # a1e353cd-bd9e-45b0-8ce6-3d54995e38c2
 
 ###
 # GET ALL 
-GET {{baseURL}}/story?limit=4
+GET {{baseURL}}/story?limit=10000
+x-auth-token: {{authToken}}
 
 ###
 # GET BY ID
@@ -32,7 +34,9 @@ Content-Type: application/json
 ###
 #
 
-GET {{baseURL}}/story/popular/getstories?tag=war
+GET {{baseURL}}/story/popular/getstories
+# x-auth-token: {{authToken}}
+
 ###
 # Create a story
 POST {{baseURL}}/story/create
