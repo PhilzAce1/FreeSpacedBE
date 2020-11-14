@@ -345,7 +345,7 @@ class StoryService {
 					username: creator.username,
 					profileimage: creator.profileimage,
 				},
-				reports: comment.reports,
+				reports: comment.reports.length,
 			});
 		});
 

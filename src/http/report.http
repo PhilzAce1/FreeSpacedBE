@@ -21,4 +21,15 @@ x-auth-token: {{authToken}}
 
 }
 
+###
+
+POST {{baseURL}}/comment
+Content-Type: application/json
+x-auth-token: {{authToken}}
+
+{
+    "commentId":"a1e353cd-bd9e-45b0-8ce6-3d54995e38c2"
+}
+
+
 
