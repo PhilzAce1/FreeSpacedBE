@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { RequestWithUser } from 'src/interfaces/auth.interface';
-import { ReportCommentDto, ReportStoryDto } from '../dtos/report.dto';
+import {
+	ReportCommentDto,
+	ReportReplyDto,
+	ReportStoryDto,
+} from '../dtos/report.dto';
 
 import ReportService from '../services/report.service';
 import HttpException from '../exceptions/HttpException';
@@ -52,11 +56,33 @@ class ReportController {
 					' You were not properly authenticated, please Login again'
 				);
 			const userId = req.user.id;
-			const reportStoryData: ReportCommentDto = req.body;
+			const reportCommentData: ReportCommentDto = req.body;
 			const data = await this.reportSevice.reportComment(
-				reportStoryData,
+				reportCommentData,
 				userId
 			);
+			res.status(200).json({
+				success: true,
+				payload: data,
+			});
+		} catch (error) {
+			next(error);
+		}
+	};
+	public reportReply = async (
+		req: RequestWithUser,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			if (req.user?.id === undefined)
+				throw new HttpException(
+					400,
+					' You were not properly authenticated, please Login again'
+				);
+			const userId = req.user.id;
+			const reportReplyData: ReportReplyDto = req.body;
+			const data = await this.reportSevice.reportReply(reportReplyData, userId);
 			res.status(200).json({
 				success: true,
 				payload: data,

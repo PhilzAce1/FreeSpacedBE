@@ -6,8 +6,7 @@ import authMiddleware from '../middlewares/auth.middleware';
 
 import {
 	ReportCommentDto,
-	// ReportCommentDto,
-	// ReportReplyDto,
+	ReportReplyDto,
 	ReportStoryDto,
 } from '../dtos/report.dto';
 class ReportRoute implements Route {
@@ -31,6 +30,13 @@ class ReportRoute implements Route {
 			validationMiddleware(ReportCommentDto),
 			authMiddleware,
 			this.reportController.reportComment
+		);
+
+		this.router.post(
+			`${this.path}/reply`,
+			validationMiddleware(ReportReplyDto),
+			authMiddleware,
+			this.reportController.reportReply
 		);
 	}
 }
