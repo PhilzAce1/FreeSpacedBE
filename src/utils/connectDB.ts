@@ -10,6 +10,7 @@ import { Tag } from '../models/tag.model';
 import { Reply } from '../models/reply.model';
 import { Bookmark } from '../models/bookmark.model';
 import { Reports } from '../models/reports.model';
+import { QuoteStory } from '../models/quotestory.model';
 /**-----------Env variables -------------------- */
 import { __prod__ } from '../config';
 export const redisDb = __prod__
@@ -22,13 +23,31 @@ async function connect() {
 		? createConnection({
 				...connectionOptions,
 				url: process.env.DATABASE_URL,
-				entities: [UserModel, Story, Tag, Comment, Reply, Bookmark, Reports],
+				entities: [
+					UserModel,
+					Story,
+					Tag,
+					Comment,
+					Reply,
+					Bookmark,
+					Reports,
+					QuoteStory,
+				],
 				name: 'default',
 		  } as any)
 		: createConnection({
 				...connectionOptions,
 				name: 'default',
-				entities: [UserModel, Story, Tag, Comment, Reply, Bookmark, Reports],
+				entities: [
+					UserModel,
+					Story,
+					Tag,
+					Comment,
+					Reply,
+					Bookmark,
+					Reports,
+					QuoteStory,
+				],
 		  });
 }
 export async function database() {

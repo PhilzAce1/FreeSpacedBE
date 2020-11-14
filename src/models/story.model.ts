@@ -7,6 +7,7 @@ import {
 	ManyToMany,
 	ManyToOne,
 	OneToMany,
+	OneToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
@@ -17,6 +18,7 @@ import { Comment } from './comment.model';
 import { Tag } from './tag.model';
 import { UserModel as User } from './users.model';
 import { Reports } from './reports.model';
+import { QuoteStory } from './quotestory.model';
 
 @Entity()
 export class Story extends BaseEntity {
@@ -90,6 +92,20 @@ export class Story extends BaseEntity {
 	})
 	@JoinTable()
 	creator: User;
+	/**----------------------Quoted Story--------------- */
+
+	@OneToOne(() => QuoteStory, (quote) => quote.story, {
+		nullable: true,
+	})
+	@JoinTable()
+	quote: QuoteStory;
+
+	@OneToOne(() => QuoteStory, (quote) => quote.story, {
+		nullable: true,
+	})
+	/**------------------Main Story------------------------ */
+	@JoinTable()
+	story: QuoteStory;
 
 	@CreateDateColumn()
 	createdAt: Date;

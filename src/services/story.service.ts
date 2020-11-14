@@ -2,17 +2,39 @@ import { Story as storyModel } from '../models/story.model';
 import { Tag } from '../models/tag.model';
 import { Story } from '../interfaces/story.interface';
 import { isEmptyObject } from '../utils/util';
-import { PublishStoryDto, UpdateStoryDto } from '../dtos/story.dto';
+import {
+	PublishStoryDto,
+	QuoteStoryDto,
+	UpdateStoryDto,
+} from '../dtos/story.dto';
 import HttpException from '../exceptions/HttpException';
 import { genSlug, mapContributors } from '../utils/helpers';
 import { validate as uuidValidator, v4 } from 'uuid';
 import { Bookmark } from '../models/bookmark.model';
+import { QuoteStory } from '../models/quotestory.model';
 // import { getRepository } from 'typeorm';
 
 class StoryService {
 	private story = storyModel;
 	private tags = Tag;
 	public bookmark = Bookmark;
+	private quote = QuoteStory;
+
+	public async quoteStory(quoteStoryData: QuoteStoryDto) {
+		const { storyId } = quoteStoryData;
+		const quotedStory = await this.createStory(quoteStoryData);
+		await this.quote
+			.create({
+				quoteId: storyId,
+				storyId: quotedStory.id,
+			})
+			.save();
+		const finalStory = await this.story.findOne({
+			where: { id: quotedStory.id },
+		});
+		return finalStory;
+	}
+
 	public async publishAllStory() {
 		const storiesInDb = await this.story.find();
 
@@ -70,7 +92,11 @@ class StoryService {
 		const stories = await this.story.find(findOptions);
 		console.log(stories.length);
 		const mapedStory = mapContributors(this.pruneStory(stories));
-		return this.userBookmarkedStory(mapedStory, userBookmarks);
+		const mapBookmarkedStories = this.userBookmarkedStory(
+			mapedStory,
+			userBookmarks
+		);
+		return mapBookmarkedStories;
 	}
 	public async getPopularStories(query, userId?) {
 		let userBookmarks: string[] = [];

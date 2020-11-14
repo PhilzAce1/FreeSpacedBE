@@ -6,6 +6,7 @@ import {
 	CreateStoryDto,
 	UpdateStoryDto,
 	PublishStoryDto,
+	QuoteStoryDto,
 } from '../dtos/story.dto';
 import authMiddleware from '../middlewares/auth.middleware';
 import storyMiddelware from '../middlewares/story.middleware';
@@ -53,6 +54,12 @@ class StoryRoute implements Route {
 			validationMiddleware(CreateStoryDto),
 			storyMiddelware,
 			this.storyController.createPost
+		);
+		this.router.post(
+			`${this.path}/quote`,
+			validationMiddleware(QuoteStoryDto),
+			storyMiddelware,
+			this.storyController.quoteStory
 		);
 		this.router.put(
 			`${this.path}/publish`,

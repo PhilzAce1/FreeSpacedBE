@@ -19,6 +19,21 @@ export class CreateStoryDto {
 	public creatorId: string;
 }
 
+export class QuoteStoryDto {
+	@IsUUID('4')
+	public storyId: string;
+
+	@IsString()
+	public text: string;
+
+	@IsBoolean()
+	public allow_therapist: boolean;
+
+	@IsArray()
+	public tags;
+
+	public creatorId;
+}
 export class PublishStoryDto {
 	@IsUUID()
 	storyId: string;

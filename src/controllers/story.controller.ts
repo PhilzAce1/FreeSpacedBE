@@ -6,6 +6,7 @@ import {
 	CreateStoryDto,
 	UpdateStoryDto,
 	PublishStoryDto,
+	QuoteStoryDto,
 } from '../dtos/story.dto';
 
 /* -------------------------- Internal Dependencies ------------------------- */
@@ -17,6 +18,27 @@ import { Story } from '../models/story.model';
 class StoryController {
 	public storyService = new StoryService();
 	public authService = new AuthService();
+
+	public quoteStory = async (
+		req: RequestWithUser,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const quoteStoryData: QuoteStoryDto = req.body;
+			if (!quoteStoryData.creatorId) {
+				quoteStoryData.creatorId = await this.authService.createAnonUser();
+			}
+			const quotedStory = await this.storyService.quoteStory(quoteStoryData);
+
+			res.status(200).json({
+				success: true,
+				payload: quotedStory,
+			});
+		} catch (error) {
+			next(error);
+		}
+	};
 
 	public publishStory = async (
 		req: Request,
