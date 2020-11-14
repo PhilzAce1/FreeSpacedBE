@@ -14,6 +14,7 @@ import { backcoverimage } from '../utils/helpers';
 import { Bookmark } from './bookmark.model';
 import { Comment } from './comment.model';
 import { Reply } from './reply.model';
+import { Reports } from './reports.model';
 import { Story } from './story.model';
 
 const imageFile = ImageUrl + 'one.png';
@@ -70,6 +71,14 @@ export class UserModel extends BaseEntity implements User {
 	})
 	@JoinTable()
 	stories: Story[];
+
+	@OneToMany(() => Reports, (reports) => reports.creator, {
+		nullable: true,
+		onDelete: 'CASCADE',
+		onUpdate: 'CASCADE',
+	})
+	@JoinTable()
+	reports: Reports[];
 
 	@OneToMany(() => Reply, (replies) => replies.creator)
 	@JoinTable()

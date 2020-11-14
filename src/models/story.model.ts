@@ -10,10 +10,13 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+
+/** -------------------Relations ---------------------------- */
 import { Bookmark } from './bookmark.model';
 import { Comment } from './comment.model';
 import { Tag } from './tag.model';
 import { UserModel as User } from './users.model';
+import { Reports } from './reports.model';
 
 @Entity()
 export class Story extends BaseEntity {
@@ -38,6 +41,13 @@ export class Story extends BaseEntity {
 	})
 	@JoinTable()
 	comments: Comment[];
+
+	@OneToMany(() => Reports, (report) => report.story, {
+		nullable: true,
+		onDelete: 'CASCADE',
+	})
+	@JoinTable()
+	reports: Reports[];
 
 	@OneToMany(() => Bookmark, (bookmarks) => bookmarks.story, {
 		nullable: true,
