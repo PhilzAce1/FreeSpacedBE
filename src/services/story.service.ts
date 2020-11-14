@@ -9,7 +9,7 @@ import {
 } from '../dtos/story.dto';
 import HttpException from '../exceptions/HttpException';
 import { genSlug, mapContributors } from '../utils/helpers';
-import { validate as uuidValidator, v4 } from 'uuid';
+import { validate as uuidValidator } from 'uuid';
 import { Bookmark } from '../models/bookmark.model';
 import { QuoteStory } from '../models/quotestory.model';
 // import { getRepository } from 'typeorm';
@@ -265,30 +265,30 @@ class StoryService {
 		if (tags) {
 			newTagList = await this.getTagName(tags);
 		}
-		const userViews = req.session.userViews;
-		const userViewsId = v4();
+		// const userViews = req.session.userViews;
+		// const userViewsId = v4();
 		// replace the orignal tag object to only tag name
 		mainStory.tags = newTagList;
-		if (mainStory.views || mainStory.views === 0) {
-			if (!userViews) {
-				await this.story.update(id, { views: mainStory.views + 1 });
-				mainStory.views = mainStory.views + 1;
-				req.session.userViews = {
-					id: userViewsId,
-					views: [{ id: mainStory.id }],
-				};
-			} else {
-				const userHasAlreadyViewedStory = userViews.views.some(
-					(story) => story.id === mainStory.id
-				);
-				if (!userHasAlreadyViewedStory) {
-					await this.story.update(id, { views: mainStory.views + 1 });
-					mainStory.views = mainStory.views + 1;
-					userViews.views.push({ id: mainStory.id });
-					req.session.userViews = userViews;
-				}
-			}
-		}
+		// if (mainStory.views || mainStory.views === 0) {
+		// 	if (!userViews) {
+		// 		await this.story.update(id, { views: mainStory.views + 1 });
+		// 		mainStory.views = mainStory.views + 1;
+		// 		req.session.userViews = {
+		// 			id: userViewsId,
+		// 			views: [{ id: mainStory.id }],
+		// 		};
+		// 	} else {
+		// 		const userHasAlreadyViewedStory = userViews.views.some(
+		// 			(story) => story.id === mainStory.id
+		// 		);
+		// 		if (!userHasAlreadyViewedStory) {
+		// 			await this.story.update(id, { views: mainStory.views + 1 });
+		// 			mainStory.views = mainStory.views + 1;
+		// 			userViews.views.push({ id: mainStory.id });
+		// 			req.session.userViews = userViews;
+		// 		}
+		// 	}
+		// }
 		mainStory.creator = {
 			profileimage: creator.profileimage,
 			username: creator.username,
