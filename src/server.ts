@@ -18,10 +18,14 @@ import StoryRoute from './routes/story.route';
 import CommentRoute from './routes/comment.route';
 import BookmarkRoute from './routes/bookmark.route';
 import TagRoute from './routes/tag.route';
+import ReportRoute from './routes/report.route';
 
 validateEnv();
 database();
 
+/**
+ * Initialize Apps WIth Rroutes
+ */
 const app = new App([
 	new IndexRoute(),
 	new UsersRoute(),
@@ -30,6 +34,10 @@ const app = new App([
 	new CommentRoute(),
 	new TagRoute(),
 	new BookmarkRoute(),
+	new ReportRoute(),
 ]);
 
+/**
+ * Start Server, and Listen
+ */
 app.listen();

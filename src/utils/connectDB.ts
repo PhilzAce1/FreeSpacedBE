@@ -1,11 +1,16 @@
+/**-------------------Databases ------------------- */
 import { createConnection, getConnectionOptions } from 'typeorm';
 import Redis from 'ioredis';
+
+/**-----------------------Models------------------------ */
 import { Story } from '../models/story.model';
 import { UserModel } from '../models/users.model';
 import { Comment } from '../models/comment.model';
 import { Tag } from '../models/tag.model';
 import { Reply } from '../models/reply.model';
 import { Bookmark } from '../models/bookmark.model';
+import { Reports } from '../models/reports.model';
+/**-----------Env variables -------------------- */
 import { __prod__ } from '../config';
 export const redisDb = __prod__
 	? new Redis(process.env.REDIS_URL)
@@ -17,13 +22,13 @@ async function connect() {
 		? createConnection({
 				...connectionOptions,
 				url: process.env.DATABASE_URL,
-				entities: [UserModel, Story, Tag, Comment, Reply, Bookmark],
+				entities: [UserModel, Story, Tag, Comment, Reply, Bookmark, Reports],
 				name: 'default',
 		  } as any)
 		: createConnection({
 				...connectionOptions,
 				name: 'default',
-				entities: [UserModel, Story, Tag, Comment, Reply, Bookmark],
+				entities: [UserModel, Story, Tag, Comment, Reply, Bookmark, Reports],
 		  });
 }
 export async function database() {
