@@ -1,8 +1,11 @@
 console.clear();
 
-/* -------------------------- Internal Dependencies ------------------------- */
+/* -------------------------- External Dependencies ------------------------- */
 import 'dotenv/config';
 import 'reflect-metadata';
+
+/* -------------------------- Internal Dependencies ------------------------- */
+
 import App from './app';
 /* -------------------------- Env Config ------------------------- */
 import validateEnv from './utils/validateEnv';
