@@ -23,7 +23,12 @@ class StoryRoute implements Route {
 			this.storyController.getAllStories
 		);
 
-		this.router.get(`${this.path}/:id`, this.storyController.getPostById);
+		this.router.get(
+			`${this.path}/:id`,
+			storyMiddelware,
+
+			this.storyController.getPostById
+		);
 
 		this.router.get(
 			`${this.path}/popular/getstories`,

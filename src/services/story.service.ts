@@ -67,7 +67,11 @@ class StoryService {
 		if (skip) {
 			findOptions.skip = skip;
 		}
-		const stories = await this.story.find(findOptions);
+		const stories = await this.story.find({
+			relations: ['tags', 'creator', 'comments', 'comments.creator'],
+			order: { createdAt: 'DESC' },
+			// where: { published: true },
+		});
 		const mapedStory = mapContributors(this.pruneStory(stories));
 		return this.userBookmarkedStory(mapedStory, userBookmarks);
 	}
@@ -154,7 +158,15 @@ class StoryService {
 	}
 	public async getPostById(id: string, req): Promise<Story> {
 		let story;
-
+		let userBookmarks: string[] = [];
+		if (req.body.creatorId) {
+			let bookmarks = await this.bookmark.find({
+				where: { creatorId: req.body.creatorId },
+			});
+			userBookmarks = bookmarks.map((x) => {
+				return x.storyId;
+			});
+		}
 		// check if req param is by storyID or Slug
 		if (uuidValidator(id)) {
 			story = await this.story.find({
@@ -211,8 +223,9 @@ class StoryService {
 			profileimage: creator.profileimage,
 			username: creator.username,
 		};
-
-		return mapContributors([mainStory])[0];
+		const postById = mapContributors([mainStory])[0];
+		postById.bookMarked = userBookmarks.some((x) => postById.id === x);
+		return postById;
 	}
 
 	public async createStory(storyData): Promise<Story> {

@@ -15,12 +15,13 @@
 
 ###
 # GET ALL 
-GET {{baseURL}}/story?limit=10000
+GET {{baseURL}}/story 
 x-auth-token: {{authToken}}
 
 ###
 # GET BY ID
-GET {{baseURL}}/story/795b04ad-4954-474e-974a-0cbd41c41bb0
+GET {{baseURL}}/story/a1e353cd-bd9e-45b0-8ce6-3d54995e38c2
+x-auth-token: {{authToken}}
 Content-Type: application/json
 
 ###
