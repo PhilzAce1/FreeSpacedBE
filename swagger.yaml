@@ -9,8 +9,75 @@ basePath: "/"
 tags:
   - name: Auth
     description: Auth API
+  - name: User
+    description: User Routes
 
 paths:
+  /report/story:
+    post:
+      summary: Report Story (Auth Route)
+      tags:
+        - Report
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              storyId:
+                type: string
+                description: story Id
+              complain:
+                type: string
+                description: reason for reporting
+      responses:
+        200:
+          description: "OK"
+      deprecated: false
+
+  /report/comment:
+    post:
+      summary: Report Comment (Auth Route)
+      tags:
+        - Report
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              commentId:
+                type: string
+                description: story Id
+              complain:
+                type: string
+                description: reason for reporting
+      responses:
+        200:
+          description: "OK"
+      deprecated: false
+
+  /report/reply:
+    post:
+      summary: Report Reply (Auth Route)
+      tags:
+        - Report
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              replyId:
+                type: string
+                description: story Id
+              complain:
+                type: string
+                description: reason for reporting
+      responses:
+        200:
+          description: "OK"
+      deprecated: false
   #[POST] auth
   /signup:
     post:

@@ -28,7 +28,8 @@ Content-Type: application/json
 x-auth-token: {{authToken}}
 
 {
-    "commentId":"8d2df095-9679-4736-8e99-3b96e40f3eb9"
+    "commentId":"8d2df095-9679-4736-8e99-3b96e40f3eb9", 
+    "complain": "sotyf"
 }
 
 
