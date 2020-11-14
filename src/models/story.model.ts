@@ -7,7 +7,8 @@ import {
 	ManyToMany,
 	ManyToOne,
 	OneToMany,
-	OneToOne,
+	// OneToOne,
+	// OneToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
@@ -94,18 +95,25 @@ export class Story extends BaseEntity {
 	creator: User;
 	/**----------------------Quoted Story--------------- */
 
-	@OneToOne(() => QuoteStory, (quote) => quote.story, {
+	@OneToMany(() => QuoteStory, (quote) => quote.quote, {
 		nullable: true,
+		onUpdate: 'CASCADE',
+		onDelete: 'CASCADE',
 	})
-	@JoinTable()
+	@JoinTable({
+		name: 'quote',
+	})
 	quote: QuoteStory;
 
-	@OneToOne(() => QuoteStory, (quote) => quote.story, {
+	@OneToMany(() => QuoteStory, (story) => story.story, {
 		nullable: true,
+		onUpdate: 'CASCADE',
+		onDelete: 'CASCADE',
 	})
-	/**------------------Main Story------------------------ */
 	@JoinTable()
 	story: QuoteStory;
+
+	/**------------------Main Story------------------------ */
 
 	@CreateDateColumn()
 	createdAt: Date;

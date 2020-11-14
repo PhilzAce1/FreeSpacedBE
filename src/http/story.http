@@ -15,12 +15,12 @@
 
 ###
 # GET ALL 
-GET {{baseURL}}/story
+GET {{baseURL}}/story?limit=1000
 x-auth-token: {{authToken}}
 
 ###
 # GET BY ID
-GET {{baseURL}}/story/a1e353cd-bd9e-45b0-8ce6-3d54995e38c2
+GET {{baseURL}}/story/6c501ef0-9d0a-4a45-8a2f-47717af1469a
 x-auth-token: {{authToken}}
 Content-Type: application/json
 
@@ -51,6 +51,19 @@ x-auth-token: {{authToken}}
     "tags":[]
 }
 ###
+# Quote a story
+POST {{baseURL}}/story/quote
+Content-Type: application/json
+x-auth-token: {{authToken}}
+
+{
+    "title":"something", 
+    "text":"they are saying that this must be a string", 
+    "allow_therapist":true, 
+    "tags":[],
+    "storyId": "a1e353cd-bd9e-45b0-8ce6-3d54995e38c2"
+}
+###
 # a2c73854-8137-4420-b8bc-222a8354ed4b
 # create story as a loged in user 
 
@@ -78,7 +91,8 @@ x-auth-token: {{authToken}}
     "id": "1156876b-665c-4863-bd07-b1b865a3e648"
 }
 ###
-DELETE  {{baseURL}}/story/delete/cdc6e928-6867-4fff-a049-4b2fd0ba3884
+# ad2bfd4e-09be-450e-a731-1f1d2e8de6b4
+DELETE  {{baseURL}}/story/delete/6b19edd8-427d-4fc8-8ffe-cfccdbe89203
 Content-Type: application/json
 x-auth-token: {{authToken}}
 ###

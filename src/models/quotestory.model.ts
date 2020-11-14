@@ -4,9 +4,10 @@ import {
 	Entity,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
-	OneToOne,
+	// OneToOne,
 	JoinTable,
 	Column,
+	ManyToOne,
 } from 'typeorm';
 import { Story } from './story.model';
 
@@ -19,9 +20,10 @@ export class QuoteStory extends BaseEntity {
 	@Column({ nullable: true })
 	quoteId: string;
 
-	@OneToOne(() => Story, (story) => story.quote, {
+	@ManyToOne(() => Story, (story) => story.quote, {
 		onUpdate: 'CASCADE',
 		nullable: true,
+		onDelete: 'CASCADE',
 	})
 	@JoinTable()
 	quote: Story;
@@ -30,9 +32,10 @@ export class QuoteStory extends BaseEntity {
 	@Column({ nullable: true })
 	storyId: string;
 
-	@OneToOne(() => Story, (quote) => quote.story, {
+	@ManyToOne(() => Story, (quote) => quote.story, {
 		onUpdate: 'CASCADE',
 		nullable: true,
+		onDelete: 'CASCADE',
 	})
 	@JoinTable()
 	story: Story;
