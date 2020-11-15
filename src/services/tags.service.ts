@@ -90,7 +90,6 @@ class TagService {
 		const filteredMoreFromUser = moreFromUser
 			.filter((userStory) => userStory.id !== story.id)
 			.slice(0, 3);
-		console.log(moreFromUser);
 		return {
 			relatedStories: this.storyService.pruneStory(filteredRelatedStories),
 			moreFromuser: this.storyService.pruneStory(filteredMoreFromUser),

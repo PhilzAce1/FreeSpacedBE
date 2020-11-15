@@ -21,14 +21,15 @@ class StoryService {
 	private quote = QuoteStory;
 
 	public async quoteStory(quoteStoryData: QuoteStoryDto) {
-		console.log('Quoting Story');
 		const { storyId } = quoteStoryData;
-		const storyExist = await this.story.findOne({
+		const storyExist = (await this.story.findOne({
 			where: { id: storyId },
-		});
+			relations: ['quote', 'quote.story'],
+		})) as any;
+
 		if (!storyExist) throw new HttpException(404, 'Story does not exist');
 		const storyWIthQuote = await this.createStory(quoteStoryData);
-		const q = await this.quote
+		await this.quote
 			.create({
 				quoteId: storyId,
 				storyId: storyWIthQuote.id,
@@ -37,7 +38,6 @@ class StoryService {
 		await this.story.update(storyWIthQuote.id, {
 			published: true,
 		});
-		console.log(q);
 		const finalStory = await this.story.findOne({
 			where: { id: storyWIthQuote.id },
 			relations: [
@@ -90,6 +90,7 @@ class StoryService {
 				'comments.creator',
 				'reports',
 				'story',
+				'quote',
 				'story.quote',
 				'story.quote.creator',
 				'story.quote.tags',
@@ -117,13 +118,14 @@ class StoryService {
 			findOptions.skip = skip;
 		}
 		const stories = await this.story.find(findOptions);
-		console.log(stories.length);
 		const mapedStory = mapContributors(this.pruneStory(stories));
 		const mapBookmarkedStories = this.userBookmarkedStory(
 			mapedStory,
 			userBookmarks
 		);
-		return this.mapQuotedStoryArr(mapBookmarkedStories);
+
+		const quotedStoryArr = this.mapQuotedStoryArr(mapBookmarkedStories);
+		return this.mapNumberOfQuotedPostArr(quotedStoryArr);
 	}
 	public async getPopularStories(query, userId?) {
 		let userBookmarks: string[] = [];
@@ -190,7 +192,9 @@ class StoryService {
 			findOptions.skip = skip;
 		}
 		const stories = await this.story.find(findOptions);
-		return mapContributors(this.pruneStory(stories));
+		return this.mapNumberOfQuotedPostArr(
+			mapContributors(this.pruneStory(stories))
+		);
 	}
 	public async getCommentsByStoryId(storyId) {
 		let storyComment = await this.story.findOne({
@@ -229,6 +233,7 @@ class StoryService {
 					'comments',
 					'comments.creator',
 					'story',
+					'quote',
 					'story.quote',
 					'story.quote.creator',
 					'story.quote.tags',
@@ -243,6 +248,7 @@ class StoryService {
 					'creator',
 					'comments',
 					'comments.creator',
+					'quote',
 					'story',
 					'story.quote',
 					'story.quote.creator',
@@ -265,42 +271,20 @@ class StoryService {
 		if (tags) {
 			newTagList = await this.getTagName(tags);
 		}
-		// const userViews = req.session.userViews;
-		// const userViewsId = v4();
-		// replace the orignal tag object to only tag name
 		mainStory.tags = newTagList;
-		// if (mainStory.views || mainStory.views === 0) {
-		// 	if (!userViews) {
-		// 		await this.story.update(id, { views: mainStory.views + 1 });
-		// 		mainStory.views = mainStory.views + 1;
-		// 		req.session.userViews = {
-		// 			id: userViewsId,
-		// 			views: [{ id: mainStory.id }],
-		// 		};
-		// 	} else {
-		// 		const userHasAlreadyViewedStory = userViews.views.some(
-		// 			(story) => story.id === mainStory.id
-		// 		);
-		// 		if (!userHasAlreadyViewedStory) {
-		// 			await this.story.update(id, { views: mainStory.views + 1 });
-		// 			mainStory.views = mainStory.views + 1;
-		// 			userViews.views.push({ id: mainStory.id });
-		// 			req.session.userViews = userViews;
-		// 		}
-		// 	}
-		// }
 		mainStory.creator = {
 			profileimage: creator.profileimage,
 			username: creator.username,
 		};
 		const postById = mapContributors([mainStory])[0];
 		postById.bookMarked = userBookmarks.some((x) => postById.id === x);
-		return this.mapQuotedStory(postById);
+		const mappedQuote = this.mapQuotedStory(postById);
+
+		const mapNumberOfQuoted = this.mapNumberOfQuotedPost(mappedQuote);
+		return mapNumberOfQuoted;
 	}
 
 	public async createStory(storyData): Promise<Story> {
-		console.log('Creating Story');
-
 		if (isEmptyObject(storyData))
 			throw new HttpException(400, 'You have not inputed any Story Data');
 
@@ -439,6 +423,14 @@ class StoryService {
 		});
 		return newArr;
 	}
+	private mapNumberOfQuotedPost(story) {
+		const { quote, ...mainStory } = story;
+		mainStory.quoted = quote.length;
+		return mainStory;
+	}
+	private mapNumberOfQuotedPostArr(stories) {
+		return stories.map((story) => this.mapNumberOfQuotedPost(story));
+	}
 	private async getStoryTag(name: string): Promise<Tag> {
 		const storyTag = await this.tags.findOne({ where: { name } });
 		if (storyTag) {
@@ -474,7 +466,7 @@ class StoryService {
 		return newTagList;
 	}
 	public mapQuotedStory(story) {
-		const { story: quote, creator, comments, ...mainStory } = story;
+		const { story: quote, comments, ...mainStory } = story;
 		if (quote.length > 0) {
 			const { creator, tags, ...quotedStory } = quote[0].quote;
 			quotedStory.creator = {

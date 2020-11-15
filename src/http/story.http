@@ -20,9 +20,11 @@ x-auth-token: {{authToken}}
 
 ###
 # GET BY ID
-GET {{baseURL}}/story/6c501ef0-9d0a-4a45-8a2f-47717af1469a
-x-auth-token: {{authToken}}
+GET {{baseURL}}/story/something-1408
+# x-auth-token: {{authToken}}
 Content-Type: application/json
+
+
 
 ###
 
@@ -65,6 +67,7 @@ x-auth-token: {{authToken}}
 }
 ###
 # a2c73854-8137-4420-b8bc-222a8354ed4b
+    #  "creatorId": "ee4d44a5-e76b-4135-87e0-ad780fa50f91",
 # create story as a loged in user 
 
 POST {{baseURL}}/story/create
@@ -73,8 +76,8 @@ Content-Type: application/json
 {
     "text":"they are saying that this must be a string", 
     "allow_therapist":true, 
-     "creatorId": "ee4d44a5-e76b-4135-87e0-ad780fa50f91",
     "tags":["fight", "war"],
+    "creatorId": "afa0c31f-d642-41e4-bf56-f44e246bbbfa",
     "title":"something" 
 }
 

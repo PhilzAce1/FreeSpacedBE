@@ -7,38 +7,28 @@
 
 ###
 # authToken
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiNjAzZWJhLTEzOGQtNDA0ZC1hMjljLTdjZmQ3NjZhZDM3YSIsImlhdCI6MTYwNDg0NDQ4OCwiZXhwIjo0MTk2ODQ0NDg4fQ.FMskLE_fGR-FmgZHoOJjrzqLMFSD93TxjL3MjoP_9Xc
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFmYTBjMzFmLWQ2NDItNDFlNC1iZjU2LWY0NGUyNDZiYmJmYSIsImlhdCI6MTYwNTQ2NzE2NiwiZXhwIjo0MTk3NDY3MTY2fQ.EUrV54sJhRSaMPVM3sPVp22T_M1FxuZm-r5KgVJoa-E
 ###
 # signup
 POST {{baseURL}}/signup
 Content-Type: application/json
 
 {
-    "email": "ellocodewsddonders@gmail.com",
+    "email": "testing123@gmail.com",
     "password": "12345678",
-    "userId": "ee4d44a5-e76b-4135-87e0-ad780fa50f91"
+    "userId": "afa0c31f-d642-41e4-bf56-f44e246bbbfa"
 }
 
-# {
-#     "email": "hellocodewondersss@gmail.com",
-# 	"password": "12345678",
-#     "userId":"da79a190-c7fb-4bd1-a4b3-04e5673a000f"
-# }
+ 
 
 ###
 # Login
 POST {{baseURL}}/login
 Content-Type: application/json
 
-# {
-#     "email": "hellocodewddonders@gmail.com",
-#     "password": "12345678"
-# }
-
 {
-    "email": "ellocodewddonders@gmail.com",
-    "password": "12345678",
-    "userId": "1b603eba-138d-404d-a29c-7cfd766ad37a"
+    "email": "testing123@gmail.com",
+    "password": "12345678"
 }
 
 ###
