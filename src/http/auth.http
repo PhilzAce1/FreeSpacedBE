@@ -14,9 +14,9 @@ POST {{baseURL}}/signup
 Content-Type: application/json
 
 {
-    "email": "testing123@gmail.com",
+    "email": "testihdngh124ef@gmail.com",
     "password": "12345678",
-    "userId": "afa0c31f-d642-41e4-bf56-f44e246bbbfa"
+    "userId": "6d953481-9359-4875-a231-081bfd0766eb"
 }
 
  

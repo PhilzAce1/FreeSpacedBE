@@ -77,7 +77,7 @@ Content-Type: application/json
     "text":"they are saying that this must be a string", 
     "allow_therapist":true, 
     "tags":["fight", "war"],
-    "creatorId": "afa0c31f-d642-41e4-bf56-f44e246bbbfa",
+    
     "title":"something" 
 }
 

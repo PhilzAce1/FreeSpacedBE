@@ -80,8 +80,11 @@ class AuthService {
 		const userExist = await this.users.findOne({
 			where: { id: userData.userId },
 		});
-		if ((userExist && userExist.email !== null) || !userExist) {
+		if (!userExist) {
 			return this.signup(userData);
+		}
+		if (userExist && userExist.email !== null) {
+			throw new HttpException(400, 'User already exist');
 		}
 		const userWithEmailExist = await this.users.findOne({
 			where: { email: userData.email },
@@ -102,10 +105,18 @@ class AuthService {
 		);
 		const tokenData = this.createToken({ ...updateUser, id: userData.userId });
 		const cookie = this.createCookie(tokenData);
-
+		const newUser = await this.users.findOne({
+			where: { email: userData.email },
+		});
+		const findUser = {
+			email: newUser?.email,
+			username: newUser?.username,
+			role: newUser?.role,
+			verified: newUser?.verified,
+			profileimage: newUser?.profileimage,
+		};
 		await this.userService.sendVerifyUserEmail(userData.email);
-
-		return { cookie, findUser: updateUser, token: tokenData.token };
+		return { cookie, findUser, token: tokenData.token };
 	}
 
 	public async login(

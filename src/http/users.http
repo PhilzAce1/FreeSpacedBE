@@ -11,7 +11,7 @@
 
 ###
 # Get unauth user by id 
-GET {{baseURL}}/users/story/ee4d44a5-e76b-4135-87e0-ad780fa50f91
+GET {{baseURL}}/users/story/6d953481-9359-4875-a231-081bfd0766eb
 
 
 ###
