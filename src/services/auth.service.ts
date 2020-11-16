@@ -109,6 +109,7 @@ class AuthService {
 			where: { email: userData.email },
 		});
 		const findUser = {
+			id: newUser?.id,
 			email: newUser?.email,
 			username: newUser?.username,
 			role: newUser?.role,
