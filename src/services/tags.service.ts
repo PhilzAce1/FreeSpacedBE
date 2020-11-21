@@ -95,16 +95,21 @@ class TagService {
 			moreFromuser: this.storyService.pruneStory(filteredMoreFromUser),
 		};
 	}
-	public async getStoriesByTagName(name) {
-		const storiesByTag = await this.tag.findOne({
+	public async getStoriesByTagName(name, query) {
+		const { limit, skip } = query;
+		let lim = limit || 100;
+		let take = skip || 0;
+		const findOptions = {
 			where: { name },
 			relations: ['stories', 'stories.creator', 'stories.tags'],
-		});
+		} as any;
+
+		const storiesByTag = await this.tag.findOne(findOptions);
 		if (!storiesByTag) return [];
 		const prunedStories = this.storyService.pruneStory(storiesByTag.stories);
 		return {
 			...storiesByTag,
-			stories: prunedStories,
+			stories: prunedStories.splice(take, lim),
 		};
 	}
 	public async getStoriesByTag(tags) {

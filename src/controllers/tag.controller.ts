@@ -59,7 +59,8 @@ class TagController {
 			if (req.params.name === undefined)
 				throw new HttpException(400, 'invalid tag name');
 			const storiesFromTag = await this.tagService.getStoriesByTagName(
-				req.params.name
+				req.params.name,
+				req.query
 			);
 			res.status(200).json({
 				success: true,
