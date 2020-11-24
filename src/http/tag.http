@@ -7,7 +7,8 @@
 
 GET {{baseURL}}/tag
 ###
-GET  {{baseURL}}/tag/name/war
+
+GET  {{baseURL}}/tag/name/war?limit=4
 ###
 GET {{baseURL}}/tag/relatedstories/be6212a8-d99f-485a-8e23-7dbf3ac60ad3
 ###

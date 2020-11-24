@@ -40,6 +40,34 @@ class StoryController {
 		}
 	};
 
+	public searchByTnD = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			if (req.query.search === undefined)
+				throw new HttpException(404, 'Invalid Search Parameters');
+			let search: any = req.query.search;
+			if (search.match(/[^a-zA-Z0-9]+/g)) {
+				res.json({
+					success: false,
+					message: 'Please search valid alphanumeric characters',
+				});
+			} else {
+				const searchResult = await this.storyService.searchByTnD(
+					search,
+					req.query
+				);
+				res.status(200).json({
+					success: true,
+					payload: searchResult,
+				});
+			}
+		} catch (error) {
+			next(error);
+		}
+	};
 	public publishStory = async (
 		req: Request,
 		res: Response,

@@ -12,7 +12,7 @@ import { genSlug, mapContributors } from '../utils/helpers';
 import { validate as uuidValidator } from 'uuid';
 import { Bookmark } from '../models/bookmark.model';
 import { QuoteStory } from '../models/quotestory.model';
-// import { getRepository } from 'typeorm';
+import { Like } from 'typeorm';
 
 class StoryService {
 	private story = storyModel;
@@ -126,6 +126,61 @@ class StoryService {
 
 		const quotedStoryArr = this.mapQuotedStoryArr(mapBookmarkedStories);
 		return this.mapNumberOfQuotedPostArr(quotedStoryArr);
+	}
+	public async searchByTnD(search, query) {
+		const { sort, limit, skip } = query;
+
+		// const regex = new RegExp(`^${search}`, 'gi');
+		const findOptions = {
+			where: [
+				{
+					title: Like(`%${search}%`),
+					published: true,
+				},
+				{
+					text: Like(`%${search}%`),
+					published: true,
+				},
+			],
+			relations: [
+				'tags',
+				'creator',
+				'comments',
+				'comments.creator',
+				'reports',
+				'story',
+				'quote',
+				'story.quote',
+				'story.quote.creator',
+				'story.quote.tags',
+			],
+		} as any;
+		if (sort) {
+			if (sort === 'mostpopular') {
+				findOptions.order = { views: 'DESC' };
+			}
+			if (sort === 'lastest') {
+				findOptions.order = { createdAt: 'DESC' };
+			}
+			if (sort === 'freespacecertified') {
+				findOptions.where = { is_spacecare: true };
+			}
+		}
+
+		if (limit >= 1) {
+			findOptions.take = limit;
+		}
+		if (skip >= 0) {
+			findOptions.skip = skip;
+		}
+
+		const stories = await this.story.find(findOptions);
+		const prunedStory = this.pruneStory(stories);
+		const mapedStory = mapContributors(prunedStory);
+		const quotedStoryArr = this.mapReports(this.mapQuotedStoryArr(mapedStory));
+		const mapedNumberOfQuotes = this.mapNumberOfQuotedPostArr(quotedStoryArr);
+		return mapedNumberOfQuotes;
+		// return findStory;
 	}
 	public async getPopularStories(query, userId?) {
 		let userBookmarks: string[] = [];
@@ -498,6 +553,18 @@ class StoryService {
 			};
 		});
 	}
+	private mapReports(storyArr) {
+		return storyArr.map((story) => {
+			if (story.reports === undefined) {
+				return {
+					...story,
+				};
+			}
+			return {
+				...story,
+				reports: story.reports.length,
+			};
+		});
+	}
 }
-
 export default StoryService;

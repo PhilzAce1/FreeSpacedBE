@@ -107,7 +107,7 @@ export function mailtemp(emailtype: emailtype, token) {
     }
 
     .bg_white {
-      background: #eef1f3;
+      background: white;
     }
 
     .bg_light {
@@ -572,7 +572,7 @@ export function mailtemp(emailtype: emailtype, token) {
     }
 
     .bg_white {
-      background: #eef1f3;
+      background: white;
     }
 
     .bg_light {
