@@ -51,7 +51,7 @@ class UserService {
 		return findUser;
 	}
 
-	public async getUserNofications(userId): Promise<User> {
+	public async getUserNofications(userId) {
 		const findUser = await this.users.findOne({
 			where: { id: userId },
 			order: {
@@ -60,7 +60,10 @@ class UserService {
 			relations: ['notifications'],
 		});
 		if (!findUser) throw new HttpException(409, "You're not user");
-		return findUser;
+		return {
+			id: findUser.id,
+			notifications: findUser.notifications,
+		};
 	}
 	public async updateNotificationToRead(notifcationId) {
 		const findUser = await this.notification.update(notifcationId, {

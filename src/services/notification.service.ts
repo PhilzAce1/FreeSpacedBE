@@ -32,6 +32,7 @@ class NotificationService {
 		if (userEmail) {
 			await sendMessage(userEmail, 'notification', notificationMessage);
 		}
+		await this.socket.emit('NOTIFICATION', newNotification);
 		/// send notification to creator of story
 		return newNotification;
 	}
@@ -56,7 +57,7 @@ class NotificationService {
 		);
 
 		// create notification for story owner
-		await this.notification
+		const userNotification = await this.notification
 			.create({
 				content: notificationMessageForOwnerOfStory,
 				storyId: storyId,
@@ -64,9 +65,10 @@ class NotificationService {
 				type: 'story_comment_reply',
 			})
 			.save();
+		await this.socket.emit('NOTIFICATION', userNotification);
 
 		// create notification for comment owner
-		await this.notification
+		const commentNotification = await this.notification
 			.create({
 				content: notifcationMessageForOwnerOfComment,
 				storyId: storyId,
@@ -74,6 +76,7 @@ class NotificationService {
 				type: 'comment_reply',
 			})
 			.save();
+		await this.socket.emit('NOTIFICATION', commentNotification);
 
 		// send mail to creator of story
 		if (userEmail) {
