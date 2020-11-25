@@ -1,4 +1,4 @@
-export type emailtype = 'forgotpassword' | 'verifyemail';
+export type emailtype = 'forgotpassword' | 'verifyemail' | 'notification';
 export function mailtemp(emailtype: emailtype, token) {
 	if (emailtype === 'forgotpassword') {
 		return `
@@ -465,7 +465,7 @@ export function mailtemp(emailtype: emailtype, token) {
 </body>
 
 </html>`;
-	} else {
+	} else if (emailtype === 'verifyemail') {
 		return `
     <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
@@ -932,5 +932,19 @@ export function mailtemp(emailtype: emailtype, token) {
 </body>
 
 </html>`;
+	} else {
+		return `
+    <!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+  xmlns:o="urn:schemas-microsoft-com:office:office">
+
+<head>
+
+</head>
+<body>
+    ${token}
+</body>
+</html>
+`;
 	}
 }

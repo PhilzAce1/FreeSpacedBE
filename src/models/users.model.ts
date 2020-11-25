@@ -13,6 +13,7 @@ import { User } from '../interfaces/users.interface';
 import { backcoverimage } from '../utils/helpers';
 import { Bookmark } from './bookmark.model';
 import { Comment } from './comment.model';
+import { Notification } from './notification.model';
 import { Reply } from './reply.model';
 import { Reports } from './reports.model';
 import { Story } from './story.model';
@@ -57,6 +58,13 @@ export class UserModel extends BaseEntity implements User {
 	})
 	@JoinTable()
 	bookmarks: Bookmark[];
+
+	@OneToMany(() => Notification, (notification) => notification.user, {
+		nullable: true,
+		onUpdate: 'CASCADE',
+	})
+	@JoinTable()
+	notifications: Notification[];
 
 	@OneToMany(() => Comment, (comments) => comments.creator, {
 		nullable: true,

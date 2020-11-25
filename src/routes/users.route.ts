@@ -32,6 +32,11 @@ class UsersRoute implements Route {
 			authMiddleware,
 			this.usersController.getAuthUserStoried
 		);
+		this.router.get(
+			`${this.path}/notifications`,
+			authMiddleware,
+			this.usersController.getUserNotifications
+		);
 		this.router.post(
 			`${this.path}`,
 			validationMiddleware(CreateUserDto),
@@ -62,6 +67,11 @@ class UsersRoute implements Route {
 			validationMiddleware(UpdateUserEmailDto),
 			authMiddleware,
 			this.usersController.changeUserEmail
+		);
+		this.router.put(
+			`${this.path}/notification`,
+			authMiddleware,
+			this.usersController.updateNotification
 		);
 		this.router.delete(
 			`${this.path}/`,

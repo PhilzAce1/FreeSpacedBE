@@ -14,10 +14,12 @@ import { v4 } from 'uuid';
 import { sendMessage } from '../utils/sendMail';
 import { Story } from '../models/story.model';
 import { Story as StoryInterface } from '../interfaces/story.interface';
+import { Notification } from '../models/notification.model';
 import StoryService from '../services/story.service';
 class UserService {
 	public users = userModel;
 	private story = Story;
+	private notification = Notification;
 
 	public redis = redisDb;
 	public storyService = new StoryService();
@@ -49,6 +51,24 @@ class UserService {
 		return findUser;
 	}
 
+	public async getUserNofications(userId): Promise<User> {
+		const findUser = await this.users.findOne({
+			where: { id: userId },
+			order: {
+				createdAt: 'DESC',
+			},
+			relations: ['notifications'],
+		});
+		if (!findUser) throw new HttpException(409, "You're not user");
+		return findUser;
+	}
+	public async updateNotificationToRead(notifcationId) {
+		const findUser = await this.notification.update(notifcationId, {
+			read: true,
+		});
+		if (!findUser) throw new HttpException(409, "You're not user");
+		return findUser;
+	}
 	public async getAllUserStory(userId: string): Promise<StoryInterface[]> {
 		const userStories: Story[] = await this.story.find({
 			where: { creatorId: userId },

@@ -2,10 +2,11 @@
 
 ###
 # baseURL
-@baseURL = http://localhost:3000
+@baseURL = http://localhost:4000
 
 ###
-@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFmYTBjMzFmLWQ2NDItNDFlNC1iZjU2LWY0NGUyNDZiYmJmYSIsImlhdCI6MTYwNTQ2NzE2NiwiZXhwIjo0MTk3NDY3MTY2fQ.EUrV54sJhRSaMPVM3sPVp22T_M1FxuZm-r5KgVJoa-E
+ 
+@authToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNkNDVhZGM5LTJhMWYtNDE5ZC1iZGM0LTNmODY0YzBmNzU1YyIsImlhdCI6MTYwNjMzNDM0OCwiZXhwIjo0MTk4MzM0MzQ4fQ.-G3KqQxGYldpNMEnfqQ3CvFYqj-56Htbi1cEuSEYZmk
 
 
 
@@ -19,8 +20,20 @@ GET {{baseURL}}/users/story HTTP/1.1
 Content-Type: application/json
 x-auth-token: {{authToken}}
 ###
+###
+GET {{baseURL}}/users/notifications HTTP/1.1
+Content-Type: application/json
+x-auth-token: {{authToken}}
+###
 
+PUT {{baseURL}}/users/notification
+Content-Type:  application/json
+x-auth-token: {{authToken}}
 
+{
+    "notificationId":"12a8f742-c352-45ad-b420-c4383654987a"
+}
+###
 
 PUT  {{baseURL}}/users/changepassword HTTP/1.1
 Content-Type: application/json

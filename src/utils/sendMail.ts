@@ -29,7 +29,9 @@ export async function sendMessage(
 function emailType(typeofmail: emailtype) {
 	if (typeofmail === 'forgotpassword') {
 		return `Reset Password`;
-	} else {
+	} else if (typeofmail === 'verifyemail') {
 		return `Verify Email`;
+	} else {
+		return 'Notification';
 	}
 }

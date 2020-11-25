@@ -43,4 +43,5 @@ const app = new App([
 /**
  * Start Server, and Listen
  */
-app.listen();
+
+export default app.listen();

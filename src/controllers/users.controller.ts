@@ -59,6 +59,43 @@ class UsersController {
 		}
 	};
 
+	public getUserNotifications = async (
+		req: RequestWithUser,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			if (req.user?.id === undefined)
+				throw new HttpException(403, 'Please login');
+			const findAllUsersNotifications = await this.userService.getUserNofications(
+				req.user.id
+			);
+			res
+				.status(200)
+				.json({ payload: findAllUsersNotifications, success: true });
+		} catch (error) {
+			next(error);
+		}
+	};
+	public updateNotification = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			if (req.body.notificationId === undefined)
+				throw new HttpException(403, 'Please login');
+			const findAllUsersNotifications = await this.userService.updateNotificationToRead(
+				req.body.notificationId
+			);
+			res
+				.status(200)
+				.json({ payload: findAllUsersNotifications, success: true });
+		} catch (error) {
+			next(error);
+		}
+	};
+
 	public getUserStories = async (
 		req: Request,
 		res: Response,

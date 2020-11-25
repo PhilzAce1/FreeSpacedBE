@@ -7,8 +7,6 @@ import {
 	ManyToMany,
 	ManyToOne,
 	OneToMany,
-	// OneToOne,
-	// OneToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
@@ -20,7 +18,7 @@ import { Tag } from './tag.model';
 import { UserModel as User } from './users.model';
 import { Reports } from './reports.model';
 import { QuoteStory } from './quotestory.model';
-
+import { Notification } from './notification.model';
 @Entity()
 export class Story extends BaseEntity {
 	@PrimaryGeneratedColumn('uuid')
@@ -51,6 +49,13 @@ export class Story extends BaseEntity {
 	})
 	@JoinTable()
 	reports: Reports[];
+
+	@OneToMany(() => Notification, (notification) => notification.story, {
+		nullable: true,
+		onDelete: 'CASCADE',
+	})
+	@JoinTable()
+	notifications: Notification[];
 
 	@OneToMany(() => Bookmark, (bookmarks) => bookmarks.story, {
 		nullable: true,

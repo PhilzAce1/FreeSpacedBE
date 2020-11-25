@@ -5,10 +5,12 @@ import { CreateCommentReplyDto } from '../dtos/reply.dto';
 import { Reply } from '../models/reply.model';
 import { Story } from '../models/story.model';
 import HttpException from '../exceptions/HttpException';
+import NotificationService from './notification.service';
 class CommentService {
 	private comment = Comment;
 	private reply = Reply;
 	private story = Story;
+	private notification = new NotificationService();
 
 	public async createComment(commentData: CreateCommentDto): Promise<Comment> {
 		const { content, creatorId, storyId } = commentData;
@@ -19,6 +21,7 @@ class CommentService {
 		const createdComment = await this.comment
 			.create({ content, creatorId, storyId })
 			.save();
+		await this.notification.newComment(creatorId, storyId);
 		return createdComment;
 	}
 	public async replyComment(
@@ -37,6 +40,7 @@ class CommentService {
 		const repliedComment = await this.reply
 			.create({ creatorId, content, commentId })
 			.save();
+		this.notification.newReply(creatorId, commentId);
 		return repliedComment;
 	}
 }

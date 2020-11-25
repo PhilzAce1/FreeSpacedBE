@@ -2,7 +2,7 @@
 
 ###
 #baseURL
-@baseURL = http://localhost:3000/report
+@baseURL = http://localhost:4000/report
 
 
 ###
@@ -17,7 +17,7 @@ Content-Type: application/json
 x-auth-token: {{authToken}}
 
 {
-    "storyId":"a1e353cd-bd9e-45b0-8ce6-3d54995e38c2"
+    "storyId":"ba8986c6-298b-4b55-a6d4-7d54eb2353e3"
 
 }
 
@@ -28,7 +28,7 @@ Content-Type: application/json
 x-auth-token: {{authToken}}
 
 {
-    "commentId":"8d2df095-9679-4736-8e99-3b96e40f3eb9", 
+    "commentId":"8d81d234-1a6a-49dd-90bc-3248268d785f", 
     "complain": "sotyf"
 }
 
@@ -40,7 +40,7 @@ Content-Type: application/json
 x-auth-token: {{authToken}}
 
 {
-    "replyId":"8de7383f-038b-40b7-a4db-c388fe5c83f6"
+    "replyId":"f50c3e74-27df-4aa4-9589-ca9b2cabd066"
 }
 
 
