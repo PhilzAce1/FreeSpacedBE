@@ -11,7 +11,8 @@ export async function sendMessage(
 	const subject = emailType(typeofmail);
 	const msg = {
 		to, // Change to your recipient
-		from: 'akuagwuphilemon11@gmail.com', // Change to your verified sender
+		from: 'Jacob From Freespaace <wonderful@freespaace.com>', // sender address
+		// from: 'wonderful@freespaace.com', // Change to your verified sender
 		subject: subject,
 		// text: html,
 		html: html,

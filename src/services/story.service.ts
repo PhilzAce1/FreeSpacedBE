@@ -103,7 +103,7 @@ class StoryService {
 			if (sort === 'mostpopular') {
 				findOptions.order = { views: 'DESC' };
 			}
-			if (sort === 'lastest') {
+			if (sort === 'latest') {
 				findOptions.order = { createdAt: 'DESC' };
 			}
 			if (sort === 'freespacecertified') {
@@ -159,7 +159,7 @@ class StoryService {
 			if (sort === 'mostpopular') {
 				findOptions.order = { views: 'DESC' };
 			}
-			if (sort === 'lastest') {
+			if (sort === 'latest') {
 				findOptions.order = { createdAt: 'DESC' };
 			}
 			if (sort === 'freespacecertified') {
@@ -232,7 +232,7 @@ class StoryService {
 			if (sort === 'mostpopular') {
 				findOptions.order = { views: 'DESC' };
 			}
-			if (sort === 'lastest') {
+			if (sort === 'latest') {
 				findOptions.order = { createdAt: 'DESC' };
 			}
 			if (sort === 'freespacecertified') {
@@ -355,7 +355,8 @@ class StoryService {
 				allow_therapist,
 				creatorId: creatorId,
 				slug: storySlug,
-			})
+				published: true,
+			})	
 			.save();
 		const { tags: createdStoryTag, ...mainStory } = createdStory as any;
 		const newTagList: string[] = [];
