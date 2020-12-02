@@ -22,6 +22,7 @@ import CommentRoute from './routes/comment.route';
 import BookmarkRoute from './routes/bookmark.route';
 import TagRoute from './routes/tag.route';
 import ReportRoute from './routes/report.route';
+import TherapistRoute from './routes/therapist.route';
 
 validateEnv();
 database();
@@ -38,6 +39,7 @@ const app = new App([
 	new TagRoute(),
 	new BookmarkRoute(),
 	new ReportRoute(),
+	new TherapistRoute(),
 ]);
 
 /**

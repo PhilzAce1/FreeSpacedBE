@@ -59,7 +59,7 @@ class AuthService {
 		return newUser.id;
 	}
 
-	private async genUsername(): Promise<string> {
+	public async genUsername(): Promise<string> {
 		const randomInt: string = Math.floor(100 + Math.random() * 900).toString();
 		const username = 'anon' + randomInt;
 		const userExist = await this.users.findOne({

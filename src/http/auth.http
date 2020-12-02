@@ -32,6 +32,17 @@ Content-Type: application/json
 }
 
 ###
+
+POST {{baseURL}}/therapist/signup
+Content-Type: application/json
+
+{
+    "email": "somenamethatiwillnottellyou@gmaidl.com", 
+    "password":"stuff"
+    
+}
+
+###
 # me
 GET   {{baseURL}}/me
 Content-Type: application/json
