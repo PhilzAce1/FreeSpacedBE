@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 // import HttpException from '../exceptions/HttpException';
 
 /* -------------------------- Validators and Interfaces  ------------------------- */
-import { CreateUserDto } from '../dtos/users.dto';
+import { CreateUserDto, UpdateUserEmailDto } from '../dtos/users.dto';
 /* -------------------------- Internal Dependencies ------------------------- */
 import TherapistService from '../services/therapist.service';
 class TherapistController {
@@ -23,6 +23,22 @@ class TherapistController {
 			res.status(200).json({
 				success: true,
 				payload: resData,
+			});
+		} catch (error) {
+			next(error);
+		}
+	};
+	public addWaitlist = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		const userData: UpdateUserEmailDto = req.body;
+		try {
+			const data = await this.therapistService.addWaitlist(userData);
+			res.status(200).json({
+				success: true,
+				payload: data,
 			});
 		} catch (error) {
 			next(error);

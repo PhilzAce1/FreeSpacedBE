@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { CreateUserDto } from '../dtos/users.dto';
+import { CreateUserDto, UpdateUserEmailDto } from '../dtos/users.dto';
 import validationMiddleware from '../middlewares/validation.middleware';
 import TherapistController from '../controllers/therapist.controller';
 import Route from '../interfaces/routes.interface';
@@ -17,6 +17,11 @@ class TherapistRoute implements Route {
 			`${this.path}/signup`,
 			validationMiddleware(CreateUserDto),
 			this.therapistController.signup
+		);
+		this.router.post(
+			`${this.path}/waitlist`,
+			validationMiddleware(UpdateUserEmailDto),
+			this.therapistController.addWaitlist
 		);
 	}
 }

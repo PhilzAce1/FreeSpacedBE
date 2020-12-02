@@ -12,6 +12,7 @@ import { Bookmark } from '../models/bookmark.model';
 import { Reports } from '../models/reports.model';
 import { Notification } from '../models/notification.model';
 import { QuoteStory } from '../models/quotestory.model';
+import { Waitlist } from '../models/waitlist.model';
 /**-----------Env variables -------------------- */
 import { __prod__ } from '../config';
 export const redisDb = __prod__
@@ -29,6 +30,7 @@ async function connect() {
 		Reports,
 		QuoteStory,
 		Notification,
+		Waitlist,
 	];
 	return process.env.NODE_ENV === 'production'
 		? createConnection({

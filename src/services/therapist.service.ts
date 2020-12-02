@@ -1,4 +1,4 @@
-import { CreateUserDto } from '../dtos/users.dto';
+import { CreateUserDto, UpdateUserEmailDto } from '../dtos/users.dto';
 import { User } from '../interfaces/users.interface';
 import { isEmptyObject } from '../utils/util';
 import { UserModel } from '../models/users.model';
@@ -8,11 +8,32 @@ import bcrypt from 'bcrypt';
 import { createIdenticon } from '../utils/genImage';
 import { ImageUrl } from '../config';
 import UserService from './users.service';
+import { Waitlist } from '../models/waitlist.model';
 
 class TherapistService {
 	private users = UserModel;
 	private authService = new AuthService();
 	private userService = new UserService();
+	private waitlist = Waitlist;
+	public async addWaitlist(updateData: UpdateUserEmailDto) {
+		const exist = await this.waitlist.findOne({
+			email: updateData.email,
+		});
+		if (exist) {
+			throw new HttpException(409, 'You are already on the waitlist');
+		}
+		const userExist = await this.users.findOne({
+			email: updateData.email,
+		});
+		if (userExist) throw new HttpException(409, 'Email taken');
+
+		await this.waitlist
+			.create({
+				email: updateData.email,
+			})
+			.save();
+		return { message: "You've been added to our waitlist" };
+	}
 	public async signup(
 		userData: CreateUserDto
 	): Promise<{ cookie: string; findUser: User; token: string }> {

@@ -33,12 +33,23 @@ Content-Type: application/json
 
 ###
 
-POST {{baseURL}}/therapist/signup
+POST https://freespace-api.herokuapp.com/therapist/signup
 Content-Type: application/json
 
 {
-    "email": "somenamethatiwillnottellyou@gmaidl.com", 
-    "password":"stuff"
+    
+
+    "email": "therapist@freespaace.com", 
+    "password":"therapist123"
+    
+}
+
+###
+POST  {{baseURL}}/therapist/waitlist
+Content-Type: application/json
+
+{
+    "email":"sometext@gmail.com"
     
 }
 
