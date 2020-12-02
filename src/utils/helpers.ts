@@ -31,17 +31,43 @@ export function mapContributors(storyArr) {
 			});
 		});
 		const filterdContributorsArr = getUniqueListBy(contributorArr, 'username');
+		const { comments, ...filStory } = story;
+		const numberOfContributions = mapReplyCount(story);
 		const contributors = {
 			allContributors: filterdContributorsArr.length,
 			contributorsProfile: filterdContributorsArr,
+			numberOfContributions,
 		};
-		const { comments, ...filStory } = story;
 		return {
 			...filStory,
 			contributors,
 		};
 	});
 }
+
+export function mapActionUser(arr) {
+	return arr.map((data) =>
+		data.actionuser
+			? {
+					...data,
+					actionuser: {
+						id: data.actionuser.id,
+						username: data.actionuser.username,
+						profileimage: data.actionuser.profileimage,
+					},
+			  }
+			: { ...data, actionuser: {} }
+	);
+}
+export function mapReplyCount(story) {
+	if (story.comments.length > 0) {
+		return story.comments
+			.map((x) => (x.replies ? x.replies.length : 0))
+			.reduce((a, b) => a + b + 1, 0);
+	}
+	return 0;
+}
+export function mapReplyCountArr() {}
 
 export function mapContributorsForBookmarkRes(data) {
 	const prunedArr = data.map((bookmark) => {

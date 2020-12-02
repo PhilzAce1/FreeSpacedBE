@@ -34,6 +34,17 @@ export class Notification extends BaseEntity {
 	user: UserModel;
 
 	@Column({ nullable: true })
+	actionuserId;
+
+	@ManyToOne(() => UserModel, (actionuser) => actionuser.notificationactions, {
+		onDelete: 'CASCADE',
+		onUpdate: 'CASCADE',
+		nullable: true,
+	})
+	@JoinTable()
+	actionuser: UserModel;
+
+	@Column({ nullable: true })
 	storyId: string;
 
 	@ManyToOne(() => Story, (story) => story.notifications, {

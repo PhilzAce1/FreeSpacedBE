@@ -13,28 +13,36 @@ class NotificationService {
 
 	/**Create a new comment notification */
 	public async newComment(userId, storyId) {
-		const { storyUserId, username, userEmail } = await this.createNotification(
-			userId,
-			storyId
+		const {
+			storyUserId,
+			username,
+			userEmail,
+			storypref,
+		} = await this.createNotification(userId, storyId);
+		const notificationMessage = this.notifcationMessage(
+			'comment',
+			username,
+			storypref
 		);
-		const notificationMessage = this.notifcationMessage('comment', username);
 
-		// create notification
-		const newNotification = await this.notification
-			.create({
-				content: notificationMessage,
-				storyId: storyId,
-				userId: storyUserId,
-				type: 'comment',
-			})
-			.save();
-		// send email to creator of story
-		if (userEmail) {
-			await sendMessage(userEmail, 'notification', notificationMessage);
+		if (storyUserId !== userId) {
+			// create notification
+			const newNotification = await this.notification
+				.create({
+					content: notificationMessage,
+					storyId: storyId,
+					userId: storyUserId,
+					actionuserId: userId,
+					type: 'comment',
+				})
+				.save();
+			// send email to creator of story
+			if (userEmail) {
+				await sendMessage(userEmail, 'notification', notificationMessage);
+			}
+			await this.socket.emit('NOTIFICATION', newNotification);
+			/// send notification to creator of story
 		}
-		await this.socket.emit('NOTIFICATION', newNotification);
-		/// send notification to creator of story
-		return newNotification;
 	}
 
 	/**===================Notify on new Reply=========================== */
@@ -43,17 +51,21 @@ class NotificationService {
 			username,
 			storyUserId,
 			storyId,
+			storypref,
+			commentpref,
 			commentUserId,
 			commentUseremail,
 			userEmail,
 		} = await this.createNotificationForCommentReply(userId, commentId);
 		const notifcationMessageForOwnerOfComment = this.notifcationMessage(
 			'comment_reply',
-			username
+			username,
+			commentpref
 		);
 		const notificationMessageForOwnerOfStory = this.notifcationMessage(
 			'story_comment_reply',
-			username
+			username,
+			storypref
 		);
 
 		// create notification for story owner
@@ -62,6 +74,7 @@ class NotificationService {
 				content: notificationMessageForOwnerOfStory,
 				storyId: storyId,
 				userId: storyUserId,
+				actionuserId: userId,
 				type: 'story_comment_reply',
 			})
 			.save();
@@ -73,6 +86,7 @@ class NotificationService {
 				content: notifcationMessageForOwnerOfComment,
 				storyId: storyId,
 				userId: commentUserId,
+				actionuserId: userId,
 				type: 'comment_reply',
 			})
 			.save();
@@ -120,10 +134,13 @@ class NotificationService {
 			relations: ['creator'],
 		});
 
+		const storypref = story?.title ? story.title : story?.text;
+
 		return {
 			storyUserId: story?.creatorId,
 			username: user?.username,
 			userEmail: story?.creator.email,
+			storypref: storypref?.slice(0, 20),
 		};
 	}
 	public async createNotificationForCommentReply(userId, commentId) {
@@ -131,6 +148,7 @@ class NotificationService {
 			where: { id: commentId },
 			relations: ['creator'],
 		});
+		const commentpref = comment?.content.slice(0, 30);
 		const storyNofication = await this.createNotification(
 			userId,
 			comment?.storyId
@@ -139,6 +157,7 @@ class NotificationService {
 		return {
 			...storyNofication,
 			storyId: comment?.storyId,
+			commentpref,
 			commentUserId: comment?.creatorId,
 			commentUseremail: comment?.creator.email,
 		};
@@ -147,18 +166,19 @@ class NotificationService {
 
 	private notifcationMessage(
 		notificationType: notificationType,
-		username?: string
+		username?: string,
+		storypref?
 	) {
 		return notificationType === 'comment'
-			? `${username} commented on your story`
+			? `${username} commented on your story (${storypref})`
 			: notificationType === 'comment_reply'
-			? `${username} Replied Your comment on a story`
+			? `${username} Replied Your comment on a story (${storypref})`
 			: notificationType === 'reply_report'
 			? `Your reply to a comment has been banned`
 			: notificationType === 'comment_report'
 			? `Your comment on a story has  been banned`
 			: notificationType === 'story_comment_reply'
-			? `${username} replied a comment on your story`
+			? `${username} replied a comment on your story (${storypref})`
 			: 'Your story has been banned';
 	}
 }

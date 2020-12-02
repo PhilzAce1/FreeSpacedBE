@@ -13,6 +13,7 @@ import { redisDb } from '../utils/connectDB';
 import { v4 } from 'uuid';
 import { sendMessage } from '../utils/sendMail';
 import { Story } from '../models/story.model';
+import { mapActionUser } from '../utils/helpers';
 import { Story as StoryInterface } from '../interfaces/story.interface';
 import { Notification } from '../models/notification.model';
 import StoryService from '../services/story.service';
@@ -57,7 +58,7 @@ class UserService {
 			order: {
 				createdAt: 'DESC',
 			},
-			relations: ['notifications'],
+			relations: ['notifications', 'notifications.actionuser'],
 		});
 		if (!findUser) throw new HttpException(409, "You're not user");
 		const { notifications } = findUser;
@@ -68,11 +69,12 @@ class UserService {
 				}
 			});
 		}
+		const actionUserMapped = mapActionUser(notifications);
 
 		return {
 			unread: notifications.filter((x) => x.read === false).length,
 			count: notifications.length,
-			notifications: notifications,
+			notifications: actionUserMapped,
 		};
 	}
 	public async updateNotificationToRead(notifcationId) {

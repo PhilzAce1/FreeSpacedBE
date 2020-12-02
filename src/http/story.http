@@ -15,12 +15,12 @@
 
 ###
 # GET ALL 
-GET {{baseURL}}/story?limit=1000
+GET {{baseURL}}/story?limit=2
 x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiNjAzZWJhLTEzOGQtNDA0ZC1hMjljLTdjZmQ3NjZhZDM3YSIsImlhdCI6MTYwNTM1NjYxMiwiZXhwIjo0MTk3MzU2NjEyfQ.2z0kyGqOXumISWAdCeMc2lAFXQXrlQ791EjJspgzsk0
 
 ###
 # GET BY ID
-GET {{baseURL}}/story/something-1408
+GET {{baseURL}}/story/2302f17d-8e67-4b54-911f-7b911f2d309f
 x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiNjAzZWJhLTEzOGQtNDA0ZC1hMjljLTdjZmQ3NjZhZDM3YSIsImlhdCI6MTYwNTM1NjYxMiwiZXhwIjo0MTk3MzU2NjEyfQ.2z0kyGqOXumISWAdCeMc2lAFXQXrlQ791EjJspgzsk0
 Content-Type: application/json
 

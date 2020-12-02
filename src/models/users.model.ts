@@ -66,6 +66,13 @@ export class UserModel extends BaseEntity implements User {
 	@JoinTable()
 	notifications: Notification[];
 
+	@OneToMany(() => Notification, (notification) => notification.actionuser, {
+		nullable: true,
+		onUpdate: 'CASCADE',
+	})
+	@JoinTable()
+	notificationactions: Notification[];
+
 	@OneToMany(() => Comment, (comments) => comments.creator, {
 		nullable: true,
 	})

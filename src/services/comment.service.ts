@@ -40,7 +40,7 @@ class CommentService {
 		const repliedComment = await this.reply
 			.create({ creatorId, content, commentId })
 			.save();
-		this.notification.newReply(creatorId, commentId);
+		await this.notification.newReply(creatorId, commentId);
 		return repliedComment;
 	}
 }

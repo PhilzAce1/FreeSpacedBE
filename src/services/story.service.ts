@@ -8,7 +8,7 @@ import {
 	UpdateStoryDto,
 } from '../dtos/story.dto';
 import HttpException from '../exceptions/HttpException';
-import { genSlug, mapContributors } from '../utils/helpers';
+import { genSlug, mapContributors, mapReplyCount } from '../utils/helpers';
 import { validate as uuidValidator } from 'uuid';
 import { Bookmark } from '../models/bookmark.model';
 import { QuoteStory } from '../models/quotestory.model';
@@ -147,6 +147,7 @@ class StoryService {
 				'creator',
 				'comments',
 				'comments.creator',
+				'comments.replies',
 				'reports',
 				'story',
 				'quote',
@@ -224,7 +225,13 @@ class StoryService {
 	}
 	public async filterStories(query) {
 		const findOptions = {
-			relations: ['tags', 'creator', 'comments', 'comments.creator'],
+			relations: [
+				'tags',
+				'creator',
+				'comments',
+				'comments.creator',
+				'comments.replies',
+			],
 			where: { published: true },
 		} as any;
 		const { sort, limit, skip } = query;
@@ -287,6 +294,7 @@ class StoryService {
 					'creator',
 					'comments',
 					'comments.creator',
+					'comments.replies',
 					'story',
 					'quote',
 					'story.quote',
@@ -303,6 +311,7 @@ class StoryService {
 					'creator',
 					'comments',
 					'comments.creator',
+					'comments.replies',
 					'quote',
 					'story',
 					'story.quote',
@@ -326,6 +335,7 @@ class StoryService {
 		if (tags) {
 			newTagList = await this.getTagName(tags);
 		}
+		const numberOfReplies = mapReplyCount(mainStory);
 		mainStory.tags = newTagList;
 		mainStory.creator = {
 			profileimage: creator.profileimage,
@@ -336,6 +346,7 @@ class StoryService {
 		const mappedQuote = this.mapQuotedStory(postById);
 
 		const mapNumberOfQuoted = this.mapNumberOfQuotedPost(mappedQuote);
+		mapNumberOfQuoted.contributors.numberOfContributions = numberOfReplies;
 		return mapNumberOfQuoted;
 	}
 

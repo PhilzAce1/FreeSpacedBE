@@ -30,7 +30,7 @@ Content-Type: application/json
 x-auth-token:{{authToken}}
 
 {
-    "commentId":"8d81d234-1a6a-49dd-90bc-3248268d785f", 
+    "commentId":"d758bcb2-a58b-421e-bdc3-bf5a9585f188", 
     "content":"I like what I am seeing",
     "thugnssds":"afiodfd"
 }
