@@ -60,16 +60,19 @@ class UserService {
 			relations: ['notifications'],
 		});
 		if (!findUser) throw new HttpException(409, "You're not user");
-		if (findUser.notifications.length > 0) {
-			findUser.notifications.forEach((data) => {
+		const { notifications } = findUser;
+		if (notifications.length > 0) {
+			notifications.forEach((data) => {
 				if (data.read === false) {
 					this.updateNotificationToRead(data.id);
 				}
 			});
 		}
+
 		return {
-			count: findUser.notifications.length,
-			notifications: findUser.notifications,
+			unread: notifications.filter((x) => x.read === false).length,
+			count: notifications.length,
+			notifications: notifications,
 		};
 	}
 	public async updateNotificationToRead(notifcationId) {

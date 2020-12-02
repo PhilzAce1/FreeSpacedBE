@@ -36,6 +36,13 @@ class BookmarkService {
 				'The story you are bookmarked does not exist'
 			);
 		}
+		const bookmarkExist = await this.bookmark.findOne({
+			where: { creatorId, storyId },
+		});
+
+		if (bookmarkExist) {
+			throw new HttpException(409, "You've bookmarked this story");
+		}
 		const createdBookmark = await this.bookmark
 			.create({
 				creatorId,

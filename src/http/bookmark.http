@@ -7,17 +7,19 @@
 
 ###
 # baseURL
-@baseURL = http://localhost:3000
+@baseURL = http://localhost:4000
 
 ###
 # Create Bookmark
  
 POST {{baseURL}}/bookmark/create
 Content-Type: application/json
-x-auth-token: {{authToken}}
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiNjAzZWJhLTEzOGQtNDA0ZC1hMjljLTdjZmQ3NjZhZDM3YSIsImlhdCI6MTYwNTM1NjYxMiwiZXhwIjo0MTk3MzU2NjEyfQ.2z0kyGqOXumISWAdCeMc2lAFXQXrlQ791EjJspgzsk0
+
+ 
 
 {
-    "storyId":"a1e353cd-bd9e-45b0-8ce6-3d54995e38c2"
+    "storyId":"2302f17d-8e67-4b54-911f-7b911f2d309f"
 }
 ###
 

@@ -356,7 +356,7 @@ class StoryService {
 				creatorId: creatorId,
 				slug: storySlug,
 				published: true,
-			})	
+			})
 			.save();
 		const { tags: createdStoryTag, ...mainStory } = createdStory as any;
 		const newTagList: string[] = [];
