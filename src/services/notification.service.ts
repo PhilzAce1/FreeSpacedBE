@@ -11,6 +11,39 @@ class NotificationService {
 	public user = UserModel;
 	public comment = Comment;
 
+	/** The rapist comment */
+	public async therapistComment(userId, storyId) {
+		const {
+			storyUserId,
+			username,
+			userEmail,
+			storypref,
+		} = await this.createNotification(userId, storyId);
+		const notificationMessage = this.notifcationMessage(
+			'therapist_reply',
+			username,
+			storypref
+		);
+
+		if (storyUserId !== userId) {
+			// create notification
+			const newNotification = await this.notification
+				.create({
+					content: notificationMessage,
+					storyId: storyId,
+					userId: storyUserId,
+					actionuserId: userId,
+					type: 'comment',
+				})
+				.save();
+			// send email to creator of story
+			if (userEmail) {
+				await sendMessage(userEmail, 'therapist_reply', notificationMessage);
+			}
+			await this.socket.emit('NOTIFICATION', newNotification);
+			/// send notification to creator of story
+		}
+	}
 	/**Create a new comment notification */
 	public async newComment(userId, storyId) {
 		const {
@@ -38,7 +71,7 @@ class NotificationService {
 				.save();
 			// send email to creator of story
 			if (userEmail) {
-				await sendMessage(userEmail, 'notification', notificationMessage);
+				await sendMessage(userEmail, 'comment', notificationMessage);
 			}
 			await this.socket.emit('NOTIFICATION', newNotification);
 			/// send notification to creator of story
@@ -96,7 +129,7 @@ class NotificationService {
 		if (userEmail) {
 			await sendMessage(
 				userEmail,
-				'notification',
+				'comment',
 				notificationMessageForOwnerOfStory
 			);
 		}
@@ -104,12 +137,12 @@ class NotificationService {
 		if (commentUseremail) {
 			await sendMessage(
 				commentUseremail,
-				'notification',
+				'comment',
 				notifcationMessageForOwnerOfComment
 			);
 		}
 		// send notifcation to creator of story
-		// send notification to creator of comment
+		// send comment to creator of comment
 	}
 
 	/**===================Notify on  Banned Content =========================== */
@@ -140,7 +173,7 @@ class NotificationService {
 			storyUserId: story?.creatorId,
 			username: user?.username,
 			userEmail: story?.creator.email,
-			storypref: storypref?.slice(0, 20),
+			storypref: storypref?.slice(0, 30),
 		};
 	}
 	public async createNotificationForCommentReply(userId, commentId) {

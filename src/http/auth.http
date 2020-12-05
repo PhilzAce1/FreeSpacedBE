@@ -33,7 +33,7 @@ Content-Type: application/json
 
 ###
 
-POST https://freespace-api.herokuapp.com/therapist/signup
+POST {{baseURL}}/therapist/signup
 Content-Type: application/json
 
 {

@@ -49,8 +49,11 @@ export class UserModel extends BaseEntity implements User {
 	@Column({ type: 'text', default: backcoverimage, nullable: true })
 	coverimage: string;
 
-	@Column('numeric', { default: 0 })
+	@Column({ default: 0, nullable: true })
 	role: number;
+
+	@Column({ nullable: true, default: 0 })
+	numberOfTherapistComment: number;
 
 	@OneToMany(() => Bookmark, (bookmarks) => bookmarks.creator, {
 		nullable: true,

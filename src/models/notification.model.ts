@@ -17,7 +17,8 @@ export type notificationType =
 	| 'story_report'
 	| 'comment_report'
 	| 'reply_report'
-	| 'story_comment_reply';
+	| 'story_comment_reply'
+	| 'therapist_reply';
 @Entity()
 export class Notification extends BaseEntity {
 	@PrimaryGeneratedColumn('uuid')

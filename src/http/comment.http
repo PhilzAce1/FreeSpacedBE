@@ -15,13 +15,12 @@
 
 POST {{baseURL}}/comment/create 
 Content-Type: application/json
-x-auth-token: {{authToken}}
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ3NTM2ZGU1LWU1MGEtNDRmOC1iZjMxLThkMjdjY2QzMDQzYiIsImlhdCI6MTYwNzEzMjkzMiwiZXhwIjo0MTk5MTMyOTMyfQ.9nFBaTJEmoDtGF8wZRFOQa1QUpzG_0w-gE2aoAFE_Po
 
 {
  
     "storyId":"ba8986c6-298b-4b55-a6d4-7d54eb2353e3",
-
- "content":"somethigl"
+    "content":"somethigadjaldfdl"
 }
 
 ###
