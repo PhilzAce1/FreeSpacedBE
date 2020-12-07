@@ -22,11 +22,7 @@ class CommentService {
 		if (!storyExist) {
 			throw new HttpException(404, 'Story does not exist, check story Id');
 		}
-		const createdComment = await this.comment
-			.create({ content, creatorId, storyId })
-			.save();
-		console.log(ThisUser);
-		console.log(typeof ThisUser?.role);
+
 		if (ThisUser?.role === 1) {
 			await this.therapistComment(
 				storyExist.creatorId,
@@ -34,15 +30,28 @@ class CommentService {
 				ThisUser.numberOfTherapistComment,
 				creatorId
 			);
+			let createdComment = await this.comment
+				.create({ content, creatorId, storyId, is_freespaace_therapist: true })
+				.save();
+
+			return createdComment;
 		} else {
 			await this.notification.newComment(creatorId, storyId);
+
+			let createdComment = await this.comment
+				.create({ content, creatorId, storyId })
+				.save();
+
+			return createdComment;
 		}
-		return createdComment;
 	}
 	public async replyComment(
 		replyCommentData: CreateCommentReplyDto
 	): Promise<Reply> {
 		const { creatorId, content, commentId } = replyCommentData;
+		const ownerOfComment = await this.users.findOne({
+			where: { id: creatorId },
+		});
 		const commentExist = await this.comment.findOne({
 			where: { id: commentId },
 		});
@@ -52,11 +61,25 @@ class CommentService {
 				'comment you are trying to reply to to does not exist '
 			);
 		}
-		const repliedComment = await this.reply
-			.create({ creatorId, content, commentId })
-			.save();
-		await this.notification.newReply(creatorId, commentId);
-		return repliedComment;
+		if (ownerOfComment?.role === 1) {
+			const repliedComment = await this.reply
+				.create({
+					creatorId,
+					content,
+					commentId,
+					is_freespaace_therapist: true,
+				})
+				.save();
+			await this.notification.newReply(creatorId, commentId);
+
+			return repliedComment;
+		} else {
+			const repliedComment = await this.reply
+				.create({ creatorId, content, commentId })
+				.save();
+			await this.notification.newReply(creatorId, commentId);
+			return repliedComment;
+		}
 	}
 	public async therapistComment(
 		ownderOfStoryId,
@@ -69,6 +92,10 @@ class CommentService {
 			{ id: ownderOfStoryId },
 			{ numberOfTherapistComment: NoTC }
 		);
+		await this.story.update(storyId, {
+			is_spacecare: true,
+		});
+		console.log(storyId);
 		await this.notification.therapistComment(creatorId, storyId);
 	}
 }

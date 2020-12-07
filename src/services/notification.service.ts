@@ -208,6 +208,8 @@ class NotificationService {
 			? `${username} Replied Your comment on a story (${storypref})`
 			: notificationType === 'reply_report'
 			? `Your reply to a comment has been banned`
+			: notificationType === 'therapist_reply'
+			? `${storypref}`
 			: notificationType === 'comment_report'
 			? `Your comment on a story has  been banned`
 			: notificationType === 'story_comment_reply'

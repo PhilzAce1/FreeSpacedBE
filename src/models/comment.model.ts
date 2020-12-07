@@ -26,6 +26,8 @@ export class Comment extends BaseEntity implements CommentInterface {
 
 	@Column()
 	creatorId: string;
+	@Column({ nullable: true, default: false })
+	is_freespaace_therapist: true;
 	@ManyToOne(() => User, (creator) => creator.comments, {
 		onDelete: 'CASCADE',
 		onUpdate: 'CASCADE',

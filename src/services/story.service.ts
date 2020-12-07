@@ -20,6 +20,47 @@ class StoryService {
 	public bookmark = Bookmark;
 	private quote = QuoteStory;
 
+	public async getAllSpaceCare(query) {
+		const { sort, limit, skip } = query;
+		const findOptions = {
+			relations: [
+				'tags',
+				'creator',
+				'comments',
+				'comments.creator',
+				'reports',
+				'story',
+				'quote',
+				'story.quote',
+				'story.quote.creator',
+				'story.quote.tags',
+			],
+			order: { createdAt: 'DESC' },
+			where: { is_spacecare: true },
+		} as any;
+		if (sort) {
+			if (sort === 'mostpopular') {
+				findOptions.order = { views: 'DESC' };
+			}
+			if (sort === 'latest') {
+				findOptions.order = { createdAt: 'DESC' };
+			}
+			if (sort === 'freespacecertified') {
+				findOptions.where = { is_spacecare: true };
+			}
+		}
+
+		if (limit >= 1) {
+			findOptions.take = limit;
+		}
+		if (skip >= 0) {
+			findOptions.skip = skip;
+		}
+		const stories = await this.story.find(findOptions);
+		const mapedStory = mapContributors(this.pruneStory(stories));
+		const quotedStoryArr = this.mapQuotedStoryArr(mapedStory);
+		return this.mapNumberOfQuotedPostArr(quotedStoryArr);
+	}
 	public async quoteStory(quoteStoryData: QuoteStoryDto) {
 		const { storyId } = quoteStoryData;
 		const storyExist = (await this.story.findOne({
@@ -443,7 +484,13 @@ class StoryService {
 		const sortedComments = sortComment(data.comments);
 
 		data.comments = sortedComments.map((comment) => {
-			const { id, content, createdAt, creator } = comment;
+			const {
+				id,
+				content,
+				createdAt,
+				creator,
+				is_freespaace_therapist,
+			} = comment;
 			const sortedReplies = sortComment(comment.replies);
 			const replies = sortedReplies.map((reply) => {
 				const { id, content, creatorId, commentId, createdAt } = reply;
@@ -465,6 +512,7 @@ class StoryService {
 				content,
 				createdAt,
 				replies,
+				is_freespaace_therapist,
 				creator: {
 					username: creator.username,
 					profileimage: creator.profileimage,

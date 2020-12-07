@@ -31,6 +31,8 @@ export class Reply extends BaseEntity {
 	@JoinTable()
 	creator: User;
 
+	@Column({ nullable: true, default: false })
+	is_freespaace_therapist: true;
 	@Column()
 	commentId: string;
 	@ManyToOne(

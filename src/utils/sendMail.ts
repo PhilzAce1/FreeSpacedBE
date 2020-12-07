@@ -6,7 +6,6 @@ export async function sendMessage(
 	typeofmail: emailtype,
 	token: string
 ): Promise<void> {
-	console.log(typeofmail);
 	sgMail.setApiKey(SEND_GRID_API_KEY);
 	const html = mailtemp(typeofmail, token);
 	const subject = emailType(typeofmail);

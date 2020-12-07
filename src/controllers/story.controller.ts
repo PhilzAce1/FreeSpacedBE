@@ -19,6 +19,23 @@ class StoryController {
 	public storyService = new StoryService();
 	public authService = new AuthService();
 
+	public getAllSpaceCare = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const allSpaceCareStories = await this.storyService.getAllSpaceCare(
+				req.query
+			);
+			res.status(200).json({
+				status: true,
+				payload: allSpaceCareStories,
+			});
+		} catch (error) {
+			next(error);
+		}
+	};
 	public quoteStory = async (
 		req: RequestWithUser,
 		res: Response,

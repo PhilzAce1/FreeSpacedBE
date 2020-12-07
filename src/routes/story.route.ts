@@ -47,6 +47,10 @@ class StoryRoute implements Route {
 			`${this.path}/updateproddb/publishall`,
 			this.storyController.publishAllStories
 		);
+		this.router.get(
+			`${this.path}/therapist/replied`,
+			this.storyController.getAllSpaceCare
+		);
 		this.router.post(
 			`${this.path}/create`,
 			validationMiddleware(CreateStoryDto),

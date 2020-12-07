@@ -78,15 +78,15 @@ class UsersController {
 		}
 	};
 	public updateNotification = async (
-		req: Request,
+		req: RequestWithUser,
 		res: Response,
 		next: NextFunction
 	) => {
 		try {
-			if (req.body.notificationId === undefined)
+			if (req.user?.id === undefined)
 				throw new HttpException(403, 'Please login');
-			const findAllUsersNotifications = await this.userService.updateNotificationToRead(
-				req.body.notificationId
+			const findAllUsersNotifications = await this.userService.markAllNotificationAsRead(
+				req.user.id
 			);
 			res
 				.status(200)

@@ -51,7 +51,16 @@ class UserService {
 		if (!findUser) throw new HttpException(409, "You're not user");
 		return findUser;
 	}
-
+	public sortNotifcations(arr) {
+		const newArr = arr.sort((a, b) => {
+			const first = new Date(a.createdAt);
+			const second = new Date(b.createdAt);
+			const firstDate = first.getTime();
+			const lastDate = second.getTime();
+			return lastDate - firstDate;
+		});
+		return newArr;
+	}
 	public async getUserNofications(userId) {
 		const findUser = await this.users.findOne({
 			where: { id: userId },
@@ -62,11 +71,32 @@ class UserService {
 		});
 		if (!findUser) throw new HttpException(409, "You're not user");
 		const { notifications } = findUser;
+
+		const actionUserMapped = mapActionUser(notifications);
+
+		return {
+			unread: notifications.filter((x) => x.read === false).length,
+			count: notifications.length,
+			notifications: this.sortNotifcations(actionUserMapped),
+		};
+	}
+	public async markAllNotificationAsRead(userId) {
+		const findUser = await this.users.findOne({
+			where: { id: userId },
+			order: {
+				createdAt: 'DESC',
+			},
+			relations: ['notifications', 'notifications.actionuser'],
+		});
+		if (!findUser) throw new HttpException(409, "You're not user");
+		const { notifications } = findUser;
 		if (notifications.length > 0) {
-			notifications.forEach((data) => {
+			notifications.map((data) => {
 				if (data.read === false) {
 					this.updateNotificationToRead(data.id);
+					data.read = true;
 				}
+				return data;
 			});
 		}
 		const actionUserMapped = mapActionUser(notifications);
@@ -74,7 +104,7 @@ class UserService {
 		return {
 			unread: notifications.filter((x) => x.read === false).length,
 			count: notifications.length,
-			notifications: actionUserMapped,
+			notifications: this.sortNotifcations(actionUserMapped),
 		};
 	}
 	public async updateNotificationToRead(notifcationId) {
