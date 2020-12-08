@@ -1,3 +1,4 @@
+/**===============External Dependenices============================ */
 import {
 	BaseEntity,
 	Column,
@@ -8,6 +9,8 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+
+/**Entities */
 import { Story } from './story.model';
 import { UserModel as User } from './users.model';
 
@@ -18,6 +21,7 @@ export class Bookmark extends BaseEntity {
 
 	@Column({ nullable: true })
 	creatorId: string;
+
 	@ManyToOne(() => User, (creator) => creator.bookmarks, {
 		nullable: true,
 		onUpdate: 'CASCADE',
