@@ -11,41 +11,8 @@ class NotificationService {
 	public user = UserModel;
 	public comment = Comment;
 
-	/** The rapist comment */
+	/** Therapist comment */
 	public async therapistComment(userId, storyId, commentContent?) {
-		const {
-			storyUserId,
-			username,
-			userEmail,
-			// storypref,
-		} = await this.createNotification(userId, storyId);
-		const notificationMessage = this.notifcationMessage(
-			'therapist_reply',
-			username,
-			commentContent
-		);
-
-		if (storyUserId !== userId) {
-			// create notification
-			const newNotification = await this.notification
-				.create({
-					content: notificationMessage,
-					storyId: storyId,
-					userId: storyUserId,
-					actionuserId: userId,
-					type: 'comment',
-				})
-				.save();
-			// send email to creator of story
-			if (userEmail) {
-				await sendMessage(userEmail, 'therapist_reply', notificationMessage);
-			}
-			await this.socket.emit('NOTIFICATION', newNotification);
-			/// send notification to creator of story
-		}
-	}
-	/**Create a new comment notification */
-	public async newComment(userId, storyId) {
 		const {
 			storyUserId,
 			username,
@@ -53,13 +20,52 @@ class NotificationService {
 			storypref,
 		} = await this.createNotification(userId, storyId);
 		const notificationMessage = this.notifcationMessage(
+			'therapist_reply',
+			username,
+			storypref,
+			commentContent
+		);
+		if (storyUserId !== userId) {
+			// create notification
+			const newNotification = await this.notification
+				.create({
+					content: notificationMessage,
+					storyId: storyId,
+					userId: storyUserId,
+					actionuserId: userId,
+					type: 'comment',
+				})
+				.save();
+			// send email to creator of story
+			if (userEmail) {
+				await sendMessage(
+					userEmail,
+					'therapist_reply',
+					notificationMessage,
+					storyId
+				);
+			}
+			await this.socket.emit('NOTIFICATION', newNotification);
+			/// send notification to creator of story
+		}
+	}
+	/**Create a new comment notification */
+	public async newComment(userId, storyId, content?) {
+		const {
+			storyUserId,
+			username,
+			userEmail,
+			storypref,
+		} = await this.createNotification(userId, storyId);
+		const content30 = (content || 'new comment').slice(0, 30); //.slice(0, 30) + '...';
+		const notificationMessage = this.notifcationMessage(
 			'comment',
 			username,
-			storypref
+			storypref,
+			content30
 		);
 
 		if (storyUserId !== userId) {
-			console.log(storyUserId, userId);
 			// create notification
 			const newNotification = await this.notification
 				.create({
@@ -72,9 +78,8 @@ class NotificationService {
 				.save();
 			// send email to creator of story
 
-			console.log('email', userEmail);
 			if (userEmail) {
-				await sendMessage(userEmail, 'comment', notificationMessage);
+				await sendMessage(userEmail, 'comment', notificationMessage, storyId);
 			}
 			await this.socket.emit('NOTIFICATION', newNotification);
 			/// send notification to creator of story
@@ -82,26 +87,30 @@ class NotificationService {
 	}
 
 	/**===================Notify on new Reply=========================== */
-	public async newReply(userId, commentId) {
+	public async newReply(userId, commentId, content) {
 		const {
 			username,
 			storyUserId,
 			storyId,
 			storypref,
-			commentpref,
+			// commentpref,
 			commentUserId,
 			commentUseremail,
 			userEmail,
 		} = await this.createNotificationForCommentReply(userId, commentId);
+
+		const content30 = content.slice(0, 30) + '...';
 		const notifcationMessageForOwnerOfComment = this.notifcationMessage(
 			'comment_reply',
 			username,
-			commentpref
+			storypref,
+			content30
 		);
 		const notificationMessageForOwnerOfStory = this.notifcationMessage(
 			'story_comment_reply',
 			username,
-			storypref
+			storypref,
+			content30
 		);
 
 		// create notification for story owner
@@ -133,7 +142,8 @@ class NotificationService {
 			await sendMessage(
 				userEmail,
 				'comment',
-				notificationMessageForOwnerOfStory
+				notificationMessageForOwnerOfStory,
+				storyId
 			);
 		}
 		// send mail to creator of comment
@@ -141,7 +151,8 @@ class NotificationService {
 			await sendMessage(
 				commentUseremail,
 				'comment',
-				notifcationMessageForOwnerOfComment
+				notifcationMessageForOwnerOfComment,
+				storyId
 			);
 		}
 		// send notifcation to creator of story
@@ -203,12 +214,13 @@ class NotificationService {
 	private notifcationMessage(
 		notificationType: notificationType,
 		username?: string,
-		storypref?
+		storypref?,
+		content?
 	) {
 		return notificationType === 'comment'
-			? `${username} commented on your story (${storypref})`
+			? `${username} commented on your story (${storypref})[${content}]`
 			: notificationType === 'comment_reply'
-			? `${username} Replied Your comment on a story (${storypref})`
+			? `${username} Replied Your comment on a story (${storypref})[${content}]`
 			: notificationType === 'reply_report'
 			? `Your reply to a comment has been banned`
 			: notificationType === 'therapist_reply'
@@ -216,7 +228,7 @@ class NotificationService {
 			: notificationType === 'comment_report'
 			? `Your comment on a story has  been banned`
 			: notificationType === 'story_comment_reply'
-			? `${username} replied a comment on your story (${storypref})`
+			? `${username} replied a comment on your story (${storypref})[${content}]`
 			: 'Your story has been banned';
 	}
 }

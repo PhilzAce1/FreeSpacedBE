@@ -26,11 +26,16 @@ Content-Type: application/json
 POST {{baseURL}}/login
 Content-Type: application/json
 
-
 {
-    "email": "akuagwuphilemon11@gmail.com",
-    "password": "12345678"
+    "email": "newtherapist@freespaace.com", 
+    "password":"therapist123"
 }
+
+
+# {
+#     "email": "akuagwuphilemon11@gmail.com",
+#     "password": "12345678"
+# }
 
 # {
 #     "email": "akuagwuphilemon2019@gmail.com",
@@ -38,14 +43,20 @@ Content-Type: application/json
 # }
 
 ###
+POST {{baseURL}}/therapist/signup
+Content-Type: application/json
 
+{
+    "email":"localtherapist@gmail.com", 
+    "password":"localtherapist"
+}
+###
 POST  https://freespace-api.herokuapp.com/therapist/signup
 Content-Type: application/json
 
 {
     "email": "newtherapist@freespaace.com", 
-    "password":"therapist123"
-    
+    "password":"therapist123"   
 }
 
 ###

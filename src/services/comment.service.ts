@@ -22,6 +22,7 @@ class CommentService {
 		if (!storyExist) {
 			throw new HttpException(404, 'Story does not exist, check story Id');
 		}
+		console.log(ThisUser);
 
 		if (ThisUser?.role === 1) {
 			await this.therapistComment(
@@ -37,7 +38,7 @@ class CommentService {
 
 			return createdComment;
 		} else {
-			await this.notification.newComment(creatorId, storyId);
+			await this.notification.newComment(creatorId, storyId, content);
 
 			let createdComment = await this.comment
 				.create({ content, creatorId, storyId })
@@ -71,14 +72,14 @@ class CommentService {
 					is_freespaace_therapist: true,
 				})
 				.save();
-			await this.notification.newReply(creatorId, commentId);
+			await this.notification.newReply(creatorId, commentId, content);
 
 			return repliedComment;
 		} else {
 			const repliedComment = await this.reply
 				.create({ creatorId, content, commentId })
 				.save();
-			await this.notification.newReply(creatorId, commentId);
+			await this.notification.newReply(creatorId, commentId, content);
 			return repliedComment;
 		}
 	}

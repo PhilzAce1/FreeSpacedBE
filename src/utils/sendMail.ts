@@ -4,10 +4,12 @@ import { emailtype, mailtemp } from './mailtemplate';
 export async function sendMessage(
 	to: string,
 	typeofmail: emailtype,
-	token: string
+	token: string,
+	storyId?: string | undefined
 ): Promise<void> {
+	console.log(token, typeofmail);
 	sgMail.setApiKey(SEND_GRID_API_KEY);
-	const html = mailtemp(typeofmail, token);
+	const html = mailtemp(typeofmail, token, storyId);
 	const subject = emailType(typeofmail);
 	const msg = {
 		to, // Change to your recipient

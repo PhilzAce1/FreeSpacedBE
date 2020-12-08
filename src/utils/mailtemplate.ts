@@ -942,9 +942,9 @@ export function mailtemp(emailtype: emailtype, token, storyId?) {
 </html>
     `;
 	} else if (emailtype === 'comment' || emailtype === 'comment_reply') {
-		const splited = token.split('(');
+		const splited = token.split('[');
 		const header = splited[0];
-		const body = splited[1].replace(')', '');
+		const body = splited[1].replace(']', '');
 
 		return `
     <!DOCTYPE html>
@@ -1410,6 +1410,7 @@ export function mailtemp(emailtype: emailtype, token, storyId?) {
 
 </html>`;
 	} else if (emailtype === 'therapist_reply') {
+		console.log(token);
 		return `
       <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
@@ -1793,7 +1794,7 @@ export function mailtemp(emailtype: emailtype, token, storyId?) {
                      "${token}"
                     </h3>
                     <p style="text-align: center">
-                      <a href="#" class="btn btn-primary">See Reply</a>
+                      <a href="${storyLink}" class="btn btn-primary">See Reply</a>
     
                     </p>
                     <p style="text-align: center">

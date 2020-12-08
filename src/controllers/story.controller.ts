@@ -31,6 +31,7 @@ class StoryController {
 			res.status(200).json({
 				status: true,
 				payload: allSpaceCareStories,
+				length: allSpaceCareStories.length,
 			});
 		} catch (error) {
 			next(error);
