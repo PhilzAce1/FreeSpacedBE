@@ -59,6 +59,7 @@ class StoryService {
 		const stories = await this.story.find(findOptions);
 		const mapedStory = mapContributors(this.pruneStory(stories));
 		const quotedStoryArr = this.mapQuotedStoryArr(mapedStory);
+
 		return this.mapNumberOfQuotedPostArr(quotedStoryArr);
 	}
 	public async quoteStory(quoteStoryData: QuoteStoryDto) {

@@ -8,6 +8,23 @@ import { CreateUserDto, UpdateUserEmailDto } from '../dtos/users.dto';
 import TherapistService from '../services/therapist.service';
 class TherapistController {
 	private therapistService = new TherapistService();
+
+	public dashboard = async (
+		_req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const dashboardResult = await this.therapistService.dashboard();
+
+			res.status(200).json({
+				success: true,
+				payload: dashboardResult,
+			});
+		} catch (error) {
+			next(error);
+		}
+	};
 	public signup = async (req: Request, res: Response, next: NextFunction) => {
 		const userData: CreateUserDto = req.body;
 		try {

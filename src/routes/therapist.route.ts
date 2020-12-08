@@ -23,6 +23,10 @@ class TherapistRoute implements Route {
 			validationMiddleware(UpdateUserEmailDto),
 			this.therapistController.addWaitlist
 		);
+		this.router.get(
+			`${this.path}/dashboard`,
+			this.therapistController.dashboard
+		);
 	}
 }
 

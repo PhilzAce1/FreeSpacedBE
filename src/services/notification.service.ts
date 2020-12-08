@@ -25,6 +25,7 @@ class NotificationService {
 			storypref,
 			commentContent
 		);
+		console.log(storypref, commentContent);
 		if (storyUserId !== userId) {
 			// create notification
 			const newNotification = await this.notification
@@ -77,7 +78,6 @@ class NotificationService {
 				})
 				.save();
 			// send email to creator of story
-
 			if (userEmail) {
 				await sendMessage(userEmail, 'comment', notificationMessage, storyId);
 			}
@@ -218,17 +218,17 @@ class NotificationService {
 		content?
 	) {
 		return notificationType === 'comment'
-			? `${username} commented on your story (${storypref})[${content}]`
+			? `${username} commented on your story (${storypref}...)[${content}...]`
 			: notificationType === 'comment_reply'
-			? `${username} Replied Your comment on a story (${storypref})[${content}]`
+			? `${username} Replied Your comment on a story (${storypref}...)[${content}...]`
 			: notificationType === 'reply_report'
 			? `Your reply to a comment has been banned`
 			: notificationType === 'therapist_reply'
-			? `${storypref}`
+			? `${content}...`
 			: notificationType === 'comment_report'
 			? `Your comment on a story has  been banned`
 			: notificationType === 'story_comment_reply'
-			? `${username} replied a comment on your story (${storypref})[${content}]`
+			? `${username} replied a comment on your story (${storypref}...)[${content}...]`
 			: 'Your story has been banned';
 	}
 }

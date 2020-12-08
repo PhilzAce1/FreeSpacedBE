@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:4000
-# @secondUserAuth = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVmNWRkZWFiLTk2NTEtNGQ3NS1iODQyLTUwNjc3OTBlZmRhZCIsImlhdCI6MTYwNzQyMjAxNiwiZXhwIjo0MTk5NDIyMDE2fQ.OgZFWwHcbrTzfC1_IZwc5TUSuNOTadeISjXHCq3Pwok
-@secondUserAuth =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg2MjZhNGMwLTU5NWMtNDU5ZS1hZDgwLTM5YTgwNTliNGE5ZiIsImlhdCI6MTYwNzQyMzE5NCwiZXhwIjo0MTk5NDIzMTk0fQ.PDCQVrcQzaE_GyDuyMTfPvekOI711bDbSX41FwtzPIs
+@secondUserAuth = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVmNWRkZWFiLTk2NTEtNGQ3NS1iODQyLTUwNjc3OTBlZmRhZCIsImlhdCI6MTYwNzQyMjAxNiwiZXhwIjo0MTk5NDIyMDE2fQ.OgZFWwHcbrTzfC1_IZwc5TUSuNOTadeISjXHCq3Pwok
+# @secondUserAuth =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg2MjZhNGMwLTU5NWMtNDU5ZS1hZDgwLTM5YTgwNTliNGE5ZiIsImlhdCI6MTYwNzQyMzE5NCwiZXhwIjo0MTk5NDIzMTk0fQ.PDCQVrcQzaE_GyDuyMTfPvekOI711bDbSX41FwtzPIs
 @storyId = ba8986c6-298b-4b55-a6d4-7d54eb2353e3
 ###
 
@@ -33,3 +33,4 @@ x-auth-token: {{secondUserAuth}}
 ###
 ###
 ###
+GET {{baseUrl}}/therapist/dashboard

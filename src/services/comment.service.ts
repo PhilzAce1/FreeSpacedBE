@@ -22,7 +22,6 @@ class CommentService {
 		if (!storyExist) {
 			throw new HttpException(404, 'Story does not exist, check story Id');
 		}
-		console.log(ThisUser);
 
 		if (ThisUser?.role === 1) {
 			await this.therapistComment(

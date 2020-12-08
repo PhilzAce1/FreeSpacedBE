@@ -8,13 +8,29 @@ import bcrypt from 'bcrypt';
 import { createIdenticon } from '../utils/genImage';
 import { ImageUrl } from '../config';
 import UserService from './users.service';
+import { Story } from '../models/story.model';
 import { Waitlist } from '../models/waitlist.model';
 
 class TherapistService {
 	private users = UserModel;
+	private story = Story;
 	private authService = new AuthService();
 	private userService = new UserService();
 	private waitlist = Waitlist;
+	public async dashboard() {
+		const allStories = await this.story.find({});
+		const allPostRepliedByTherapist = await this.story.find({
+			where: { is_spacecare: true },
+		});
+		const allUser = await this.users.find({});
+		return {
+			allStoriesLength: allStories.length,
+			allUserLength: allUser.length,
+			allPostRepliedByTherapistLength: allPostRepliedByTherapist.length,
+		};
+
+		return 'hello';
+	}
 	public async addWaitlist(updateData: UpdateUserEmailDto) {
 		const exist = await this.waitlist.findOne({
 			email: updateData.email,
