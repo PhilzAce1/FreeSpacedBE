@@ -6,7 +6,6 @@ export type emailtype =
 	| 'comment_reply'
 	| 'therapist_reply';
 import { FRONTEND_DOMAIN } from '../config';
-// https://freespaace.com/changepassword/
 export function mailtemp(emailtype: emailtype, token, storyId?) {
 	const storyLink = `${FRONTEND_DOMAIN}/spaace/${storyId}`;
 	if (emailtype === 'forgotpassword') {

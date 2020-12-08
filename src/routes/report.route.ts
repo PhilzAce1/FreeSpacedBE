@@ -1,14 +1,19 @@
+/**============External Dependecies============================ */
 import { Router } from 'express';
-import Route from '../interfaces/routes.interface';
-import ReportController from '../controllers/report.controller';
-import validationMiddleware from '../middlewares/validation.middleware';
-import authMiddleware from '../middlewares/auth.middleware';
 
+/**--------------Interface, dtos and validation------------------ */
+import Route from '../interfaces/routes.interface';
 import {
 	ReportCommentDto,
 	ReportReplyDto,
 	ReportStoryDto,
 } from '../dtos/report.dto';
+
+/**-------------Internal dependencies --------------------------- */
+import ReportController from '../controllers/report.controller';
+import validationMiddleware from '../middlewares/validation.middleware';
+import authMiddleware from '../middlewares/auth.middleware';
+
 class ReportRoute implements Route {
 	public path = '/report';
 	public router = Router();

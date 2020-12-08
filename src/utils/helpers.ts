@@ -8,7 +8,18 @@ export const username = 'Anon' + v4();
 export const backcoverimage =
 	'https://images.pexels.com/photos/261055/pexels-photo-261055.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500';
 
+/**
+ *
+ * @param name
+ * GenSlug is function that generate Story Slug
+ * e.g title-randomnumbers
+ */
 export function genSlug(name: string) {
+	/**
+	 * randomInt -> Generate a random int from 0000 - 9999
+	 * preSlug -> joining name with random int
+	 * slug -> convert "some title" to "some-title-0022"
+	 */
 	const randomInt = Math.floor(1000 + Math.random() * 900).toString();
 	const preSlug = `${name} ${randomInt}`;
 	const slug = preSlug
@@ -17,9 +28,22 @@ export function genSlug(name: string) {
 		.toLowerCase();
 	return slug;
 }
+
+/**
+ *
+ * @param arr
+ * @param key
+ * Removing duplicate objects in an array
+ */
 function getUniqueListBy(arr, key) {
 	return [...new Map(arr.map((item) => [item[key], item])).values()];
 }
+
+/**
+ *
+ * @param storyArr
+ * mapContibutors to story array
+ */
 export function mapContributors(storyArr) {
 	return storyArr.map((story) => {
 		const contributorArr: contributors[] = [];
@@ -101,6 +125,11 @@ export function mapContributorsForBookmarkRes(data) {
 	return prunedArr;
 }
 
+/**
+ *
+ * @param tags -> Array of tag objects
+ * Convert tag object arr to tag name array
+ */
 export function getTagName(tags) {
 	const newTagList: any[] = [];
 	if (tags.length > 0) {

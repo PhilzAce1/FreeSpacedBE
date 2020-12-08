@@ -1,8 +1,13 @@
+/**============External Dependecies============================ */
 import { Router } from 'express';
+
+/**--------------Interface, dtos and validation------------------ */
 import { RequestWithUser } from '../interfaces/auth.interface';
-import AuthController from '../controllers/auth.controller';
 import { CreateUserDto } from '../dtos/users.dto';
 import Route from '../interfaces/routes.interface';
+
+/**-------------Internal dependencies --------------------------- */
+import AuthController from '../controllers/auth.controller';
 import authMiddleware from '../middlewares/auth.middleware';
 import validationMiddleware from '../middlewares/validation.middleware';
 

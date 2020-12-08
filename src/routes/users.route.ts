@@ -1,6 +1,6 @@
+/**============External Dependecies============================ */
 import { Router } from 'express';
-import authMiddleware from '../middlewares/auth.middleware';
-import UsersController from '../controllers/users.controller';
+/**--------------Interface, dtos and validation------------------ */
 import {
 	CreateUserDto,
 	ChangePasswordDto,
@@ -8,7 +8,10 @@ import {
 	UpdateUserEmailDto,
 } from '../dtos/users.dto';
 import Route from '../interfaces/routes.interface';
+/**-------------Internal dependencies --------------------------- */
 import validationMiddleware from '../middlewares/validation.middleware';
+import authMiddleware from '../middlewares/auth.middleware';
+import UsersController from '../controllers/users.controller';
 
 class UsersRoute implements Route {
 	public path = '/users';

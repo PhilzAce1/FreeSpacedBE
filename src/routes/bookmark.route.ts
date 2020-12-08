@@ -1,9 +1,14 @@
+/**============External Dependecies============================ */
 import { Router } from 'express';
+
+/**--------------Interface, dtos and validation------------------ */
+import { CreateBookmarkDto } from '../dtos/bookmark.dto';
 import Route from '../interfaces/routes.interface';
+
+/**-------------Internal dependencies --------------------------- */
 import validationMiddleWare from '../middlewares/validation.middleware';
 import authMiddleware from '../middlewares/auth.middleware';
 import BookmarkController from '../controllers/bookmark.controller';
-import { CreateBookmarkDto } from '../dtos/bookmark.dto';
 class BookmarkRoute implements Route {
 	public path = '/bookmark';
 	public router = Router();

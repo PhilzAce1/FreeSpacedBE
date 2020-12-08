@@ -1,10 +1,15 @@
+/**============External Dependecies============================ */
 import { Router } from 'express';
 import Route from '../interfaces/routes.interface';
-import validationMiddleWare from '../middlewares/validation.middleware';
+
+/**--------------Interface, dtos and validation------------------ */
 import { CreateCommentDto } from '../dtos/comment.dto';
-import CommentController from '../controllers/comment.controller';
-import authMiddleware from '../middlewares/auth.middleware';
 import { CreateCommentReplyDto } from '../dtos/reply.dto';
+
+/**-------------Internal dependencies --------------------------- */
+import CommentController from '../controllers/comment.controller';
+import validationMiddleWare from '../middlewares/validation.middleware';
+import authMiddleware from '../middlewares/auth.middleware';
 class CommentRoute implements Route {
 	public path = '/comment';
 	public router = Router();

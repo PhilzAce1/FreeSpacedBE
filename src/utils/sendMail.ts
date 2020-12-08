@@ -27,6 +27,7 @@ export async function sendMessage(
 			console.error(error);
 		});
 }
+/**-------------------Return Email Title----------------------------- */
 function emailType(typeofmail: emailtype) {
 	if (typeofmail === 'forgotpassword') {
 		return `Reset Password`;

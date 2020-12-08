@@ -1,4 +1,6 @@
-// import cookieParser from 'cookie-parser';
+/**
+ * External Dependencies
+ */
 import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
@@ -6,11 +8,12 @@ import hpp from 'hpp';
 import logger from 'morgan';
 import connectRedis from 'connect-redis';
 import session from 'express-session';
+
+/**==================Internal Dependencies============================= */
 import Routes from './interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
 import { PORT } from './config';
 import { __prod__ } from './config';
-// COOKIE_NAME
 import { redisDb as redis } from './utils/connectDB';
 const RedisStore = connectRedis(session);
 
@@ -20,8 +23,8 @@ class App {
 	public env: boolean;
 
 	constructor(routes: Routes[]) {
-		this.app = express();
-		this.port = PORT || 4000;
+		this.app = express(); // Express application instance
+		this.port = PORT || 4000; // Env Port or 4000
 		this.env = process.env.NODE_ENV === 'production' ? true : false;
 		this.initializeMiddlewares();
 		this.initializeRoutes(routes);
@@ -40,17 +43,7 @@ class App {
 	}
 
 	private initializeMiddlewares() {
-		// const whitelist = ['http://localhost:3000', 'freespaced.co'];
-		// var corsOptions = {
-		// 	origin: function (origin, callback) {
-		// 		if (whitelist.indexOf(origin) !== -1) {
-		// 			callback(null, true);
-		// 		} else {
-		// 			callback(new Error('Not allowed by CORS'));
-		// 		}
-		// 	},
-		// 	credentials: true,
-		// };
+		// Express Session
 		this.app.use(
 			session({
 				name: 'qid',
@@ -85,7 +78,6 @@ class App {
 
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: true }));
-		// this.app.use(cookieParser());
 	}
 
 	private initializeRoutes(routes: Routes[]) {
@@ -118,3 +110,15 @@ class App {
 }
 
 export default App;
+
+// const whitelist = ['http://localhost:3000', 'freespaced.co'];
+// var corsOptions = {
+// 	origin: function (origin, callback) {
+// 		if (whitelist.indexOf(origin) !== -1) {
+// 			callback(null, true);
+// 		} else {
+// 			callback(new Error('Not allowed by CORS'));
+// 		}
+// 	},
+// 	credentials: true,
+// };

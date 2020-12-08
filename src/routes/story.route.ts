@@ -1,15 +1,20 @@
+/**============External Dependecies============================ */
 import { Router } from 'express';
 import Route from '../interfaces/routes.interface';
-import StoryController from '../controllers/story.controller';
-import validationMiddleware from '../middlewares/validation.middleware';
+
+/**--------------Interface, dtos and validation------------------ */
 import {
 	CreateStoryDto,
 	UpdateStoryDto,
 	PublishStoryDto,
 	QuoteStoryDto,
 } from '../dtos/story.dto';
+
+/**-------------Internal dependencies --------------------------- */
 import authMiddleware from '../middlewares/auth.middleware';
 import storyMiddelware from '../middlewares/story.middleware';
+import StoryController from '../controllers/story.controller';
+import validationMiddleware from '../middlewares/validation.middleware';
 class StoryRoute implements Route {
 	public path = '/story';
 	public router = Router();

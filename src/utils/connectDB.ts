@@ -15,11 +15,16 @@ import { QuoteStory } from '../models/quotestory.model';
 import { Waitlist } from '../models/waitlist.model';
 /**-----------Env variables -------------------- */
 import { __prod__ } from '../config';
+
+/**
+ * Connect redis
+ * in production set Redis url to REDIS_URL env var
+ */
 export const redisDb = __prod__
 	? new Redis(process.env.REDIS_URL)
 	: new Redis();
 async function connect() {
-	const connectionOptions = await getConnectionOptions(process.env.NODE_ENV);
+	const connectionOptions = await getConnectionOptions(process.env.NODE_ENV); // Connection options based on env
 	const entities = [
 		UserModel,
 		Story,
@@ -35,8 +40,8 @@ async function connect() {
 	return process.env.NODE_ENV === 'production'
 		? createConnection({
 				...connectionOptions,
-				url: process.env.DATABASE_URL,
-				entities,
+				url: process.env.DATABASE_URL, // specify database url
+				entities, // entities (model/tables) in the database
 				name: 'default',
 		  } as any)
 		: createConnection({
