@@ -7,7 +7,8 @@ export type emailtype =
 	| 'therapist_reply';
 import { FRONTEND_DOMAIN } from '../config';
 // https://freespaace.com/changepassword/
-export function mailtemp(emailtype: emailtype, token) {
+export function mailtemp(emailtype: emailtype, token, storyId?) {
+	const storyLink = `${FRONTEND_DOMAIN}/spaace/${storyId}`;
 	if (emailtype === 'forgotpassword') {
 		return `
         <!DOCTYPE html>
@@ -1329,7 +1330,7 @@ export function mailtemp(emailtype: emailtype, token) {
                      ${body}
                     </h3>
                     <p style="text-align: center">
-                      <a href="#" class="btn btn-primary">Reply</a>
+                      <a href="${storyLink}" class="btn btn-primary">Reply</a>
     
                     </p>
                     <p style="text-align: center">

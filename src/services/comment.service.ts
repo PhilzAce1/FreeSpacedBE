@@ -28,7 +28,8 @@ class CommentService {
 				storyExist.creatorId,
 				storyId,
 				ThisUser.numberOfTherapistComment,
-				creatorId
+				creatorId,
+				content
 			);
 			let createdComment = await this.comment
 				.create({ content, creatorId, storyId, is_freespaace_therapist: true })
@@ -85,7 +86,8 @@ class CommentService {
 		ownderOfStoryId,
 		storyId,
 		numberOfTherapistComment,
-		creatorId
+		creatorId,
+		content?
 	) {
 		const NoTC = (numberOfTherapistComment || 0) + 1;
 		await this.users.update(
@@ -96,7 +98,7 @@ class CommentService {
 			is_spacecare: true,
 		});
 		console.log(storyId);
-		await this.notification.therapistComment(creatorId, storyId);
+		await this.notification.therapistComment(creatorId, storyId, content);
 	}
 }
 export default CommentService;

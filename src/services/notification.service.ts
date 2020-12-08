@@ -12,17 +12,17 @@ class NotificationService {
 	public comment = Comment;
 
 	/** The rapist comment */
-	public async therapistComment(userId, storyId) {
+	public async therapistComment(userId, storyId, commentContent?) {
 		const {
 			storyUserId,
 			username,
 			userEmail,
-			storypref,
+			// storypref,
 		} = await this.createNotification(userId, storyId);
 		const notificationMessage = this.notifcationMessage(
 			'therapist_reply',
 			username,
-			storypref
+			commentContent
 		);
 
 		if (storyUserId !== userId) {
@@ -59,6 +59,7 @@ class NotificationService {
 		);
 
 		if (storyUserId !== userId) {
+			console.log(storyUserId, userId);
 			// create notification
 			const newNotification = await this.notification
 				.create({
@@ -70,6 +71,8 @@ class NotificationService {
 				})
 				.save();
 			// send email to creator of story
+
+			console.log('email', userEmail);
 			if (userEmail) {
 				await sendMessage(userEmail, 'comment', notificationMessage);
 			}
