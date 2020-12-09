@@ -25,7 +25,6 @@ class NotificationService {
 			storypref,
 			commentContent
 		);
-		console.log(storypref, commentContent);
 		if (storyUserId !== userId) {
 			// create notification
 			const newNotification = await this.notification

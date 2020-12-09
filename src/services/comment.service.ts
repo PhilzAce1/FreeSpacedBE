@@ -97,7 +97,6 @@ class CommentService {
 		await this.story.update(storyId, {
 			is_spacecare: true,
 		});
-		console.log(storyId);
 		await this.notification.therapistComment(creatorId, storyId, content);
 	}
 }

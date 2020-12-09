@@ -12,6 +12,7 @@ import { genSlug, mapContributors, mapReplyCount } from '../utils/helpers';
 import { validate as uuidValidator } from 'uuid';
 import { Bookmark } from '../models/bookmark.model';
 import { QuoteStory } from '../models/quotestory.model';
+import ViewService from './views.service';
 import { Like } from 'typeorm';
 
 class StoryService {
@@ -19,7 +20,19 @@ class StoryService {
 	private tags = Tag;
 	public bookmark = Bookmark;
 	private quote = QuoteStory;
+	public view = new ViewService();
 
+	// public async cookieChecker(req) {
+	// 	const { storyuserid } = req.cookies;
+	// 	const data = {
+	// 		value: '',
+	// 		newUser: '',
+	// 	};
+	// 	if (storyuserid) {
+	// 		return '';
+	// 	}
+	// return storyuserid ? '' : this.view.createCookie(storyuserid);
+	// }
 	public async getAllSpaceCare(query) {
 		const { sort, limit, skip } = query;
 		const findOptions = {
@@ -177,11 +190,9 @@ class StoryService {
 			where: [
 				{
 					title: Like(`%${search}%`),
-					published: true,
 				},
 				{
 					text: Like(`%${search}%`),
-					published: true,
 				},
 			],
 			relations: [
@@ -377,7 +388,24 @@ class StoryService {
 		if (tags) {
 			newTagList = await this.getTagName(tags);
 		}
+		const userStoryId = await this.view.userExistInStore(
+			req.cookies.userstoryid
+		);
+		const storyHasBeenViewed = await this.view.storyHasBeenReadByUser(
+			userStoryId,
+			mainStory.id
+		);
+		if (!storyHasBeenViewed) {
+			const view = (mainStory.views || 0) + 1;
+			await this.story.update(mainStory.id, {
+				views: view,
+			});
+			mainStory.views = view;
+		}
+		// if(req.cookies.userstoryid){}
+
 		const numberOfReplies = mapReplyCount(mainStory);
+		mainStory.userstoryid = userStoryId;
 		mainStory.tags = newTagList;
 		mainStory.creator = {
 			profileimage: creator.profileimage,

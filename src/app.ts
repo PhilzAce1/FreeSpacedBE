@@ -64,6 +64,7 @@ class App {
 		);
 
 		this.app.use('/images', express.static('images'));
+		this.app.use(require('cookie-parser')());
 		if (this.env) {
 			this.app.use(hpp());
 			this.app.use(helmet());
