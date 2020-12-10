@@ -1410,7 +1410,10 @@ export function mailtemp(emailtype: emailtype, token, storyId?) {
 
 </html>`;
 	} else if (emailtype === 'therapist_reply') {
-		console.log(token);
+		const splited = token.split('[');
+		const header = splited[0];
+		const body = splited[1].replace(']', '');
+
 		return `
       <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
@@ -1787,11 +1790,13 @@ export function mailtemp(emailtype: emailtype, token, storyId?) {
               <tr>
                 <td>
                   <div class="text" style="padding: 0 2.5em;">
-                    <h2 style=" margin-bottom: 1rem; text-align: center">A Therapist just talked on your story</h2>
+                    <h2 style=" margin-bottom: 1rem; text-align: center">
+                    ${header}
+                    </h2>
                     <h3 style="padding: 25px;
                     background: #f1f7ff;
                     border-radius: 8px;">
-                     "${token}"
+                     "${body}"
                     </h3>
                     <p style="text-align: center">
                       <a href="${storyLink}" class="btn btn-primary">See Reply</a>

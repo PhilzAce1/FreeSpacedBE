@@ -7,7 +7,6 @@ export async function sendMessage(
 	token: string,
 	storyId?: string | undefined
 ): Promise<void> {
-	console.log(token, typeofmail);
 	sgMail.setApiKey(SEND_GRID_API_KEY);
 	const html = mailtemp(typeofmail, token, storyId);
 	const subject = emailType(typeofmail);
@@ -23,7 +22,7 @@ export async function sendMessage(
 	sgMail
 		.send(msg)
 		.then(() => {
-			console.log('Email sent');
+			console.log('Email sent to ', to);
 		})
 		.catch((error) => {
 			console.error(error);

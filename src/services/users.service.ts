@@ -17,6 +17,7 @@ import { mapActionUser } from '../utils/helpers';
 import { Story as StoryInterface } from '../interfaces/story.interface';
 import { Notification } from '../models/notification.model';
 import StoryService from '../services/story.service';
+import { mapContributors } from '../utils/helpers';
 class UserService {
 	public users = userModel;
 	private story = Story;
@@ -117,10 +118,15 @@ class UserService {
 	public async getAllUserStory(userId: string): Promise<StoryInterface[]> {
 		const userStories: Story[] = await this.story.find({
 			where: { creatorId: userId },
-			relations: ['creator', 'tags'],
+			relations: ['tags', 'creator', 'comments', 'comments.creator'],
 			order: { createdAt: 'DESC' },
 		});
-		return this.storyService.pruneStory(userStories);
+
+		const mapedContributorStory = mapContributors(
+			this.storyService.pruneStory(userStories)
+		);
+
+		return mapedContributorStory;
 	}
 
 	public async createUser(userData: CreateUserDto): Promise<User> {

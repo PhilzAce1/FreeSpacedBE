@@ -25,11 +25,12 @@ class NotificationService {
 			storypref,
 			commentContent
 		);
+		const noteMessage = notificationMessage.split('[')[0];
 		if (storyUserId !== userId) {
 			// create notification
 			const newNotification = await this.notification
 				.create({
-					content: notificationMessage,
+					content: noteMessage,
 					storyId: storyId,
 					userId: storyUserId,
 					actionuserId: userId,
@@ -64,12 +65,13 @@ class NotificationService {
 			storypref,
 			content30
 		);
+		const noteMessage = notificationMessage.split('[')[0];
 
 		if (storyUserId !== userId) {
 			// create notification
 			const newNotification = await this.notification
 				.create({
-					content: notificationMessage,
+					content: noteMessage,
 					storyId: storyId,
 					userId: storyUserId,
 					actionuserId: userId,
@@ -105,17 +107,24 @@ class NotificationService {
 			storypref,
 			content30
 		);
+
+		const noteMessageForOwnerOfComment = notifcationMessageForOwnerOfComment.split(
+			'['
+		)[0];
 		const notificationMessageForOwnerOfStory = this.notifcationMessage(
 			'story_comment_reply',
 			username,
 			storypref,
 			content30
 		);
+		const noteMessageForOwnerOfStory = notifcationMessageForOwnerOfComment.split(
+			'['
+		)[0];
 
 		// create notification for story owner
 		const userNotification = await this.notification
 			.create({
-				content: notificationMessageForOwnerOfStory,
+				content: noteMessageForOwnerOfStory,
 				storyId: storyId,
 				userId: storyUserId,
 				actionuserId: userId,
@@ -127,7 +136,7 @@ class NotificationService {
 		// create notification for comment owner
 		const commentNotification = await this.notification
 			.create({
-				content: notifcationMessageForOwnerOfComment,
+				content: noteMessageForOwnerOfComment,
 				storyId: storyId,
 				userId: commentUserId,
 				actionuserId: userId,
@@ -223,7 +232,7 @@ class NotificationService {
 			: notificationType === 'reply_report'
 			? `Your reply to a comment has been banned`
 			: notificationType === 'therapist_reply'
-			? `${content}...`
+			? `A Therapist just talked on your story (${storypref}...)[${content}...]`
 			: notificationType === 'comment_report'
 			? `Your comment on a story has  been banned`
 			: notificationType === 'story_comment_reply'
