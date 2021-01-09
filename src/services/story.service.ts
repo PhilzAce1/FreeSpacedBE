@@ -532,6 +532,7 @@ class StoryService {
 					creator: {
 						username: reply.creator.username,
 						profileimage: reply.creator.profileimage,
+						creatorId: reply.creator.id,
 					},
 					reports: reply.reports.length,
 				});
@@ -545,6 +546,7 @@ class StoryService {
 				creator: {
 					username: creator.username,
 					profileimage: creator.profileimage,
+					creatorId: creator.id,
 				},
 				reports: comment.reports.length,
 			});
