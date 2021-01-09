@@ -61,9 +61,9 @@ x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjQ3NTM2ZGU1LWU1MGEtN
 
 
 {
-    "firstname":"anewUser", 
+    "firstname":"anewXUser", 
     "lastname":"theuserlastname", 
-    "username":"needstobe",
+    "username":"neeaddstsomthisobe",
     "another":"sofa", 
     "profileimage": "http://localhost:3000/images/six.png",
     "coverimage": "https://images.pexels.com/photos/261055/pexels-photo-261055.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500",

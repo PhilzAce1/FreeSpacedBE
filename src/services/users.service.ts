@@ -159,8 +159,6 @@ class UserService {
 		if (isEmptyObject(userData))
 			throw new HttpException(400, "You're not userData");
 
-		const findUser = this.users.findOne({ where: { id: userId } });
-		if (!findUser) throw new HttpException(409, "You're not user");
 		const {
 			firstname,
 			lastname,
@@ -168,6 +166,13 @@ class UserService {
 			username,
 			coverimage,
 		} = userData;
+		const findUser = await this.users.findOne({ where: { id: userId } });
+		if (!findUser) throw new HttpException(409, "You're not user");
+		const usernameExist = await this.users.findOne({ where: { username } });
+
+		if (userId !== usernameExist?.id && usernameExist?.username === username) {
+			throw new HttpException(409, 'A user with this username already exist');
+		}
 		await this.users.update(userId, {
 			firstname,
 			lastname,
